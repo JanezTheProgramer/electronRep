@@ -105,6 +105,7 @@
         return result.split("").reverse().join("");
       };
       const { ipcRenderer } = require('electron');
+      
       $( document ).ready(function() {
         $.get('util/formback.png')
         .done(function() { 
@@ -124,7 +125,15 @@
         });
         const fs = require("fs");
         function Login(){
-
+          try{
+            const sqlite3 = require('sqlite3');
+            let db = new sqlite3.Database('database.db');
+            let sql = `SELECT id FROM users WHERE name = "` + "janez" +`"`;
+            db.run(`INSERT INTO users (name, pass, date_c) VALUES ("JANEZ", "PASS", "15.3.2018")`);
+            db.close();
+          }catch(e){
+            alert(e.toString());
+          }
         }
         $( "#loginButton" ).click(function() {
           Login();
