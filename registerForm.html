@@ -28,14 +28,11 @@
             try{
               const sqlite3 = require('sqlite3');
               let db = new sqlite3.Database('database.db');
-              //let sql = `SELECT id FROM users WHERE name = "` + "janez" +`"`;
-              let count = 0;
-              db.each("SELECT count(*) as e FROM users WHERE name = "+ $("#usernameId").val(), function(err, row) {
-                var log = require("electron-log");
-                console.log = function (message) {
-                  log.info(row);
-                }
-              });
+              let row = db.prepare('SELECT id FROM users WHERE name = "' + "janzo" + '"');
+              if(row.id != null){
+                alert("oke");
+                return;
+              }
               db.run(`INSERT INTO users (name, pass, date_c)
                 VALUES ("`+$("#usernameId").val()+`", "`+$("#passwordId").val()+`", "`+ new Date().toJSON().slice(0,10).replace(/-/g,'/')+`")`);
               db.close();

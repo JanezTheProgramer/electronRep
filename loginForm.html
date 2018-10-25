@@ -35,7 +35,6 @@
             const sqlite3 = require('sqlite3');
             let db = new sqlite3.Database('database.db');
             let sql = `SELECT id FROM users WHERE name = "` + "janez" +`"`;
-            db.run(`INSERT INTO users (name, pass, date_c) VALUES ("JANEZ", "PASS", "15.3.2018")`);
             db.close();
           }catch(e){
             alert(e.toString());

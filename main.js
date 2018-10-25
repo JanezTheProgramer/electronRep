@@ -51,7 +51,6 @@ const loadView = ({title}) => {
     </html>
   `)
 }
-
   try{
     const sqlite3 = require('sqlite3');
     let db = new sqlite3.Database('database.db');
@@ -64,6 +63,7 @@ const loadView = ({title}) => {
     console.log(e.toString());
   }
 const {ipcMain} = require('electron');
+require('electron-debug')({ showDevTools: process.env.NODE_ENV === 'development' })
 ipcMain.on('request-close-action', (event) => {
   popUp.close();
 });
