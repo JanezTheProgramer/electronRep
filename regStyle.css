@@ -1,0 +1,109 @@
+body {          
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-repeat:no-repeat;
+    background-position:top center; 
+  }
+  .divTable{
+    display: table;
+    width: 100%;
+    margin: auto;
+  }
+  .divTableRow {
+    height: 74px !important;
+    display: table-row;
+    border-spacing: 1px;
+    padding-bottom: 35px;
+  }
+  .divTableCell, .divTableHead {
+    border: 0px;
+    display: table-cell;
+    padding: 3px 10px;
+  }
+  .divTableBody {
+    display: table-row-group;
+  }
+  #registerButton:hover {
+    letter-spacing: 0.4em;
+    background-color: rgb(28, 139, 0);
+  }
+  #registerButton {
+    color: white;
+    height: 60px;
+    width: 340px;
+    padding: 1.5em auto;
+    margin-top: 20px;
+    margin-bottom: 1em relative;
+    background-color: rgb(16, 71, 0); 
+    border: none;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    transition: all 0.2s cubic-bezier(.4,0,.2,1);
+  }
+  #topdiv {
+    border: 1px;
+    position: absolute;
+    padding: 0px;
+    width: 480px;
+    height: 35px;
+    position: fixed;
+    top: 0;
+    display: flex;
+    vertical-align: middle;
+    }
+  .col{
+    border: 1px;
+    margin-top: 0px;
+    padding: 0px;
+    height: 35px;
+    flex: 1;
+  }
+  #minimize{
+    margin-top: 10px;
+    float: left;
+    display:block;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    border: 0px;
+  }
+  #minimize:hover{
+    height: 17px;
+    width: 17px;
+    background-color: rgb(223, 208, 0);
+  }
+  #exit{
+    margin-top: 10px;
+    float: right;
+    margin-right: 55px;
+    display:block;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    border: 0px;
+  }
+  #exit:hover{
+    height: 17px;
+    width: 17px;
+    background-color: rgb(221, 65, 3);
+  }
+  input{
+    font-family: Open Sans;
+    color: rgba(50, 50, 50, 1);
+    font-stretch: expanded;
+    letter-spacing: 0px;
+    font-size: 20px;
+    width: 310px;
+    height: 36px;
+    padding: 12px;
+    border: 0px;
+    background-color: rgba(205, 205, 205, 0.8);
+  }
+  input:hover, input:focus{
+    letter-spacing: 2px;
+    font-size: 21px;
+    background-color: rgba(255, 255, 255, 0.8);
+  }
