@@ -10,6 +10,7 @@
     <script src="hash.js"></script>
     <script>
     const { ipcRenderer } = require('electron');
+    const sqlite3 = require('sqlite3');
       $( document ).ready(function() {
         $.get('util/formback.png')
         .done(function() { 
@@ -24,17 +25,17 @@
           window.close();
         });
         function CreateAccount(){
+          let already = false;
           if($("#usernameId").val().toString().length && $("#passwordId").val().toString().length){
             try{
-              const sqlite3 = require('sqlite3');
               let db = new sqlite3.Database('database.db');
-              let row = db.prepare('SELECT id FROM users WHERE name = "' + "janzo" + '"');
-              if(row.id != null){
-                alert("oke");
-                return;
-              }
-              db.run(`INSERT INTO users (name, pass, date_c)
-                VALUES ("`+$("#usernameId").val()+`", "`+$("#passwordId").val()+`", "`+ new Date().toJSON().slice(0,10).replace(/-/g,'/')+`")`);
+              db.get('SELECT name FROM users WHERE name = "' + $("#usernameId").val() + '"', [], (err, row) =>{
+                if(!row){
+                  alert("new acc");
+                  db.run(`INSERT INTO users (name, pass, date_c)
+                  VALUES ("`+$("#usernameId").val()+`", "`+$("#passwordId").val()+`", "`+ new Date().toJSON().slice(0,10).replace(/-/g,'/')+`")`);
+                } 
+              });
               db.close();
             }catch(e){
               alert(e.toString());
