@@ -64,9 +64,11 @@ const loadView = ({title}) => {
   }
 const {ipcMain} = require('electron');
 require('electron-debug')({ showDevTools: process.env.NODE_ENV === 'development' })
+
 ipcMain.on('request-close-action', (event) => {
   popUp.close();
 });
+
 ipcMain.on('request-mainprocess-action', (event) => {
   mainProgram = new BrowserWindow({fullscreen: true, resizable: false, frame: false});
   loginWindow.close();
@@ -80,18 +82,6 @@ ipcMain.on('request-mainprocess-action', (event) => {
     mainProgram = null;
   })
 });
-//game request 
-ipcMain.on('load-game-request', (event) => {
-  gameWindow = new BrowserWindow({fullscreen: true, resizable: false, frame: false,transparent: false});
-  gameWindow.loadFile('shoterOne/shoterOne.html')
-  gameWindow.setMenu(null);
-  mainProgram.minimize();
-  gameWindow.on('closed', function () {
-    gameWindow = null
-  })
-});
-
-
 //
 //
 ipcMain.on('request-registration-action', (event) => {
@@ -101,24 +91,6 @@ ipcMain.on('request-registration-action', (event) => {
   reqWindow.on('closed', function () {
     reqWindow = null
   })
-});
-
-ipcMain.on('request-createdAcc-action', (event) => {
-  try{
-    loginWindow.close();
-  }catch(e){
-    //do nothing
-  }
-  loginWindow = new BrowserWindow({fullscreenable: false, maximizable: false, width: 480, height: 460, resizable: false, frame: false,transparent: true,});
-  loginWindow.loadFile('loginForm.html');
-  loginWindow.setMenu(null);
-  reqWindow.close();
-  popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
-  popUp.setMenu(null);
-  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
-    title: "New Account was Created!",
-  }));
-  popUp.loadURL(file);
 });
 //
 //alerts
@@ -240,26 +212,6 @@ ipcMain.on('request-mainwindow-logOut', (event) => {
   mainProgram.close();
 });
 //
-ipcMain.on('request-mainwindow-missingData', (event) => { 
-  loginWindow = new BrowserWindow({fullscreenable: false, maximizable: false, width: 480, height: 460, resizable: false, frame: false,transparent: true,});
-  loginWindow.loadFile('loginForm.html');
-  loginWindow.setMenu(null);
-  try{
-    popUp.close();
-  }catch(err){
-    //do nothing
-  }
-  mainProgram.close();
-  popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
-  popUp.setMenu(null);
-  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
-    title: "Missing data! Crash occurred!",
-  }));
-  popUp.loadURL(file);
-  loginWindow.on('closed', function () {
-    loginWindow = null
-  });
-});
 //
 // everything below is generated on load! || default functions
 //

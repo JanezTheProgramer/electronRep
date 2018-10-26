@@ -7,44 +7,12 @@
         <script >
             $( document ).ready(function(){
                 const fs = require("fs");
-                $.get("util/mainback.png")
-                .fail(function() { 
-                    ipcRenderer.send('request-mainwindow-missingData');
-                });
                 $.get("util/iconSearch.png")
                 .fail(function() { 
                     $("#icon").hide();
                     $("#searchElement").show();
                 });
-                $.get('users/loginHistory.txt')
-                .fail(function(){
-                    ipcRenderer.send('request-mainwindow-missingData');
-                });
                 let historyData = ["",""],userData = ["","", "", ""];
-                try{
-                    historyData =  (fs.readFileSync('users/loginHistory.txt')).toString().split("\n");
-                    userData =  (fs.readFileSync('users/'+ historyData[historyData.length-2] + 'account.txt')).toString().split("\n");
-                }catch(e){
-                    ipcRenderer.send('request-failed-to-generate-action');
-                }
-                $.get('users/'+ historyData[historyData.length-2] + 'account.txt')
-                .done(function() { 
-                    try{
-                        if(historyData[historyData.length-2] == userData[0]){
-                            $("#CurrentUserOnLeftDiv").html("<b>" + userData[0] + "</b>");
-                            for(let x = 0; x < userData[0].length && x < 17; x++){
-                                $( ".fly-in-text" ).append( "<li>"+userData[0].charAt(x)+"</li>" );
-                            }
-                        }else{
-                            ipcRenderer.send('request-failed-to-generate-action');
-                        }
-
-                    }catch(e){
-                        ipcRenderer.send('request-failed-to-generate-action');
-                    }
-                }).fail(function() { 
-                    ipcRenderer.send('request-mainwindow-missingData');
-                });
                 let onlineTimer = 0;
                 clock();
                 changeOnline();
@@ -82,6 +50,7 @@
                 }
                 //$("#informationDiv").load("home.html");
                 const { ipcRenderer } = require('electron');
+                /*
                 $.get('users/'+ historyData[historyData.length-2] + 'account.txt')
                 .done(function(){
                     try{
@@ -124,7 +93,7 @@
                     }
                 }).fail(function(){
                     ipcRenderer.send('request-failed-to-generate-action');
-                });
+                });*/
                 $( "#exit" ).click(function(){
                     window.close();
                 });

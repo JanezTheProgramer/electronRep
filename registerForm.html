@@ -25,7 +25,6 @@
           window.close();
         });
         function CreateAccount(){
-          let already = false;
           if($("#usernameId").val().toString().length && $("#passwordId").val().toString().length){
             try{
               let db = new sqlite3.Database('database.db');

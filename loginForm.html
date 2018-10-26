@@ -29,12 +29,14 @@
         .fail(function() { 
           ipcRenderer.send('request-failed-to-generate-action');
         });
-        const fs = require("fs");
         function Login(){
           try{
             const sqlite3 = require('sqlite3');
             let db = new sqlite3.Database('database.db');
-            let sql = `SELECT id FROM users WHERE name = "` + "janez" +`"`;
+            db.get('SELECT distinct id, count(*) as c FROM users WHERE name = "' + $("#usernameId").val() + '" AND pass = "' + $("#passwordId").val() + '" GROUP BY name HAVING c = 1',
+             [], (err, row) =>{
+              if(row) ipcRenderer.send('request-mainprocess-action');
+            });
             db.close();
           }catch(e){
             alert(e.toString());
