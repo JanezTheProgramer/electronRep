@@ -9,6 +9,7 @@
       window.$ = window.jQuery = require("jquery");
     </script>
     <script src="hash.js"></script>
+    <script src="query.js"></script>
     <script>
       const { ipcRenderer } = require('electron');
       
@@ -30,17 +31,8 @@
           ipcRenderer.send('request-failed-to-generate-action');
         });
         function Login(){
-          try{
-            const sqlite3 = require('sqlite3');
-            let db = new sqlite3.Database('database.db');
-            db.get('SELECT distinct id, count(*) as c FROM users WHERE name = "' + $("#usernameId").val() + '" AND pass = "' + $("#passwordId").val() + '" GROUP BY name HAVING c = 1',
-             [], (err, row) =>{
-              if(row) ipcRenderer.send('request-mainprocess-action');
-            });
-            db.close();
-          }catch(e){
-            alert(e.toString());
-          }
+          loginFunc($("#usernameId").val(), $("#passwordId").val())
+
         }
         $( "#loginButton" ).click(function() {
           Login();

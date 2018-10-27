@@ -8,6 +8,7 @@
       window.$ = window.jQuery = require("jquery");
     </script>
     <script src="hash.js"></script>
+    <script src="query.js"></script>
     <script>
     const { ipcRenderer } = require('electron');
     const sqlite3 = require('sqlite3');
@@ -26,19 +27,7 @@
         });
         function CreateAccount(){
           if($("#usernameId").val().toString().length && $("#passwordId").val().toString().length){
-            try{
-              let db = new sqlite3.Database('database.db');
-              db.get('SELECT name FROM users WHERE name = "' + $("#usernameId").val() + '"', [], (err, row) =>{
-                if(!row){
-                  alert("new acc");
-                  db.run(`INSERT INTO users (name, pass, date_c)
-                  VALUES ("`+$("#usernameId").val()+`", "`+$("#passwordId").val()+`", "`+ new Date().toJSON().slice(0,10).replace(/-/g,'/')+`")`);
-                } 
-              });
-              db.close();
-            }catch(e){
-              alert(e.toString());
-            }
+            regFunc($("#usernameId").val(), $("#passwordId").val());
           }else{
             alert("input data");
           }

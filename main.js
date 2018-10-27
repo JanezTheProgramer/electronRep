@@ -51,18 +51,12 @@ const loadView = ({title}) => {
     </html>
   `)
 }
-  try{
-    const sqlite3 = require('sqlite3');
-    let db = new sqlite3.Database('database.db');
-    db.serialize(function() {
-      db.run("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, pass TEXT, date_c TEXT)");
-      db.run("CREATE TABLE IF NOT EXISTS log_history (id INTEGER PRIMARY KEY AUTOINCREMENT, id_user INTEGER, date_l TEXT)");
-    });
-    db.close();
-  }catch(e){
-    console.log(e.toString());
-  }
+
 const {ipcMain} = require('electron');
+
+const query = require('./query');
+query.createDB();
+
 require('electron-debug')({ showDevTools: process.env.NODE_ENV === 'development' })
 
 ipcMain.on('request-close-action', (event) => {
@@ -239,4 +233,4 @@ app.on('activate', function () {
   if (mainProgram === null) {
     createWindow();
   }
-});
+})
