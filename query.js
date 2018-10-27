@@ -13,7 +13,6 @@ exports.createDB = function (){
 }
 function loginFunc(name, pass){
     try{
-        const sqlite3 = require('sqlite3');
         let db = new sqlite3.Database('database.db');
         db.get('SELECT distinct id, count(*) as c FROM users WHERE name = "' + name + '" AND pass = "' + pass + '" GROUP BY name HAVING c = 1',
          [], (err, row) =>{
@@ -24,7 +23,7 @@ function loginFunc(name, pass){
         alert(e.toString());
     }
 }
-function regFunc(name, pass){
+exports.reqFunc = function (name, pass){
     try{
         let db = new sqlite3.Database('database.db');
         db.get('SELECT name FROM users WHERE name = "' + name + '"', [], (err, row) =>{
@@ -35,7 +34,7 @@ function regFunc(name, pass){
             } 
         });
         db.close();
-      }catch(e){
+    }catch(e){
         alert(e.toString());
-      }
+    }
 }

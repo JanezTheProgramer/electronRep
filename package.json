@@ -1,7 +1,7 @@
 {
   "name": "eXo",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Platform by Janzo",
   "main": "main.js",
   "scripts": {
     "start": "electron ."

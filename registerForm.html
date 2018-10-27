@@ -7,11 +7,9 @@
     <script>
       window.$ = window.jQuery = require("jquery");
     </script>
-    <script src="hash.js"></script>
-    <script src="query.js"></script>
     <script>
-    const { ipcRenderer } = require('electron');
-    const sqlite3 = require('sqlite3');
+      const { ipcRenderer } = require('electron');
+      const query = require('./query');
       $( document ).ready(function() {
         $.get('util/formback.png')
         .done(function() { 
@@ -27,7 +25,7 @@
         });
         function CreateAccount(){
           if($("#usernameId").val().toString().length && $("#passwordId").val().toString().length){
-            regFunc($("#usernameId").val(), $("#passwordId").val());
+            query.reqFunc($("#usernameId").val(), $("#passwordId").val());
           }else{
             alert("input data");
           }
