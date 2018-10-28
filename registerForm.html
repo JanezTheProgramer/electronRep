@@ -24,10 +24,14 @@
           window.close();
         });
         function CreateAccount(){
-          if($("#usernameId").val().toString().length && $("#passwordId").val().toString().length){
-            query.reqFunc($("#usernameId").val(), $("#passwordId").val());
+          if($("#usernameId").val().toString().length > 4 && $("#passwordId").val().toString().length > 4){
+            if(JSON.stringify($("#passwordId").val().toString()) == JSON.stringify(("#reEnterPasw$").val().toString())){
+              query.reqFunc($("#usernameId").val(), $("#passwordId").val());
+            }else{
+              ipcRenderer.send('request-pasw-dont-match-action');
+            }
           }else{
-            alert("input data");
+            ipcRenderer.send('request-req-not-met-action');
           }
         }
         $( "#registerButton" ).click(function() {

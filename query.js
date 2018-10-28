@@ -16,7 +16,8 @@ function loginFunc(name, pass){
         let db = new sqlite3.Database('database.db');
         db.get('SELECT distinct id, count(*) as c FROM users WHERE name = "' + name + '" AND pass = "' + pass + '" GROUP BY name HAVING c = 1',
          [], (err, row) =>{
-            if(row) ipcRenderer.send('request-mainprocess-action');
+             console.log(row);
+            //if(row) ipcRenderer.send('request-mainprocess-action');
         });
         db.close();
     }catch(e){
