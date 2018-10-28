@@ -15,12 +15,13 @@ exports.loginFunc = (name, pass) => {
     try{
         let db = new sqlite3.Database('database.db');
         db.get('SELECT distinct id, count(*) as c FROM users WHERE name = "' + name + '" AND pass = "' + require("./hash").method(pass) + '" GROUP BY name HAVING c = 1',
-         [], (row) =>{
+         [], (err, row) =>{
             if(row){
                 db.run(`INSERT INTO log_history (id_user, date_l)
                     VALUES ("`+ row.id +`", "`+ new Date().toJSON().slice(0,10).replace(/-/g,'/')+`")`);
                 ipcRenderer.send('request-mainprocess-action');
-            }
+            }else
+                ipcRenderer.send('request-account-not-found');
         });
         db.close();
     }catch(e){
@@ -30,7 +31,7 @@ exports.loginFunc = (name, pass) => {
 exports.reqFunc = (name, pass) => {
     try{
         let db = new sqlite3.Database('database.db');
-        db.get('SELECT name FROM users WHERE name = "' + name + '"', [], (row) =>{
+        db.get('SELECT name FROM users WHERE name = "' + name + '"', [], (err, row) =>{
             if(!row){
                 db.run(`INSERT INTO users (name, pass, date_c)
                     VALUES ("`+name+`", "`+ require("./hash").method(pass) +`", "`+ new Date().toJSON().slice(0,10).replace(/-/g,'/')+`")`);

@@ -36,10 +36,6 @@ ipcMain.on('request-login-minimize', (event) => {
   loginWindow.minimize();
 });
 //
-ipcMain.on('request-game-minimize', (event) => { 
-  gameWindow.minimize();
-});
-//
 ipcMain.on('request-register-minimize', (event) => { 
   reqWindow.minimize();
 });
@@ -152,6 +148,11 @@ ipcMain.on('request-createdAcc-action', (event) => {
   closePopUP();
   popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
+  try{
+    loginWindow.focus();
+  }catch(e){
+    createWindow();
+  }
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
     title: "New Account was Created!",
   }));
