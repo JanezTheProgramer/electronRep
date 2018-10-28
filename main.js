@@ -10,11 +10,12 @@ ipcMain.on('request-close-action', (event) => {
 ipcMain.on('request-mainprocess-action', (event) => {
   mainProgram = new BrowserWindow({fullscreen: true, resizable: false, frame: false});
   loginWindow.close();
-  if ((reqWindow != null) || !(reqWindow.closed))
+  try{
     reqWindow.close();
+  }catch(e){/*ingore*/}
   mainProgram.loadFile('mainProgram.html');
   mainProgram.setMenu(null);
-  mainProgram.on('closed', function () {
+  mainProgram.on('closed', () => {
     mainProgram = null;
   })
 });
@@ -24,7 +25,7 @@ ipcMain.on('request-registration-action', (event) => {
   reqWindow = new BrowserWindow({fullscreenable: false, maximizable: false, width: 480, height: 460, resizable: false, frame: false,transparent: true,});
   reqWindow.loadFile('registerForm.html')
   reqWindow.setMenu(null);
-  reqWindow.on('closed', function () {
+  reqWindow.on('closed', () => {
     reqWindow = null
   })
 });
@@ -52,15 +53,14 @@ ipcMain.on('request-mainwindow-logOut', (event) => {
   loginWindow = new BrowserWindow({fullscreenable: false, maximizable: false, width: 480, height: 460, resizable: false, frame: false,transparent: true,});
   loginWindow.loadFile('loginForm.html');
   loginWindow.setMenu(null);
-  if ((popUp != null) || !(popUp.closed))
-    popUp.close();
+  closePopUP();
   popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
     title: "Logged out!",
   }));
   popUp.loadURL(file);
-  loginWindow.on('closed', function () {
+  loginWindow.on('closed', () => {
     loginWindow = null
   });
   mainProgram.close();
@@ -71,25 +71,22 @@ ipcMain.on('request-mainwindow-logOut', (event) => {
 //
 let loginWindow;
 
-function createWindow () {
-
+let createWindow = () => {
   loginWindow = new BrowserWindow({fullscreenable: false, maximizable: false, width: 480, height: 460, resizable: false, frame: false,transparent: true,});
   loginWindow.loadFile('loginForm.html');
   loginWindow.setMenu(null);
-  loginWindow.on('closed', function () {
+  loginWindow.on('closed', () => {
     loginWindow = null;
-  })
+  });
 }
-
-
 app.on('ready', createWindow);
-app.on('window-all-closed', function () {
+app.on('window-all-closed', () => {
   if (process.platform !== "" ) {
     app.quit();
   }
 })
 
-app.on('activate', function () {
+app.on('activate', () => {
   if (mainProgram === null) {
     createWindow();
   }
@@ -98,9 +95,9 @@ app.on('activate', function () {
 /////alerts 
 /////////////////////////////////////////
 ////////////////////////////////////////
+let popUp; 
 ipcMain.on('request-failed-to-generate-action', (event) => {
-  if ((popUp != null) || !(popUp.closed))
-    popUp.close();
+  closePopUP();
   popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
@@ -112,8 +109,7 @@ ipcMain.on('request-failed-to-generate-action', (event) => {
 });
   //
 ipcMain.on('request-account-not-found', (event) => {
-  if ((popUp != null) || !(popUp.closed))
-    popUp.close();
+  closePopUP();
   popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
@@ -123,8 +119,7 @@ ipcMain.on('request-account-not-found', (event) => {
 });
   //
 ipcMain.on('request-already-exsists-action', (event) => {
-  if ((popUp != null) || !(popUp.closed))
-    popUp.close();
+  closePopUP();
   popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
@@ -134,8 +129,7 @@ ipcMain.on('request-already-exsists-action', (event) => {
 });
   //
 ipcMain.on('request-pasw-dont-match-action', (event) => {
-  if ((popUp != null) || !(popUp.closed))
-    popUp.close();
+  closePopUP();
   popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
@@ -145,8 +139,7 @@ ipcMain.on('request-pasw-dont-match-action', (event) => {
 });
   //
 ipcMain.on('request-req-not-met-action', (event) => {
-  if ((popUp != null) || !(popUp.closed))
-    popUp.close();
+  closePopUP();
   popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
@@ -155,6 +148,21 @@ ipcMain.on('request-req-not-met-action', (event) => {
   popUp.loadURL(file);
 });
 
+ipcMain.on('request-createdAcc-action', (event) => {
+  closePopUP();
+  popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
+  popUp.setMenu(null);
+  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
+    title: "New Account was Created!",
+  }));
+  popUp.loadURL(file);
+});
+
+let closePopUP = () => {
+  try{
+    popUp.close();
+  }catch(e){/*ignore*/}
+}
 
 ///custom alert template
 const loadView = ({title}) => {

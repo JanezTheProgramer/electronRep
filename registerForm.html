@@ -9,35 +9,39 @@
     </script>
     <script>
       const { ipcRenderer } = require('electron');
-      const query = require('./query');
-      $( document ).ready(function() {
+      $( document ).ready(() => {
         $.get('util/formback.png')
-        .done(function() { 
+        .done(() => { 
           $( "body" ).css("background-image", "url('util/formback.png')");
-        }).fail(function() { 
+        }).fail(() => { 
           $( "body" ).css("background-color", "#5f5f5f");
         });
-        $("#minimize").click(function(){
+        $("#minimize").click(() => {
           ipcRenderer.send('request-register-minimize');
         });
-        $("#exit").click(function(){
+        $("#exit").click(() => {
           window.close();
         });
-        function CreateAccount(){
-          if($("#usernameId").val().toString().length > 4 && $("#passwordId").val().toString().length > 4){
-            if(JSON.stringify($("#passwordId").val().toString()) == JSON.stringify(("#reEnterPasw$").val().toString())){
-              query.reqFunc($("#usernameId").val(), $("#passwordId").val());
-            }else{
-              ipcRenderer.send('request-pasw-dont-match-action');
-            }
+        let CreateAccount = () => {
+          if($("#usernameId").val().toString().length > 4 
+            && $("#passwordId").val().toString().length > 4 
+            && $("#reEnterPasw").val().toString().length > 4){
+              if($("#passwordId").val().toString() == $("#reEnterPasw").val().toString()){
+                require('./query').reqFunc($("#usernameId").val(), $("#passwordId").val());
+              }else{
+                ipcRenderer.send('request-pasw-dont-match-action');
+              }
           }else{
             ipcRenderer.send('request-req-not-met-action');
           }
+          $("#usernameId").val("");
+          $("#passwordId").val("");
+          $("#reEnterPasw").val("");
         }
-        $( "#registerButton" ).click(function() {
+        $( "#registerButton" ).click(() => {
           CreateAccount();
         });
-        $( "#reEnterPasw" ).keypress(function(e) {
+        $( "#reEnterPasw" ).keypress((e) => {
           if(e.keyCode == 13)
             CreateAccount();
         });

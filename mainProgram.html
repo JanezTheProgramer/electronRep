@@ -5,20 +5,20 @@
                 window.$ = window.jQuery = require("jquery");
         </script>
         <script >
-            $( document ).ready(function(){
+            $( document ).ready(() => {
                 const fs = require("fs");
                 $.get("util/iconSearch.png")
-                .fail(function() { 
+                .fail(() =>  { 
                     $("#icon").hide();
                     $("#searchElement").show();
                 });
                 let onlineTimer = 0;
                 clock();
                 changeOnline();
-                setTimeout(function() {
+                setTimeout(() =>  {
                     $(".fly-in-text").removeClass("hidden");
                 }, 1000);
-                setTimeout(function(){
+                setTimeout(() => {
                     $("#userInfoDiv").hide();
                     $("#getGamesDiv").hide();
                     $("#yourGamesDiv").hide();
@@ -33,17 +33,17 @@
                 },3000);
                 setInterval(changeOnline,60000);
                 setInterval(clock, 5000);
-                function clock() {
+                let clock = () => {
                     let time = new Date();
                     $("#worldClock").html("<b>" + timeFix(time.getHours()) + ":" + timeFix(time.getMinutes()) + "</b>");
 
-                    function timeFix(letx) {
+                    let timeFix = (letx) => {
                         if (letx < 10)
                                 letx = '0' + letx;
                         return letx;
                     }
                 }
-                function changeOnline(){
+                let changeOnline = () =>{
                     onlineTimer++;
                     $("#onlineTime").html("<b>" + onlineTimer + "</b>")          
                 }
@@ -51,7 +51,7 @@
                 const { ipcRenderer } = require('electron');
                 /*
                 $.get('users/'+ historyData[historyData.length-2] + 'account.txt')
-                .done(function(){
+                .done(() => {
                     try{
                         $("#DivUserNAME").html(historyData[historyData.length-2]);
                         let x = historyData.length-4;
@@ -90,27 +90,27 @@
                     }catch(e){
                         ipcRenderer.send('request-failed-to-generate-action');
                     }
-                }).fail(function(){
+                }).fail(() => {
                     ipcRenderer.send('request-failed-to-generate-action');
                 });*/
-                $( "#exit" ).click(function(){
+                $( "#exit" ).click(() => {
                     window.close();
                 });
-                $( "#minimize" ).click(function(){
+                $( "#minimize" ).click(() => {
                     ipcRenderer.send('request-mainwindow-minimize');
                 });
-                $( "#logOut" ).click(function(){
+                $( "#logOut" ).click(() => {
                     ipcRenderer.send('request-mainwindow-logOut');
                 });
-                $( "#icon" ).mousedown(function(){
+                $( "#icon" ).mousedown(() => {
                     //search 
                 });
-                $(function(){
-                    $( "#searchBar" ).hover(function(){
+                $(() => {
+                    $( "#searchBar" ).hover(() => {
                         $(this).find("#searchElement").fadeToggle();
                     });
                 });
-                $("#userName").mousedown(function(e) {
+                $("#userName").mousedown((e) => {
                     if(e.which === 1){
                         $("#windowTitle").text("Account Info");
                         $("#userInfoDiv").fadeIn();
@@ -128,7 +128,7 @@
                         $("#yourGamesDiv").fadeOut();
                     }
                 });
-                $("#yourGames").mousedown(function(e) {
+                $("#yourGames").mousedown((e) => {
                     if(e.which === 1){
                         $("#windowTitle").text("Owned Games");
                         $("#yourGamesDiv").fadeIn();
@@ -146,7 +146,7 @@
                             $("#yourGamesDiv").fadeOut();
                     }
                 });
-                $("#getGames").mousedown(function(e) {
+                $("#getGames").mousedown((e) => {
                     if(e.which === 1){
                         $("#windowTitle").text("Game Store");
                         $("#getGamesDiv").fadeIn();
@@ -164,7 +164,7 @@
                         $("#yourGamesDiv").fadeOut();
                     }
                 });
-                $("#information").mousedown(function(e) {
+                $("#information").mousedown((e) => {
                     if(e.which === 1){
                         $("#windowTitle").text("News Fed");
                         $("#informationDiv").fadeIn();
@@ -182,12 +182,12 @@
                         $("#yourGamesDiv").fadeOut();
                     }
                 });
-                $( "#firstGame" ).click(function(){
+                $( "#firstGame" ).click(() => {
                     ipcRenderer.send('load-game-request');
                 });
                 // button click sound effect
-                $(function() {
-                    $(":button").mousedown(function() {
+                $(() =>  {
+                    $(":button").mousedown(() =>  {
                         let buttonClickSoundEffect = new Audio();
                         buttonClickSoundEffect.src = "util/clickeffect.mp3";
                         buttonClickSoundEffect.play();
