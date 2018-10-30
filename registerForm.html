@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="regStyle.css">
+    <link rel="stylesheet" type="text/css" href="./css/regStyle.css">
     <meta charset="UTF-8">
     <title>Register</title>
     <script>
@@ -10,19 +10,13 @@
     <script>
       const { ipcRenderer } = require('electron');
       $( document ).ready(() => {
-        $.get('util/formback.png')
-        .done(() => { 
-          $( "body" ).css("background-image", "url('util/formback.png')");
-        }).fail(() => { 
-          $( "body" ).css("background-color", "#5f5f5f");
-        });
         $("#minimize").click(() => {
           ipcRenderer.send('request-register-minimize');
         });
         $("#exit").click(() => {
           window.close();
         });
-        let CreateAccount = () => {
+        const CreateAccount = () => {
           if($("#usernameId").val().toString().length > 4 
             && $("#passwordId").val().toString().length > 4 
             && $("#reEnterPasw").val().toString().length > 4){
@@ -42,8 +36,7 @@
           CreateAccount();
         });
         $( "#reEnterPasw" ).keypress((e) => {
-          if(e.keyCode == 13)
-            CreateAccount();
+          if(e.keyCode == 13)CreateAccount();
         });
       });
     </script>

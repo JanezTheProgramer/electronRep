@@ -8,32 +8,20 @@
     <script>
       window.$ = window.jQuery = require("jquery");
     </script>
-    <script src="hash.js"></script>
     <script>
       const { ipcRenderer } = require('electron'); 
       $( document ).ready(() => {
-        $.get('util/formback.png')
-        .done(() => { 
-          $( "body" ).css("background-image", "url('util/formback.png')");
-        }).fail(() => { 
-          $( "body" ).css("background-color", "#5f5f5f");
-        });
         $("#minimize").click(() => {
           ipcRenderer.send('request-login-minimize');
         });
         $("#exit").click(() => {
           window.close();
         });
-        $.get("util/mainback.png")
-        .fail(() => { 
-          ipcRenderer.send('request-failed-to-generate-action');
-        });
-        let Login = () => {
+        const Login = () => {
           if($("#usernameId").val().toString().length > 4 && $("#passwordId").val().toString().length > 4)
             require('./query').loginFunc($("#usernameId").val(), $("#passwordId").val());
           else
             ipcRenderer.send('request-req-not-met-action');
-
           $("#usernameId").val("");
           $("#passwordId").val("");
         }
@@ -41,16 +29,15 @@
           Login();
         });
         $( "#passwordId" ).keypress((event) => {
-          if(event.keyCode == 13){
-            Login();
-          }
+          if(event.keyCode == 13)Login();
         });
         $( "#noAcc" ).click(() => {
           ipcRenderer.send('request-registration-action');
         });
+
       });
     </script>
-    <link rel="stylesheet" type="text/css" href="loginStyle.css">
+    <link rel="stylesheet" type="text/css" href="./css/loginStyle.css">
   </head>
   <body>
       <div id="topdiv"> 

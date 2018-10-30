@@ -1,4 +1,3 @@
-//pop up generator
 const {app, BrowserWindow, ipcMain} = require('electron');
 require('./query').createDB();
 require('electron-debug')({ showDevTools: process.env.NODE_ENV === 'development' })
@@ -52,7 +51,7 @@ ipcMain.on('request-mainwindow-logOut', (event) => {
   closePopUP();
   popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
-  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
+  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "Logged out!",
   }));
   popUp.loadURL(file);
@@ -87,28 +86,25 @@ app.on('activate', () => {
     createWindow();
   }
 })
-
-/////alerts 
-/////////////////////////////////////////
-////////////////////////////////////////
 let popUp; 
 ipcMain.on('request-failed-to-generate-action', (event) => {
   closePopUP();
   popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
-  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
+  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "Unknow error! <br> Try restoring the program!",
   }));
   popUp.loadURL(file);
-  if ((mainProgram != null) || !(mainProgram.closed))
+  try{
     mainProgram.close();
+  }catch(e){/* ignore exception */}
 });
   //
 ipcMain.on('request-account-not-found', (event) => {
   closePopUP();
   popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
-  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
+  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "Invalid username or password!",
   }));
   popUp.loadURL(file);
@@ -118,7 +114,7 @@ ipcMain.on('request-already-exsists-action', (event) => {
   closePopUP();
   popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
-  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
+  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "Username already in use!",
   }));
   popUp.loadURL(file);
@@ -128,7 +124,7 @@ ipcMain.on('request-pasw-dont-match-action', (event) => {
   closePopUP();
   popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
-  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
+  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "Passwords do not match!",
   }));
   popUp.loadURL(file);
@@ -138,7 +134,7 @@ ipcMain.on('request-req-not-met-action', (event) => {
   closePopUP();
   popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
-  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
+  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
       title: "Data not filled in properly!",
   }));
   popUp.loadURL(file);
@@ -153,66 +149,14 @@ ipcMain.on('request-createdAcc-action', (event) => {
   }catch(e){
     createWindow();
   }
-  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
+  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "New Account was Created!",
   }));
   popUp.loadURL(file);
 });
 
-let closePopUP = () => {
+const closePopUP = () => {
   try{
     popUp.close();
   }catch(e){/*ignore*/}
-}
-
-///custom alert template
-const loadView = ({title}) => {
-  return (`
-    <!DOCTYPE html>
-    <html>
-      <head>
-      <style>
-        body {
-          background: linear-gradient(to bottom right, #4D92A8, #0F9557);
-          -webkit-background-size: cover;
-          -moz-background-size: cover;
-          -o-background-size: cover;
-          background-size: cover;
-          background-repeat:no-repeat;      
-          overflow-x: hidden;
-          overflow-y: hidden; 
-          border: 3px solid #3a3a3a;          
-        }
-        .card {
-          margin-top: 0px;
-          vertical-align: middle;
-          height: 80px;
-          width: 400px;
-          display: inline-block;
-          position: relative;
-          display: flex;
-          padding: 10px;
-          color: #3a3a3a;
-          font-size: 18px;
-          font-family: Open Sans;
-        }
-        p{
-          font-size: 20px;
-        }
-      </style>
-        <title>PopUp</title>
-        <meta charset="UTF-8">
-        <script>
-          const { ipcRenderer } = require('electron');
-          let Timer = setInterval(exitPopUp, 2500);
-          function exitPopUp(){
-            ipcRenderer.send('request-close-action');
-          }
-        </script>
-      </head>
-      <body>
-        <div class="card" id="view"><p>${title}</p></div>
-      </body>
-    </html>
-  `)
 }
