@@ -14,7 +14,8 @@ exports.createDB = () => {
 exports.loginFunc = (name, pass) => {
     try {
         let db = new sqlite3.Database('database.db');
-        db.get('SELECT distinct id, count(*) as c FROM users WHERE name = "${name}" AND pass = "${require("./hash").method(pass)}" GROUP BY name HAVING c = 1',
+        console.log(`SELECT distinct id, count(*) as c FROM users WHERE name = "${name}" AND pass = "${require("./hash").method(pass)}" GROUP BY name HAVING c = 1`);
+        db.get(`SELECT distinct id, count(*) as c FROM users WHERE name = "${name}" AND pass = "${require("./hash").method(pass)}" GROUP BY name HAVING c = 1`,
             [], (err, row) => {
                 if (row) {
                     db.run(`INSERT INTO log_history (id_user, date_l) VALUES ("${row.id}", "${new Date()}")`);
@@ -30,7 +31,7 @@ exports.loginFunc = (name, pass) => {
 exports.reqFunc = (name, pass) => {
     try {
         let db = new sqlite3.Database('database.db');
-        db.get('SELECT name FROM users WHERE name = "${name}"', [], (err, row) => {
+        db.get(`SELECT name FROM users WHERE name = "${name}"`, [], (err, row) => {
             if (!row) {
                 db.run(`INSERT INTO users (name, pass, date_c)
                     VALUES ("${name}", "${require("./hash").method(pass)}", "${new Date()}")`);
@@ -44,11 +45,16 @@ exports.reqFunc = (name, pass) => {
         ipcRenderer.send('request-failed-to-generate-action');
     }
 }
-exports.getUser = () => {
+const getUser = () => {
     try {
         let db = new sqlite3.Database('database.db');
-        db.get('SELECT id_user FROM log_history ORDER BY id DESC LIMIT 1', [], (err, row) => {
-            console.log(row);
+        db.get(`
+            SELECT users.name as name FROM log_history 
+            INNER JOIN users on log_history.id_user = users.id
+            ORDER BY log_history.id_user DESC LIMIT 1`,
+             [], (err, row) => {
+                console.log(row.name);
+                return row.name;
         });
     } catch (e) {
         ipcRenderer.send('request-failed-to-generate-action');

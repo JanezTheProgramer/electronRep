@@ -1,100 +1,72 @@
 <html>
     <head>
         <title>eXo</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="mainpStyle.css">
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="./css/mainpStyle.css">
+        <script>
+            window.$ = window.jQuery = require("jquery");
+        </script>
+        <script>
+            const { ipcRenderer } = require('electron'); 
+            $( document ).ready(() => {
+                $(".dropbtn").text("");
+                $("#minimize").click(() => {
+                    ipcRenderer.send('request-mainwindow-minimize');
+                });
+                $("#exit").click(() => {
+                    window.close();
+                });
+                $(".data").click((e) => {
+                   $( "#bodyDiv" ).empty();
+                   switch(parseInt(e.target.id)){
+                        case 0: 
+                            break;
+                        case 1: 
+                            break;
+                        case 2: 
+                            break;
+                        case 3: 
+                            break;
+                        case 4: 
+                            break;
+                        case 5:
+                            ipcRenderer.send('request-mainwindow-logOut');
+                            break;
+                        default:
+                            console.log("unwanted id occured!");
+                            break;
+                   }
+                });      
+            });
+        </script>
     </head>
-    <body align="center"> 
-        <div align="middle" id="topdiv"> 
-            <div class="col"><button id="userName"><p id="headtext-display">Account</p></button></div>
-            <div  class="col"><button id="yourGames"><p id="headtext-display">Owned</p></button></div>
-            <div class="col"><button id="getGames"><p id="headtext-display">Store</p></button></div>
-            <div class="col"><button id="information"><p id="headtext-display">News</p></button></div>
-            <div class="col"></div>
-            <div class="col"></div>
-            <div class="col"><button id="logOut"><p id="headtext-functions">Log out</p></button></div>
-            <div class="col"><button id="minimize"><p id="headtext-functions">Minimize</p></button></div>
-            <div class="col"><button id="exit"><p id="headtext-functions">Exit</p></button></div>
+    <body> 
+        <div>  
+            <div class="dropdown">
+              <button class="dropbtn">user</button>
+              <div class="dropdown-content">
+                <a id="0" class="data" href="#">account</a>
+                <a id="1" class="data" href="#">store</a>
+                <a id="2" class="data" href="#">library</a>
+                <a id="3" class="data" href="#">about-exo</a>
+                <a id="4" class="data" href="#">notes</a>
+                <a id="5" class="data" href="#">logout</a>
+              </div>
+            </div>         
+            <button id="minimize"></button>
+            <button id="exit"></button>
         </div>
-        <div id="searchBar">
-            <img id="icon" src="util/iconSearch.png" width="6%" height="66%">
-            <input id="searchElement" type="name">
-        </div>
-        <div id="leftFixDIV">
-            <div class="divTable">
-                <div class="divTableBody">
-                    <div style="height:11%" class="divTableRowWatch" align="center"><img src="util/avatar.png"> </div>
-                    <div style="height:30%" class="divTableRowWatch" align="center">
-                        <div id="CurrentUserOnLeftDiv" width="50%" class="divTableCell"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="leftBottomFixDIV">
-            <div class="divTable">
-                <div class="divTableBody">
-                    <br>
-                    <div style="height:11%" class="divTableRowWatch" align="center">
-                        <div id="clockTitle" width="50%" class="divTableCell">Online for (min):</div>
-                    </div>
-                    <div style="height:24%" class="divTableRowWatch" align="center">
-                        <div id="onlineTime" width="50%" class="divTableCell"></div>
-                    </div><br>
-                    <div style="height:11%" class="divTableRowWatch" align="center">
-                        <div id="clockTitle" width="50%" class="divTableCell">World Time:</div>
-                    </div>
-                    <div style="height:24%" class="divTableRowWatch" align="center">
-                        <div id="worldClock" width="50%" class="divTableCell"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <ul align="center" style="text-align: center" class="fly-in-text hidden">
-            <li>W</li>
-            <li>e</li>
-            <li>l</li>
-            <li>c</li>
-            <li>o</li>
-            <li>m</li>
-            <li>e</li>
-            <br>
-        </ul>
-        <div id="borderDiv">
-            <div id="windowTitle"></div>
-            <div id="userInfoDiv">
-                <div class="divTable">
-                    <div class="divTableBody">
-                        <br><br><br>
-                        <div class="divTableRow" align="left">
-                            <div id="userDivName" width="50%" class="divTableCell"><p id="DivBasicDATA">Username:</p></div>
-                            <div id="userDivData" width="50%" class="divTableCell"><p id="DivUserNAME">/</p></div>
-                        </div><br>
-                        <div class="divTableRow" align="left">
-                            <div id="userDivName" width="50%" class="divTableCell"><p id="DivBasicDATA">Member since:</p></div>
-                            <div id="userDivData" width="50%" class="divTableCell"><p id="DivUserSINCE">/</p></div>
-                        </div><br>
-                        <div class="divTableRow" align="left">
-                            <div id="userDivName" width="50%" class="divTableCell"><p id="DivBasicDATA">Last logged in:</p></div>
-                            <div id="userDivData" width="50%" class="divTableCell"><p id="DivUserLAST">/</p></div>
-                        </div><br>
-                        <div class="divTableRow" align="left">
-                            <div id="userDivName" width="50%" class="divTableCell"><p id="DivBasicDATA">Account age (days):</p></div>
-                            <div id="userDivData" width="50%" class="divTableCell"><p id="DivUserAGE">/</p></div>
-                        </div><br>
-                        <div class="divTableRow" align="left">
-                            <div id="userDivName" width="50%" class="divTableCell"><p id="DivBasicDATA">Games owned:</p></div>
-                            <div id="userDivData" width="50%" class="divTableCell"><p id="DivUserGAME">/</p></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="yourGamesDiv">
-                <button style="width: 100%; height: 5%;" id="firstGame">first game</button>
-            </div>
-            <div id="getGamesDiv">
-            </div>
-            <div id="informationDiv">
-            </div>
+        <div id="bodyDiv">
+            <figure>
+                <h1>Welcome<br>to Exo!</h1>
+                <h1>Welcome<br>to Exo!</h1>
+                <h1>Welcome<br>to Exo!</h1>
+                <h1>Welcome<br>to Exo!</h1>
+                <h1>Welcome<br>to Exo!</h1>
+                <h1>Welcome<br>to Exo!</h1>
+                <h1>Welcome<br>to Exo!</h1>
+                <h1>Welcome<br>to Exo!</h1>
+            </figure>
         </div>
     </body>
 </html>

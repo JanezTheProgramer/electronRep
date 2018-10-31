@@ -7,7 +7,7 @@ ipcMain.on('request-close-action', (event) => {
 });
 
 ipcMain.on('request-mainprocess-action', (event) => {
-  mainProgram = new BrowserWindow({fullscreen: true, resizable: false, frame: false});
+  mainProgram = new BrowserWindow({alwaysOnTop: true, skipTaskbar: false, fullscreen: true, resizable: false, frame: false});
   loginWindow.close();
   try{
     reqWindow.close();
@@ -21,7 +21,7 @@ ipcMain.on('request-mainprocess-action', (event) => {
 //
 //
 ipcMain.on('request-registration-action', (event) => {
-  reqWindow = new BrowserWindow({fullscreenable: false, maximizable: false, width: 480, height: 460, resizable: false, frame: false,transparent: true,});
+  reqWindow = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 480, height: 460, resizable: false, frame: false,transparent: true,});
   reqWindow.loadFile('registerForm.html')
   reqWindow.setMenu(null);
   reqWindow.on('closed', () => {
@@ -45,11 +45,11 @@ ipcMain.on('request-mainwindow-minimize', (event) => {
 });
 //
 ipcMain.on('request-mainwindow-logOut', (event) => { 
-  loginWindow = new BrowserWindow({fullscreenable: false, maximizable: false, width: 480, height: 460, resizable: false, frame: false,transparent: true,});
+  loginWindow = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 480, height: 460, resizable: false, frame: false,transparent: true,});
   loginWindow.loadFile('loginForm.html');
   loginWindow.setMenu(null);
   closePopUP();
-  popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
+  popUp = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "Logged out!",
@@ -67,7 +67,7 @@ ipcMain.on('request-mainwindow-logOut', (event) => {
 let loginWindow;
 
 let createWindow = () => {
-  loginWindow = new BrowserWindow({fullscreenable: false, maximizable: false, width: 480, height: 460, resizable: false, frame: false,transparent: true,});
+  loginWindow = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 480, height: 460, resizable: false, frame: false,transparent: true,});
   loginWindow.loadFile('loginForm.html');
   loginWindow.setMenu(null);
   loginWindow.on('closed', () => {
@@ -76,9 +76,8 @@ let createWindow = () => {
 }
 app.on('ready', createWindow);
 app.on('window-all-closed', () => {
-  if (process.platform !== "" ) {
+  if (process.platform !== "" )
     app.quit();
-  }
 })
 
 app.on('activate', () => {
@@ -89,7 +88,7 @@ app.on('activate', () => {
 let popUp; 
 ipcMain.on('request-failed-to-generate-action', (event) => {
   closePopUP();
-  popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
+  popUp = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "Unknow error! <br> Try restoring the program!",
@@ -102,7 +101,7 @@ ipcMain.on('request-failed-to-generate-action', (event) => {
   //
 ipcMain.on('request-account-not-found', (event) => {
   closePopUP();
-  popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
+  popUp = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "Invalid username or password!",
@@ -112,7 +111,7 @@ ipcMain.on('request-account-not-found', (event) => {
   //
 ipcMain.on('request-already-exsists-action', (event) => {
   closePopUP();
-  popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
+  popUp = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "Username already in use!",
@@ -122,7 +121,7 @@ ipcMain.on('request-already-exsists-action', (event) => {
   //
 ipcMain.on('request-pasw-dont-match-action', (event) => {
   closePopUP();
-  popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
+  popUp = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "Passwords do not match!",
@@ -132,7 +131,7 @@ ipcMain.on('request-pasw-dont-match-action', (event) => {
   //
 ipcMain.on('request-req-not-met-action', (event) => {
   closePopUP();
-  popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
+  popUp = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
       title: "Data not filled in properly!",
@@ -142,7 +141,7 @@ ipcMain.on('request-req-not-met-action', (event) => {
 
 ipcMain.on('request-createdAcc-action', (event) => {
   closePopUP();
-  popUp = new BrowserWindow({fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
+  popUp = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
   popUp.setMenu(null);
   try{
     loginWindow.focus();
