@@ -1,5 +1,4 @@
 "# electronRep" 
 tasks/ 
-  remove custom font 
-  chnage main 
-  window focused
+  await async functions 
+  platform in general
