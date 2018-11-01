@@ -8,32 +8,41 @@
         </script>
         <script>
             const { ipcRenderer } = require('electron'); 
+            const worldClock = () => {
+                let time = new Date();
+                const timeFix = (x) => {
+                    return parseInt(x) < 10 ?  `0${x}` : x;
+                }
+                $("#clock").text(`${timeFix(time.getHours())}:${timeFix(time.getMinutes())}`);  
+                setTimeout(worldClock, 10000);
+            }
             $( document ).ready(() => {
-                $(".dropbtn").text("");
+                worldClock();
                 $("#minimize").click(() => {
                     ipcRenderer.send('request-mainwindow-minimize');
                 });
-                $("#exit").click(() => {
+                $("#exit").click(() => {                 
                     window.close();
                 });
+                $( ".dropbtn" ).click(() => {
+                    $( "#mainDiv" ).children().hide();
+                    $( "#platform" ).fadeIn();
+                });
                 $(".data").click((e) => {
-                   $( "#bodyDiv" ).empty();
                    switch(parseInt(e.target.id)){
-                        case 0: 
+                        case 1:
+                            $( "#mainDiv" ).children().hide();  
+                            $( "#accInfo" ).fadeIn();
                             break;
-                        case 1: 
+                        case 2:
+                            $( "#mainDiv" ).children().hide();  
+                            $( "#tutorial" ).fadeIn();
                             break;
-                        case 2: 
-                            break;
-                        case 3: 
-                            break;
-                        case 4: 
-                            break;
-                        case 5:
+                        case 3:
                             ipcRenderer.send('request-mainwindow-logOut');
                             break;
                         default:
-                            console.log("unwanted id occured!");
+                            ipcRenderer.send('request-failed-to-generate-action');
                             break;
                    }
                 });      
@@ -41,23 +50,21 @@
         </script>
     </head>
     <body> 
-        <div>  
+        <div>
             <div class="dropdown">
-              <button class="dropbtn">user</button>
+              <button class="dropbtn">eXo</button>
               <div class="dropdown-content">
-                <a id="0" class="data" href="#">account</a>
-                <a id="1" class="data" href="#">store</a>
-                <a id="2" class="data" href="#">library</a>
-                <a id="3" class="data" href="#">about-exo</a>
-                <a id="4" class="data" href="#">notes</a>
-                <a id="5" class="data" href="#">logout</a>
+                <a id="1" class="data">Account</a>
+                <a id="2" class="data">Tutorial</a>
+                <a id="3" class="data">Logout</a>
               </div>
-            </div>         
+            </div>   
+            <div id="clock"></div>       
             <button id="minimize"></button>
             <button id="exit"></button>
         </div>
-        <div id="bodyDiv">
-            <figure>
+        <div id="mainDiv" class="bodyDiv">
+            <figure id="welcText">
                 <h1>Welcome<br>to Exo!</h1>
                 <h1>Welcome<br>to Exo!</h1>
                 <h1>Welcome<br>to Exo!</h1>
@@ -67,6 +74,14 @@
                 <h1>Welcome<br>to Exo!</h1>
                 <h1>Welcome<br>to Exo!</h1>
             </figure>
-        </div>
+            <div id="platform" style="display:none">
+                <p>hello to the main boi</p>
+            </div>
+            <div id="accInfo" style="display:none">
+                <p>hello to the main boi</p>
+            </div> 
+            <div id="tutorial" style="display:none">
+                <p>welcome to the tutorial</p>
+            </div>
     </body>
 </html>

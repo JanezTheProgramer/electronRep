@@ -1,13 +1,22 @@
-const {app, BrowserWindow, ipcMain} = require('electron');
+const {app, BrowserWindow, ipcMain, nativeImage} = require('electron');
+const path = require('path');
 require('./query').createDB();
 require('electron-debug')({ showDevTools: process.env.NODE_ENV === 'development' })
+
+let icon = nativeImage.createFromPath(path.join(__dirname, "./util/icon.png"))
 
 ipcMain.on('request-close-action', (event) => {
   popUp.close();
 });
 
 ipcMain.on('request-mainprocess-action', (event) => {
-  mainProgram = new BrowserWindow({alwaysOnTop: true, skipTaskbar: false, fullscreen: true, resizable: false, frame: false});
+  mainProgram = new BrowserWindow({
+    skipTaskbar: false,
+    fullscreen: true,
+    resizable: false,
+    frame: false,
+    icon: icon
+  });
   loginWindow.close();
   try{
     reqWindow.close();
@@ -21,7 +30,17 @@ ipcMain.on('request-mainprocess-action', (event) => {
 //
 //
 ipcMain.on('request-registration-action', (event) => {
-  reqWindow = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 480, height: 460, resizable: false, frame: false,transparent: true,});
+  reqWindow = new BrowserWindow({
+    skipTaskbar: false, 
+    fullscreenable: false, 
+    maximizable: false, 
+    width: 480, 
+    height: 460, 
+    resizable: false,
+    frame: false,
+    transparent: true,
+    icon: icon
+  });
   reqWindow.loadFile('registerForm.html')
   reqWindow.setMenu(null);
   reqWindow.on('closed', () => {
@@ -45,11 +64,31 @@ ipcMain.on('request-mainwindow-minimize', (event) => {
 });
 //
 ipcMain.on('request-mainwindow-logOut', (event) => { 
-  loginWindow = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 480, height: 460, resizable: false, frame: false,transparent: true,});
+  loginWindow = new BrowserWindow({
+    skipTaskbar: false,
+    fullscreenable: false, 
+    maximizable: false, 
+    width: 480, 
+    height: 460, 
+    resizable: false, 
+    frame: false,
+    transparent: true,
+    icon: icon
+  });
   loginWindow.loadFile('loginForm.html');
   loginWindow.setMenu(null);
   closePopUP();
-  popUp = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
+  popUp = new BrowserWindow({
+    skipTaskbar: false,
+    fullscreenable: false, 
+    maximizable: false, 
+    width: 450, 
+    height: 170, 
+    resizable: false, 
+    frame: false,
+    transparent: true,
+    icon: path.join(__dirname, './util/icon.png')
+  });
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "Logged out!",
@@ -67,7 +106,17 @@ ipcMain.on('request-mainwindow-logOut', (event) => {
 let loginWindow;
 
 let createWindow = () => {
-  loginWindow = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 480, height: 460, resizable: false, frame: false,transparent: true,});
+  loginWindow = new BrowserWindow({
+    skipTaskbar: false, 
+    fullscreenable: false, 
+    maximizable: false, 
+    width: 480, 
+    height: 460, 
+    resizable: false, 
+    frame: false,
+    transparent: true,
+    icon: icon
+  });
   loginWindow.loadFile('loginForm.html');
   loginWindow.setMenu(null);
   loginWindow.on('closed', () => {
@@ -88,20 +137,37 @@ app.on('activate', () => {
 let popUp; 
 ipcMain.on('request-failed-to-generate-action', (event) => {
   closePopUP();
-  popUp = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
+  popUp = new BrowserWindow({
+    skipTaskbar: false, 
+    fullscreenable: false, 
+    maximizable: false, 
+    width: 450, 
+    height: 170, 
+    resizable: false, 
+    frame: false,
+    transparent: true,
+    icon: icon
+  });
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "Unknow error! <br> Try restoring the program!",
   }));
   popUp.loadURL(file);
-  try{
-    mainProgram.close();
-  }catch(e){/* ignore exception */}
 });
   //
 ipcMain.on('request-account-not-found', (event) => {
   closePopUP();
-  popUp = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
+  popUp = new BrowserWindow({
+    skipTaskbar: false, 
+    fullscreenable: false, 
+    maximizable: false, 
+    width: 450, 
+    height: 170, 
+    resizable: false, 
+    frame: false,
+    transparent: true,
+    icon: icon
+  });
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "Invalid username or password!",
@@ -111,7 +177,17 @@ ipcMain.on('request-account-not-found', (event) => {
   //
 ipcMain.on('request-already-exsists-action', (event) => {
   closePopUP();
-  popUp = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
+  popUp = new BrowserWindow({
+    skipTaskbar: false, 
+    fullscreenable: false, 
+    maximizable: false, 
+    width: 450, 
+    height: 170, 
+    resizable: false, 
+    frame: false,
+    transparent: true,
+    icon: icon
+  });
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "Username already in use!",
@@ -121,7 +197,17 @@ ipcMain.on('request-already-exsists-action', (event) => {
   //
 ipcMain.on('request-pasw-dont-match-action', (event) => {
   closePopUP();
-  popUp = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
+  popUp = new BrowserWindow({
+    skipTaskbar: false, 
+    fullscreenable: false, 
+    maximizable: false, 
+    width: 450, 
+    height: 170, 
+    resizable: false, 
+    frame: false,
+    transparent: true,
+    icon: icon
+  });
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "Passwords do not match!",
@@ -131,7 +217,17 @@ ipcMain.on('request-pasw-dont-match-action', (event) => {
   //
 ipcMain.on('request-req-not-met-action', (event) => {
   closePopUP();
-  popUp = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
+  popUp = new BrowserWindow({
+    skipTaskbar: false, 
+    fullscreenable: false, 
+    maximizable: false, 
+    width: 450, 
+    height: 170, 
+    resizable: false, 
+    frame: false,
+    transparent: true,
+    icon: icon
+  });
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
       title: "Data not filled in properly!",
@@ -141,8 +237,17 @@ ipcMain.on('request-req-not-met-action', (event) => {
 
 ipcMain.on('request-createdAcc-action', (event) => {
   closePopUP();
-  popUp = new BrowserWindow({skipTaskbar: false, fullscreenable: false, maximizable: false, width: 450, height: 170, resizable: false, frame: false,transparent: true,});
-  popUp.setMenu(null);
+  popUp = new BrowserWindow({
+    skipTaskbar: false, 
+    fullscreenable: false, 
+    maximizable: false, 
+    width: 450, 
+    height: 170, 
+    resizable: false, 
+    frame: false,
+    transparent: true,
+    icon: icon
+  });
   try{
     loginWindow.focus();
   }catch(e){

@@ -45,18 +45,56 @@ exports.reqFunc = (name, pass) => {
         ipcRenderer.send('request-failed-to-generate-action');
     }
 }
-const getUser = () => {
+var value;
+exports.getUser = () => {
     try {
         let db = new sqlite3.Database('database.db');
         db.get(`
-            SELECT users.name as name FROM log_history 
+            SELECT users.name name FROM log_history 
             INNER JOIN users on log_history.id_user = users.id
             ORDER BY log_history.id_user DESC LIMIT 1`,
              [], (err, row) => {
-                console.log(row.name);
-                return row.name;
+                value = `${row.name}`;
         });
+        db.close();
     } catch (e) {
         ipcRenderer.send('request-failed-to-generate-action');
     }
+    return value;
+}
+
+exports.generateNotes = () => {
+    let htmlObject = "";
+    for(let i = 0; i < 10; i++){
+        htmlObject +=`<div>${i}</div>`;
+    }
+    console.log(htmlObject);
+    return htmlObject;
+}
+
+exports.generateStore = () => {
+    let htmlObject = "";
+    for(let i = 0; i < 10; i++){
+        htmlObject +=`<div>${i}</div>`;
+    }
+    console.log(htmlObject);
+    return htmlObject;
+}
+
+exports.generateLibrary = () => {
+    let htmlObject = "";
+    for(let i = 0; i < 10; i++){
+        htmlObject +=`<div>${i}</div>`;
+    }
+    console.log(htmlObject);
+    return htmlObject;
+}
+
+exports.generateAccInfo = () => {
+    let htmlObject = "";
+    for(let i = 0; i < 10; i++){
+        htmlObject +=`<div>${i}</div>`;
+    }
+    console.log(htmlObject);
+    return htmlObject;
 }
