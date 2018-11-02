@@ -14,29 +14,45 @@
                     return parseInt(x) < 10 ?  `0${x}` : x;
                 }
                 $("#clock").text(`${timeFix(time.getHours())}:${timeFix(time.getMinutes())}`);  
-                setTimeout(worldClock, 10000);
+                setTimeout(worldClock, 60000);
             }
             $( document ).ready(() => {
                 worldClock();
                 $("#minimize").click(() => {
-                    ipcRenderer.send('request-mainwindow-minimize');
+                    
                 });
-                $("#exit").click(() => {                 
-                    window.close();
+                $(".roundBtn").click((e) => {
+                    switch(String(e.target.id)){
+                        case "exit":
+                            window.close();
+                            break;
+                        case "minimize":
+                            ipcRenderer.send('request-mainwindow-minimize');
+                            break;
+                        case "reset":
+                            self.location.assign(location);
+                            break;
+                        case "back":
+                            if(!$("#platformDiv").is(":visible"))break;
+                            $(".platformWindow").fadeOut(200);                            
+                            break;
+                        default:
+                            ipcRenderer.send('request-failed-to-generate-action');
+                            break;
+                    }
                 });
                 $( ".dropbtn" ).click(() => {
                     $( "#mainDiv" ).children().hide();
-                    $( "#platform" ).fadeIn();
+                    $( "#platformDiv" ).fadeIn();
                 });
                 $(".data").click((e) => {
-                   switch(parseInt(e.target.id)){
+                    $( "#mainDiv" ).children().hide();
+                    switch(parseInt(e.target.id)){
                         case 1:
-                            $( "#mainDiv" ).children().hide();  
-                            $( "#accInfo" ).fadeIn();
+                            $( "#accInfoDiv" ).fadeIn();
                             break;
-                        case 2:
-                            $( "#mainDiv" ).children().hide();  
-                            $( "#tutorial" ).fadeIn();
+                        case 2: 
+                            $( "#tutorialDiv" ).fadeIn();
                             break;
                         case 3:
                             ipcRenderer.send('request-mainwindow-logOut');
@@ -44,8 +60,14 @@
                         default:
                             ipcRenderer.send('request-failed-to-generate-action');
                             break;
-                   }
-                });      
+                    }
+                });
+                $("input#save").click(() => {
+                   //history.go(0);
+                });
+                setTimeout(() => {
+                  $( "body" ).fadeIn(1500);  
+                }, 1000)
             });
         </script>
     </head>
@@ -59,9 +81,11 @@
                 <a id="3" class="data">Logout</a>
               </div>
             </div>   
-            <div id="clock"></div>       
-            <button id="minimize"></button>
-            <button id="exit"></button>
+            <div id="clock"></div>     
+            <button class="roundBtn" id="back"></button>
+            <button class="roundBtn" id="reset"></button>  
+            <button class="roundBtn" id="minimize"></button>
+            <button class="roundBtn" id="exit"></button>
         </div>
         <div id="mainDiv" class="bodyDiv">
             <figure id="welcText">
@@ -74,13 +98,33 @@
                 <h1>Welcome<br>to Exo!</h1>
                 <h1>Welcome<br>to Exo!</h1>
             </figure>
-            <div id="platform" style="display:none">
-                <p>hello to the main boi</p>
+            <div id="platformDiv" style="display:none">
+                <div id="buttonsDiv">
+                    <div class="dragg"><input type="button" value="Notes"></div><br>
+                    <div class="dragg"><input type="button" value="Store"></div><br>
+                    <div class="dragg"><input type="button" value="Library"></div><br>
+                    <div class="dragg"><input type="button" value="Calculator"></div>
+                    <div class="platformWindow">
+                        
+                    </div>
+                </div>
             </div>
-            <div id="accInfo" style="display:none">
-                <p>hello to the main boi</p>
+            <div id="accInfoDiv" style="display:none">
+                <div id="labels">
+                    <div>Username:</div><br>
+                    <div>Member since:</div><br>
+                    <div>Last seen:</div><br>
+                    <div>Account age:</div><br>
+                    <div><input id="save" type="button" value="Save"></div>
+                </div>
+                <div id="accData">
+                    <div><input type=text value="username"></div><br>
+                    <div>1</div><br>
+                    <div>2</div><br>
+                    <div>3</div>
+                </div>
             </div> 
-            <div id="tutorial" style="display:none">
+            <div id="tutorialDiv" style="display:none">
                 <p>welcome to the tutorial</p>
             </div>
     </body>

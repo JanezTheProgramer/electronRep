@@ -1,9 +1,9 @@
 const {app, BrowserWindow, ipcMain, nativeImage} = require('electron');
 const path = require('path');
+const icon = nativeImage.createFromPath(path.join(__dirname, "./util/icon.png"));
 require('./query').createDB();
-require('electron-debug')({ showDevTools: process.env.NODE_ENV === 'development' })
+require('electron-debug')({ showDevTools: process.env.NODE_ENV === 'development' });
 
-let icon = nativeImage.createFromPath(path.join(__dirname, "./util/icon.png"))
 
 ipcMain.on('request-close-action', (event) => {
   popUp.close();
@@ -25,7 +25,7 @@ ipcMain.on('request-mainprocess-action', (event) => {
   mainProgram.setMenu(null);
   mainProgram.on('closed', () => {
     mainProgram = null;
-  })
+  });
 });
 //
 //
@@ -45,7 +45,7 @@ ipcMain.on('request-registration-action', (event) => {
   reqWindow.setMenu(null);
   reqWindow.on('closed', () => {
     reqWindow = null
-  })
+  });
 });
 //
 //minimize
@@ -127,18 +127,18 @@ app.on('ready', createWindow);
 app.on('window-all-closed', () => {
   if (process.platform !== "" )
     app.quit();
-})
+});
 
 app.on('activate', () => {
   if (mainProgram === null) {
     createWindow();
   }
-})
+});
 let popUp; 
 ipcMain.on('request-failed-to-generate-action', (event) => {
   closePopUP();
   popUp = new BrowserWindow({
-    skipTaskbar: false, 
+    skipTaskbar: true, 
     fullscreenable: false, 
     maximizable: false, 
     width: 450, 
@@ -158,7 +158,7 @@ ipcMain.on('request-failed-to-generate-action', (event) => {
 ipcMain.on('request-account-not-found', (event) => {
   closePopUP();
   popUp = new BrowserWindow({
-    skipTaskbar: false, 
+    skipTaskbar: true,  
     fullscreenable: false, 
     maximizable: false, 
     width: 450, 
@@ -178,7 +178,7 @@ ipcMain.on('request-account-not-found', (event) => {
 ipcMain.on('request-already-exsists-action', (event) => {
   closePopUP();
   popUp = new BrowserWindow({
-    skipTaskbar: false, 
+    skipTaskbar: true, 
     fullscreenable: false, 
     maximizable: false, 
     width: 450, 
@@ -198,7 +198,7 @@ ipcMain.on('request-already-exsists-action', (event) => {
 ipcMain.on('request-pasw-dont-match-action', (event) => {
   closePopUP();
   popUp = new BrowserWindow({
-    skipTaskbar: false, 
+    skipTaskbar: true,  
     fullscreenable: false, 
     maximizable: false, 
     width: 450, 
@@ -218,7 +218,7 @@ ipcMain.on('request-pasw-dont-match-action', (event) => {
 ipcMain.on('request-req-not-met-action', (event) => {
   closePopUP();
   popUp = new BrowserWindow({
-    skipTaskbar: false, 
+    skipTaskbar: true, 
     fullscreenable: false, 
     maximizable: false, 
     width: 450, 
@@ -238,7 +238,7 @@ ipcMain.on('request-req-not-met-action', (event) => {
 ipcMain.on('request-createdAcc-action', (event) => {
   closePopUP();
   popUp = new BrowserWindow({
-    skipTaskbar: false, 
+    skipTaskbar: true,  
     fullscreenable: false, 
     maximizable: false, 
     width: 450, 

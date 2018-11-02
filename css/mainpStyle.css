@@ -1,16 +1,17 @@
 @font-face{
   font-family:'digital';
-  src: url('digital.ttf');
+  src: url('./digital.ttf');
 }
 @font-face{
   font-family:'custom';
-  src: url('custom.otf');
+  src: url('./custom.otf');
 }
 body {         
   background-image: url("./../util/mainback.jpg"); 
   background-repeat: no-repeat;
   background-size: 100% 100%;
   overflow: hidden;
+  display: none;
 }
 /*::-webkit-scrollbar {
     width: 2%;
@@ -27,38 +28,36 @@ body {
 ::-webkit-scrollbar-thumb:window-inactive {
     background: rgba(2, 136, 118, 0.8);  
 }*/
-#minimize{
+
+.roundBtn {
+  outline: none;
   position: absolute;
-  right: 4vw;
-  top: 2vh;
+  top: 5vh;
   display:block;
   height: 2vh;
   width: 2vh;
   border-radius: 50%;
   border: 0px;
+  user-select: none;
+  background-color: rgb(141, 145, 143)
 }
-#exit{
-  position: absolute;
-  right: 2vw;
-  top: 2vh;
-  display:block;
-  height: 2vh;
-  width: 2vh;
-  border-radius: 50%;
-  border: 0px;
-}
-#minimize:hover{
+#exit{right: 3vw}
+#minimize{right: 5vw}
+#reset {right: 7vw}
+#back {right: 9vw}
+
+.roundBtn:hover{
   cursor: pointer;
   height: 2.2vh;
   width: 2.2vh;
-  background-color: rgb(223, 208, 0);
 }
-#exit:hover{
-  cursor: pointer;
-  height: 2.2vh;
-  width: 2.2vh;
-  background-color: rgb(221, 65, 3);
-}
+#exit:hover{background-color: rgb(221, 85, 53)}
+#minimize:hover{background-color: rgb(211, 170, 3)}
+#reset:hover{background-color: rgb(21, 115, 220)}
+#back:hover{background-color: rgb(91, 240, 43)}
+
+.roundBtn:focus{outline: none}
+
 .dropbtn {
   outline:none;
   position: absolute;
@@ -204,3 +203,105 @@ h1:nth-child(4){ transform:translateZ(15px); }
 h1:nth-child(5){ transform:translateZ(20px); }
 h1:nth-child(6){ transform:translateZ(25px); }
 h1:nth-child(7){ transform:translateZ(30px); }
+
+#labels{
+  user-select: none;
+  position: absolute;
+  left: 10vw;
+  top: 10vh;
+  color: white;
+  font-family: custom;
+  font-size: 2.7vw;
+}
+
+#accData{
+  user-select: none;
+  position: absolute;
+  left: 50vw;
+  top: 10vh;
+  color: white;
+  font-family: custom;
+  font-size: 2.7vw;
+}
+
+#labels:hover, #accData:hover{
+  cursor: default;
+}
+
+#labels div input {
+  outline:none;
+  background-color: transparent;
+  background-image: radial-gradient(rgba(30,90,60,0.94), rgba(30,90,60,0.64), rgba(20,20,20,0.2));
+  border: 2px solid black;
+  font-family: custom;
+  width: 15vw;
+  height: 5vh;
+  color: rgb(200,200,200);
+  font-size: 2vw;
+  text-align: center;
+  vertical-align: baseline;
+  user-select: none;
+  border: none;
+  border-bottom: 2px solid grey;
+}
+
+#labels div input:hover{
+  outline:none;
+  cursor: pointer;
+  user-select: none;
+  color:white;
+  text-shadow: 0px 1px 10px rgba(255,255,255,0.6);
+}
+
+
+#accData div input {
+  background: none;
+  color: white;
+  font-family: custom;
+  font-size: 2.7vw;
+  border: none;
+  border-bottom: 2px solid grey;
+}
+
+#accData div input:focus, #labels div input:focus{
+  outline: none;
+}
+
+#buttonsDiv {
+  position: absolute;
+  left: 10vw;
+  top: 10vw;
+  user-select: none;
+  position: absolute;
+  left: 10vw;
+  top: 10vh;
+  color: white;
+  font-family: custom;
+  font-size: 2.7vw;
+ 
+}
+
+#buttonsDiv div input {
+  outline:none;
+  background-color: transparent;
+  background-image: radial-gradient(rgba(30,90,60,0.94), rgba(30,90,60,0.64), rgba(20,20,20,0.2));
+  border: 2px solid black;
+  font-family: custom;
+  width: 15vw;
+  height: 5vh;
+  color: rgb(200,200,200);
+  font-size: 2vw;
+  text-align: center;
+  vertical-align: baseline;
+  user-select: none;
+  border: none;
+  border-bottom: 2px solid grey;
+}
+
+#buttonsDiv div input:hover {
+  outline:none;
+  cursor: pointer;
+  user-select: none;
+  color:white;
+  text-shadow: 0px 1px 10px rgba(255,255,255,0.6);
+}
