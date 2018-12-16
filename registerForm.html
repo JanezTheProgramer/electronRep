@@ -10,6 +10,7 @@
     <script>
       const { ipcRenderer } = require('electron');
       $( document ).ready(() => {
+        $("#usernameId").focus();
         $("#minimize").click(() => {
           ipcRenderer.send('request-register-minimize');
         });
@@ -35,7 +36,7 @@
         $( "#registerButton" ).click(() => {
           CreateAccount();
         });
-        $( "#reEnterPasw" ).keypress((e) => {
+        $( "#reEnterPasw" ).keypress(e => {
           if(e.keyCode == 13)CreateAccount();
         });
       });
@@ -44,9 +45,9 @@
   <body>
     <div id="topdiv"> 
       <div style="-webkit-app-region: drag;" class="col"></div>
-      <div style="-webkit-app-region: drag;"class="col"></div>
-      <div style="-webkit-app-region: drag;"class="col"></div>
-      <div style="-webkit-app-region: drag;"class="col"></div>
+      <div style="-webkit-app-region: drag;" class="col"></div>
+      <div style="-webkit-app-region: drag;" class="col"></div>
+      <div style="-webkit-app-region: drag;" class="col"></div>
       <div class="col">
         <button id="minimize"></button>
         <button id="exit"></button>
@@ -57,7 +58,7 @@
           <div class="divTableRow"></div>
         <div class="divTableRow">
           <div class="divTableCell">
-            <input id="usernameId" type="name" placeholder="Username">
+            <input id="usernameId" type="text" placeholder="Username">
           </div>
         </div>
         <div class="divTableRow">

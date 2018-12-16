@@ -9,6 +9,7 @@
     <script>
       const { ipcRenderer } = require('electron'); 
       $( document ).ready(() => {
+        $("#usernameId").focus();
         $("#minimize").click(() => {
           ipcRenderer.send('request-login-minimize');
         });
@@ -26,7 +27,7 @@
         $( "#loginButton" ).click(() => {
           Login();
         });
-        $( "#passwordId" ).keypress((event) => {
+        $( "#passwordId" ).keypress(event => {
           if(event.keyCode == 13)Login();
         });
         $( "#noAcc" ).click(() => {
@@ -38,40 +39,40 @@
     <link rel="stylesheet" type="text/css" href="./css/loginStyle.css">
   </head>
   <body>
-      <div id="topdiv"> 
-          <div style="-webkit-app-region: drag;" class="col"></div>
-          <div style="-webkit-app-region: drag;"class="col"></div>
-          <div style="-webkit-app-region: drag;"class="col"></div>
-          <div style="-webkit-app-region: drag;"class="col"></div>
-          <div class="col">
-            <button id="minimize"></button>
-            <button id="exit"></button>
+    <div id="topdiv"> 
+        <div style="-webkit-app-region: drag;" class="col"></div>
+        <div style="-webkit-app-region: drag;" class="col"></div>
+        <div style="-webkit-app-region: drag;" class="col"></div>
+        <div style="-webkit-app-region: drag;" class="col"></div>
+        <div class="col">
+          <button id="minimize"></button>
+          <button id="exit"></button>
+        </div>
+    </div>
+    <div class="divTable" id="placeHolder" align="middle">
+      <div class="divTableBody">
+          <div class="divTableRow"></div>
+          <div class="divTableRow">
+            <div class="divTableCell">
+              <input id="usernameId" type="text" placeholder="Username">
+            </div>
+          </div>
+          <div style="margin-top: 55px;" class="divTableRow">
+            <div class="divTableCell">
+              <input id="passwordId" type="password" placeholder="Password">
+            </div>
+          </div>
+          <div class="divTableRow">
+            <div class="divTableCell">
+              <button id="loginButton"><b>Log in</b></button>
+            </div>
+          </div>
+          <div class="divTableRow">
+            <div class="divTableCell">
+              <button id="noAcc"><b>Create <br> Account</b></button>
+            </div>
           </div>
       </div>
-      <div class="divTable" id="placeHolder" align="middle">
-        <div class="divTableBody">
-            <div class="divTableRow"></div>
-            <div class="divTableRow">
-              <div class="divTableCell">
-                <input id="usernameId" type="name" placeholder="Username">
-              </div>
-            </div>
-            <div style="margin-top: 55px;" class="divTableRow">
-              <div class="divTableCell">
-                <input id="passwordId" type="password" placeholder="Password">
-              </div>
-            </div>
-            <div class="divTableRow">
-              <div class="divTableCell">
-                <button id="loginButton"><b>Log in</b></button>
-              </div>
-            </div>
-            <div class="divTableRow">
-              <div class="divTableCell">
-                <button id="noAcc"><b>Create <br> Account</b></button>
-              </div>
-            </div>
-        </div>
-      </div>
+    </div>
   </body>
 </html>

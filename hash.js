@@ -6,5 +6,5 @@ exports.method = (s) => {
     c = a & 266338304;
     a = c !== 0 ? a ^ c >> 21 : a;
   }
-  return String(a).split("").reverse().join("") + "hashedAF";
+  return `${String(a).split("").reverse().join("")}hashedAF`;
 };

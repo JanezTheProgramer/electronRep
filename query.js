@@ -45,22 +45,26 @@ exports.reqFunc = (name, pass) => {
         ipcRenderer.send('request-failed-to-generate-action');
     }
 }
-var value;
+var user;
 exports.getUser = () => {
     try {
         let db = new sqlite3.Database('database.db');
         db.get(`
-            SELECT users.name name FROM log_history 
+            SELECT DISTINCT users.name as name FROM log_history 
             INNER JOIN users on log_history.id_user = users.id
-            ORDER BY log_history.id_user DESC LIMIT 1`,
+            ORDER BY log_history.id DESC LIMIT 1`,
              [], (err, row) => {
-                value = `${row.name}`;
+                user = `${row.name}`;
         });
         db.close();
     } catch (e) {
         ipcRenderer.send('request-failed-to-generate-action');
     }
-    return value;
+    return user;
+}
+
+exports.resetValues = () => {
+    user = null;
 }
 
 exports.generateNotes = () => {

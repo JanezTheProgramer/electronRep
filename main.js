@@ -2,14 +2,16 @@ const {app, BrowserWindow, ipcMain, nativeImage} = require('electron');
 const path = require('path');
 const icon = nativeImage.createFromPath(path.join(__dirname, "./util/icon.png"));
 require('./query').createDB();
-require('electron-debug')({ showDevTools: process.env.NODE_ENV === 'development' });
+require('electron-debug')({
+ showDevTools: process.env.NODE_ENV === 'development' 
+});
 
 
-ipcMain.on('request-close-action', (event) => {
+ipcMain.on('request-close-action', event => {
   popUp.close();
 });
 
-ipcMain.on('request-mainprocess-action', (event) => {
+ipcMain.on('request-mainprocess-action', event => {
   mainProgram = new BrowserWindow({
     skipTaskbar: false,
     fullscreen: true,
@@ -29,7 +31,7 @@ ipcMain.on('request-mainprocess-action', (event) => {
 });
 //
 //
-ipcMain.on('request-registration-action', (event) => {
+ipcMain.on('request-registration-action', event => {
   reqWindow = new BrowserWindow({
     skipTaskbar: false, 
     fullscreenable: false, 
@@ -50,20 +52,20 @@ ipcMain.on('request-registration-action', (event) => {
 //
 //minimize
 //
-ipcMain.on('request-login-minimize', (event) => { 
+ipcMain.on('request-login-minimize', event => { 
   loginWindow.minimize();
 });
 //
-ipcMain.on('request-register-minimize', (event) => { 
+ipcMain.on('request-register-minimize', event => { 
   reqWindow.minimize();
 });
 //
 //main program
-ipcMain.on('request-mainwindow-minimize', (event) => { 
+ipcMain.on('request-mainwindow-minimize', event => { 
   mainProgram.minimize();
 });
 //
-ipcMain.on('request-mainwindow-logOut', (event) => { 
+ipcMain.on('request-mainwindow-logOut', event => { 
   loginWindow = new BrowserWindow({
     skipTaskbar: false,
     fullscreenable: false, 
@@ -105,7 +107,7 @@ ipcMain.on('request-mainwindow-logOut', (event) => {
 //
 let loginWindow;
 
-let createWindow = () => {
+const createWindow = () => {
   loginWindow = new BrowserWindow({
     skipTaskbar: false, 
     fullscreenable: false, 
@@ -135,7 +137,7 @@ app.on('activate', () => {
   }
 });
 let popUp; 
-ipcMain.on('request-failed-to-generate-action', (event) => {
+ipcMain.on('request-failed-to-generate-action', event => {
   closePopUP();
   popUp = new BrowserWindow({
     skipTaskbar: true, 
@@ -155,7 +157,7 @@ ipcMain.on('request-failed-to-generate-action', (event) => {
   popUp.loadURL(file);
 });
   //
-ipcMain.on('request-account-not-found', (event) => {
+ipcMain.on('request-account-not-found', event => {
   closePopUP();
   popUp = new BrowserWindow({
     skipTaskbar: true,  
@@ -175,7 +177,7 @@ ipcMain.on('request-account-not-found', (event) => {
   popUp.loadURL(file);
 });
   //
-ipcMain.on('request-already-exsists-action', (event) => {
+ipcMain.on('request-already-exsists-action', event => {
   closePopUP();
   popUp = new BrowserWindow({
     skipTaskbar: true, 
@@ -195,7 +197,7 @@ ipcMain.on('request-already-exsists-action', (event) => {
   popUp.loadURL(file);
 });
   //
-ipcMain.on('request-pasw-dont-match-action', (event) => {
+ipcMain.on('request-pasw-dont-match-action', event => {
   closePopUP();
   popUp = new BrowserWindow({
     skipTaskbar: true,  
@@ -215,7 +217,7 @@ ipcMain.on('request-pasw-dont-match-action', (event) => {
   popUp.loadURL(file);
 });
   //
-ipcMain.on('request-req-not-met-action', (event) => {
+ipcMain.on('request-req-not-met-action', event => {
   closePopUP();
   popUp = new BrowserWindow({
     skipTaskbar: true, 
@@ -235,7 +237,7 @@ ipcMain.on('request-req-not-met-action', (event) => {
   popUp.loadURL(file);
 });
 
-ipcMain.on('request-createdAcc-action', (event) => {
+ipcMain.on('request-createdAcc-action', event => {
   closePopUP();
   popUp = new BrowserWindow({
     skipTaskbar: true,  
@@ -255,6 +257,25 @@ ipcMain.on('request-createdAcc-action', (event) => {
   }
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "New Account was Created!",
+  }));
+  popUp.loadURL(file);
+});
+
+ipcMain.on('request-noConnection-error', event => {
+  closePopUP();
+  popUp = new BrowserWindow({
+    skipTaskbar: true,  
+    fullscreenable: false, 
+    maximizable: false, 
+    width: 450, 
+    height: 170, 
+    resizable: false, 
+    frame: false,
+    transparent: true,
+    icon: icon
+  });
+  let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
+    title: "No internet connection!<br> 'R' -> restart | 'Q' -> quit",
   }));
   popUp.loadURL(file);
 });

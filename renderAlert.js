@@ -36,7 +36,7 @@ exports.loadView = ({ title }) => {
         <meta charset="UTF-8">
         <script>
           const { ipcRenderer } = require('electron');
-          let Timer = setInterval(exitPopUp, 2500);
+          let Timer = setInterval(exitPopUp, 3500);
           function exitPopUp(){
             ipcRenderer.send('request-close-action');
           }

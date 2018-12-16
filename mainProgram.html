@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <title>eXo</title>
@@ -10,7 +11,7 @@
             const { ipcRenderer } = require('electron'); 
             const worldClock = () => {
                 let time = new Date();
-                const timeFix = (x) => {
+                const timeFix = x => {
                     return parseInt(x) < 10 ?  `0${x}` : x;
                 }
                 $("#clock").text(`${timeFix(time.getHours())}:${timeFix(time.getMinutes())}`);  
@@ -18,23 +19,43 @@
             }
             $( document ).ready(() => {
                 worldClock();
-                $("#minimize").click(() => {
-                    
-                });
-                $(".roundBtn").click((e) => {
+                $(".roundBtn").click(e => {
                     switch(String(e.target.id)){
                         case "exit":
+                            require('./query').resetValues();
                             window.close();
                             break;
                         case "minimize":
                             ipcRenderer.send('request-mainwindow-minimize');
                             break;
                         case "reset":
+                            require('./query').resetValues();
+                            getUserData();
                             self.location.assign(location);
                             break;
                         case "back":
                             if(!$("#platformDiv").is(":visible"))break;
                             $(".platformWindow").fadeOut(200);                            
+                            break;
+                        default: 
+                            ipcRenderer.send('request-failed-to-generate-action');
+                            break;
+                    }
+                });
+                $(".platButtons").click(e => {
+                    $(".platformWindow").hide(); 
+                    switch(Number(e.target.id[0])){
+                        case 4:
+                            $( "#notesDiv" ).fadeIn(200);
+                            break;
+                        case 5:
+                            $( "#calculatorDiv" ).fadeIn(200);
+                            break;
+                        case 6:
+                            setTimeout(() => {
+                                if(navigator.onLine) $( "#browserDiv" ).fadeIn(500); 
+                                else ipcRenderer.send('request-noConnection-error'); 
+                            }, 1000);
                             break;
                         default:
                             ipcRenderer.send('request-failed-to-generate-action');
@@ -42,12 +63,13 @@
                     }
                 });
                 $( ".dropbtn" ).click(() => {
+                    $(".platformWindow").hide(); 
                     $( "#mainDiv" ).children().hide();
                     $( "#platformDiv" ).fadeIn();
                 });
-                $(".data").click((e) => {
+                $(".data").click(e => {
                     $( "#mainDiv" ).children().hide();
-                    switch(parseInt(e.target.id)){
+                    switch(Number(e.target.id[0])){
                         case 1:
                             $( "#accInfoDiv" ).fadeIn();
                             break;
@@ -59,15 +81,44 @@
                             break;
                         default:
                             ipcRenderer.send('request-failed-to-generate-action');
+                            require('./query').resetValues(); 
                             break;
                     }
                 });
+                $("#buttonsDiv").mouseover(() => {
+                    $("#buttonsDiv div input").fadeIn(1000);       
+                });
+                $("#buttonsDiv").mouseleave(() => {
+                    $("#buttonsDiv div input").fadeOut(100);
+  
+                });
                 $("input#save").click(() => {
-                   //history.go(0);
+                    getUserData();
+                });
+                $("body").keydown(e => {
+                    if ($("input[type=text]").is(":focus")) return; 
+                    if (e.which == 81) window.close(); //close application on "q" pressed
+                    else if (e.which == 82) self.location.assign(location); //restart app on "r" pressed
                 });
                 setTimeout(() => {
-                  $( "body" ).fadeIn(1500);  
-                }, 1000)
+                    $( "body" ).fadeIn(1500);  
+                }, 1000);
+                var userData;
+                function getUserData(){
+                    require('./query').resetValues();
+                    function callBack(){
+                        userData = require('./query').getUser();
+                        setTimeout(() => {
+                            if(!userData){
+                                callBack();
+                                console.log("callback");
+                            }else{
+                                console.log(userData);
+                            }
+                        }, 300);
+                    }
+                    callBack();    
+                }
             });
         </script>
     </head>
@@ -76,16 +127,16 @@
             <div class="dropdown">
               <button class="dropbtn">eXo</button>
               <div class="dropdown-content">
-                <a id="1" class="data">Account</a>
-                <a id="2" class="data">Tutorial</a>
-                <a id="3" class="data">Logout</a>
+                <a id="1acc" class="data">Account</a>
+                <a id="2acc" class="data">Tutorial</a>
+                <a id="3acc" class="data">Logout</a>
               </div>
             </div>   
-            <div id="clock"></div>     
-            <button class="roundBtn" id="back"></button>
-            <button class="roundBtn" id="reset"></button>  
-            <button class="roundBtn" id="minimize"></button>
-            <button class="roundBtn" id="exit"></button>
+            <div id="clock"></div>
+            <a class="roundBtn" id="back" custom_title="back"></a>    
+            <a class="roundBtn" id="reset" custom_title="restart program"></a> 
+            <a class="roundBtn" id="minimize" custom_title="minimize"></a> 
+            <a class="roundBtn" id="exit" custom_title="exit"></a>  
         </div>
         <div id="mainDiv" class="bodyDiv">
             <figure id="welcText">
@@ -100,12 +151,24 @@
             </figure>
             <div id="platformDiv" style="display:none">
                 <div id="buttonsDiv">
-                    <div class="dragg"><input type="button" value="Notes"></div><br>
-                    <div class="dragg"><input type="button" value="Store"></div><br>
-                    <div class="dragg"><input type="button" value="Library"></div><br>
-                    <div class="dragg"><input type="button" value="Calculator"></div>
-                    <div class="platformWindow">
-                        
+                    <div><input class="platButtons" type="button" id="4menu" value="notes"></div>
+                    <div><input class="platButtons" type="button" id="5menu" value="calculator"></div>
+                    <div><input class="platButtons" type="button" id="6menu" value="browser"></div>
+                    <div class="platformWindow" id="notesDiv" style="display:none">
+                        <table>
+                            <tr><td>note1</td></tr>
+                            <tr><td>note2</td></tr>
+                            <tr><td>note3</td></tr>
+                            <tr><td>note4</td></tr>
+                        </table>
+                    </div>
+                    <div class="platformWindow" id="calculatorDiv" style="display:none">
+                        <div id="calcMainView">
+                        </div>
+                    </div>    
+                    <div class="platformWindow" id="browserDiv" style="display:none">
+                        <webview id="browserContent"  nodeintegration="on" src="https://www.google.com/">
+                        </webview>
                     </div>
                 </div>
             </div>
@@ -127,5 +190,6 @@
             <div id="tutorialDiv" style="display:none">
                 <p>welcome to the tutorial</p>
             </div>
+        </div>
     </body>
 </html>
