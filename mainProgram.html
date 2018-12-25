@@ -8,12 +8,15 @@
             window.$ = window.jQuery = require("jquery");
         </script>
         <script>
+            var drag = {
+                isDown: false,
+                iX: null,
+                iY: null
+            }; // object for element dragging properties
             const { ipcRenderer } = require('electron'); 
             const worldClock = () => {
                 let time = new Date();
-                const timeFix = x => {
-                    return parseInt(x) < 10 ?  `0${x}` : x;
-                }
+                const timeFix = x => parseInt(x) < 10 ?  `0${x}` : x;
                 $("#clock").text(`${timeFix(time.getHours())}:${timeFix(time.getMinutes())}`);  
                 setTimeout(worldClock, 60000);
             }
@@ -33,31 +36,7 @@
                             getUserData();
                             self.location.assign(location);
                             break;
-                        case "back":
-                            if(!$("#platformDiv").is(":visible"))break;
-                            $(".platformWindow").fadeOut(200);                            
-                            break;
                         default: 
-                            ipcRenderer.send('request-failed-to-generate-action');
-                            break;
-                    }
-                });
-                $(".platButtons").click(e => {
-                    $(".platformWindow").hide(); 
-                    switch(Number(e.target.id[0])){
-                        case 4:
-                            $( "#notesDiv" ).fadeIn(200);
-                            break;
-                        case 5:
-                            $( "#calculatorDiv" ).fadeIn(200);
-                            break;
-                        case 6:
-                            setTimeout(() => {
-                                if(navigator.onLine) $( "#browserDiv" ).fadeIn(500); 
-                                else ipcRenderer.send('request-noConnection-error'); 
-                            }, 1000);
-                            break;
-                        default:
                             ipcRenderer.send('request-failed-to-generate-action');
                             break;
                     }
@@ -85,28 +64,23 @@
                             break;
                     }
                 });
-                $("#buttonsDiv").mouseover(() => {
-                    $("#buttonsDiv div input").fadeIn(1000);       
-                });
-                $("#buttonsDiv").mouseleave(() => {
-                    $("#buttonsDiv div input").fadeOut(100);
-  
-                });
                 $("input#save").click(() => {
                     getUserData();
                 });
                 $("body").keydown(e => {
-                    if ($("input[type=text]").is(":focus")) return; 
+                    if ($("input[type=text]").is(":focus") || $("textarea").is(":focus")) return; 
                     if (e.which == 81) window.close(); //close application on "q" pressed
                     else if (e.which == 82) self.location.assign(location); //restart app on "r" pressed
                 });
+
                 setTimeout(() => {
                     $( "body" ).fadeIn(1500);  
                 }, 1000);
+
                 var userData;
-                function getUserData(){
+                const getUserData = () => {
                     require('./query').resetValues();
-                    function callBack(){
+                    const callBack = () => {
                         userData = require('./query').getUser();
                         setTimeout(() => {
                             if(!userData){
@@ -119,11 +93,111 @@
                     }
                     callBack();    
                 }
+
+                // the draggg functions
+                $(document).on('mousedown', '.box-window-top-draggable', down => {
+                    if(drag.isDown === false && down.target.className === "box-window-top-draggable"){
+                        $('#content .box-window').css({'z-index': "0"});
+                        down.currentTarget.parentNode.parentNode.style.zIndex = '1';
+                        drag.isDown = true;
+                        drag.iX = down.clientX - down.offsetX;
+                        drag.iY = down.clientY - down.offsetY;
+                    }
+                });
+
+                $(document).on('mousemove', '.box-window-top-draggable', move => {
+                    if(drag.isDown && move.currentTarget.className === "box-window-top-draggable"){
+                        let oX = move.clientX - drag.iX;
+                        let oY = move.clientY - drag.iY;
+                        move.currentTarget.parentNode.parentNode.style.top = `${oY + (screen.height * 0.1)/2}px`;
+                        move.currentTarget.parentNode.parentNode.style.left = `${oX + (screen.width * 0.025)/2}px`;
+                        move.currentTarget.parentNode.parentNode.style.zIndex = '1';
+                    }
+                });
+
+                $(document).on('mouseleave', '.box-window-top-draggable', leave => {
+                    drag.isDown = false;
+                });
+
+                $(document).mouseup(() => {
+                    drag.isDown = false;
+                });
+                
+                
+                
+
+                $(document).on('click', '.exit', e => {
+                    e.currentTarget.parentNode.parentNode.remove();
+                });
+
+                $('#leftNav div').click(e => {
+                    switch(Number(e.currentTarget.id[0])){
+                        case 0:
+                            if(!document.getElementById("games-box-window")){
+                                $.get("./components/games.html", data => {
+                                    $("#platformDiv #content").append(data);
+                                });
+                            }
+                            break;
+                        case 1:
+                            if(!document.getElementById("calculator-box-window")){
+                                $.get("./components/calculator.html", data => {
+                                    $("#platformDiv #content").append(data);
+                                });
+                            }
+                            break;
+                        case 2:
+                            if(!document.getElementById("notes-box-window")){
+                                $.get("./components/notes.html", data => {
+                                    $("#platformDiv #content").append(data);
+                                });
+                            }
+                            break;
+                        case 3:
+                            if(!document.getElementById("music-box-window")){ 
+                                $.get("./components/music.html", data => {
+                                    $("#platformDiv #content").append(data);
+                                });
+                            }
+                            break;
+                        case 4:
+                            if(!document.getElementById("brightness-box-window")){
+                                $.get("./components/brightness.html", data => {
+                                    $("#platformDiv #content").append(data);
+                                });
+                            }
+                            break;
+                        case 5:
+                            if(!document.getElementById("weather-box-window")){
+                                $.get("./components/weather.html", data => {
+                                    $("#platformDiv #content").append(data);
+                                });
+                            }
+                            break;
+                        case 6:
+                            if(!document.getElementById("maps-box-window")){
+                                $.get("./components/maps.html", data => {
+                                    $("#platformDiv #content").append(data);
+                                });
+                            }
+                            break;
+                        case 7:
+                            if(!document.getElementById("photoEditor-box-window")){
+                                $.get("./components/photoEditor.html", data => {
+                                    $("#platformDiv #content").append(data);
+                                });
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                });
             });
         </script>
     </head>
     <body> 
         <div>
+            <!--<span id="navigation_btn"><img src="./util/nav.png" alt="/"></span>-->
             <div class="dropdown">
               <button class="dropbtn">eXo</button>
               <div class="dropdown-content">
@@ -132,9 +206,8 @@
                 <a id="3acc" class="data">Logout</a>
               </div>
             </div>   
-            <div id="clock"></div>
-            <a class="roundBtn" id="back" custom_title="back"></a>    
-            <a class="roundBtn" id="reset" custom_title="restart program"></a> 
+            <div id="clock"></div>    
+            <a class="roundBtn" id="reset" custom_title="reset"></a> 
             <a class="roundBtn" id="minimize" custom_title="minimize"></a> 
             <a class="roundBtn" id="exit" custom_title="exit"></a>  
         </div>
@@ -150,27 +223,33 @@
                 <h1>Welcome<br>to Exo!</h1>
             </figure>
             <div id="platformDiv" style="display:none">
-                <div id="buttonsDiv">
-                    <div><input class="platButtons" type="button" id="4menu" value="notes"></div>
-                    <div><input class="platButtons" type="button" id="5menu" value="calculator"></div>
-                    <div><input class="platButtons" type="button" id="6menu" value="browser"></div>
-                    <div class="platformWindow" id="notesDiv" style="display:none">
-                        <table>
-                            <tr><td>note1</td></tr>
-                            <tr><td>note2</td></tr>
-                            <tr><td>note3</td></tr>
-                            <tr><td>note4</td></tr>
-                        </table>
+                <nav id="leftNav">
+                    <div id="0nav" custom_title="eXo-games">
+                        <img src="./util/icons/game.png" alt="/" />
                     </div>
-                    <div class="platformWindow" id="calculatorDiv" style="display:none">
-                        <div id="calcMainView">
-                        </div>
-                    </div>    
-                    <div class="platformWindow" id="browserDiv" style="display:none">
-                        <webview id="browserContent"  nodeintegration="on" src="https://www.google.com/">
-                        </webview>
+                    <div id="1nav" custom_title="eXo-calculator">
+                        <img src="./util/icons/calc.png" alt="/" />
                     </div>
-                </div>
+                    <div id="2nav" custom_title="eXo-notes">
+                        <img src="./util/icons/note.png" alt="/" />
+                    </div>
+                    <div id="3nav" custom_title="eXo-music">
+                        <img src="./util/icons/music.png" alt="/" />
+                    </div>
+                    <div id="4nav" custom_title="eXo-brightness">
+                        <img src="./util/icons/light.png" alt="/" />
+                    </div>
+                    <div id="5nav" custom_title="eXo-weather">
+                        <img src="./util/icons/sun.png" alt="/" />
+                    </div>
+                    <div id="6nav" custom_title="eXo-maps">
+                        <img src="./util/icons/location.png" alt="/" />
+                    </div>
+                    <div id="7nav" custom_title="eXo-photoEditor">
+                        <img src="./util/icons/image.png" alt="/" />
+                    </div>
+                </nav>
+                <div id="content"></div>
             </div>
             <div id="accInfoDiv" style="display:none">
                 <div id="labels">

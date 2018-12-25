@@ -1,7 +1,7 @@
-const {app, BrowserWindow, ipcMain, nativeImage} = require('electron');
+const { app, BrowserWindow, ipcMain, nativeImage } = require('electron');
 const path = require('path');
 const icon = nativeImage.createFromPath(path.join(__dirname, "./util/icon.png"));
-require('./query').createDB();
+//require('./query').createDB();
 require('electron-debug')({
  showDevTools: process.env.NODE_ENV === 'development' 
 });
@@ -89,7 +89,7 @@ ipcMain.on('request-mainwindow-logOut', event => {
     resizable: false, 
     frame: false,
     transparent: true,
-    icon: path.join(__dirname, './util/icon.png')
+    icon: icon
   });
   popUp.setMenu(null);
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
@@ -117,6 +117,7 @@ const createWindow = () => {
     resizable: false, 
     frame: false,
     transparent: true,
+    focus: true,
     icon: icon
   });
   loginWindow.loadFile('loginForm.html');
@@ -127,7 +128,7 @@ const createWindow = () => {
 }
 app.on('ready', createWindow);
 app.on('window-all-closed', () => {
-  if (process.platform !== "" )
+  if (process.platform !== "darwin" )
     app.quit();
 });
 
@@ -254,6 +255,7 @@ ipcMain.on('request-createdAcc-action', event => {
     loginWindow.focus();
   }catch(e){
     createWindow();
+    loginWindow.focus();
   }
   let file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(require('./renderAlert').loadView({
     title: "New Account was Created!",

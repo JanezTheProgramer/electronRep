@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "bluebird": "^3.5.2",
+    "brightness": "^3.0.0",
     "electron-debug": "^2.0.0",
     "electron-packager": "^12.2.0",
     "es6": "0.0.7",

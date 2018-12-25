@@ -1,0 +1,64 @@
+<div id="calculator-box-window" class="box-window">
+    <div class="box-window-top">
+        <div class="box-window-top-draggable">
+            <h3>eXo-calculator</h3>
+        </div>
+        <span class="exit">&times;</span>
+    </div>
+    <div class="box-window-content">
+        <div style="display: block">
+            <input id="equation" type="text" value="0"/>
+        </div>
+        <div style="display: block">
+            <input type="button" class="equationInput" value="7"/>
+            <input type="button" class="equationInput" value="8"/>
+            <input type="button" class="equationInput" value="9"/>
+            <input type="button" class="equationInput" value="C"/>
+        </div>
+        <div style="display: block">
+            <input type="button" class="equationInput" value="4"/>
+            <input type="button" class="equationInput" value="5"/>
+            <input type="button" class="equationInput" value="6"/>
+            <input type="button" class="equationInput" value="+"/>
+        </div>
+        <div style="display: block">
+            <input type="button" class="equationInput" value="1"/>
+            <input type="button" class="equationInput" value="2"/>
+            <input type="button" class="equationInput" value="3"/>
+            <input type="button" class="equationInput" value="-"/>
+        </div>
+        <div style="display: block">
+            <input type="button" class="equationInput" value="."/>
+            <input type="button" class="equationInput" value="0"/>
+            <input type="button" class="equationInput" value="*"/>
+            <input type="button" class="equationInput" value="/"/>
+        </div>
+        <div style="display: block">
+            <input class="equationSubmit" type="submit" value="="/>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(event =>{
+        $( "#equation" ).focus();
+        if(typeof calcHistory === 'undefined'){
+            window.calcHistory = true;
+            window.calculateExpression = () => {
+                try{
+                    $( "#equation" ).val(Math.round(eval($( "#equation" ).val().toString()) * 1000) / 1000);
+                }catch(e){/* invalid expression */}
+            }
+            window.expressionInput = char => {
+                if(char != 'C'){
+                    $("#equation").val() == "0" ? $("#equation").val(char) : $("#equation").val($("#equation").val() + char);
+                }else{
+                    $( "#equation" ).val("0");
+                }
+            }
+            $(document).on('keypress',"#equation", event => event.keyCode == 13 ? calculateExpression() : null);
+            $(document).on('keypress', '.equationInput', event => event.preventDefault());
+            $(document).on('click',".equationSubmit", event => calculateExpression());
+            $(document).on('click', '.equationInput', event => expressionInput(event.target.value));
+        }
+    });
+</script>

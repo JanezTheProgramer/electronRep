@@ -1,0 +1,43 @@
+<div id="notes-box-window" class="box-window">
+    <div class="box-window-top">
+        <div class="box-window-top-draggable">
+            <h3>eXo-notes</h3>
+        </div>
+        <span class="exit">&times;</span>
+    </div>
+    <div class="box-window-content">
+        <ul id="notesList">
+        </ul>
+    </div>
+    <div id="noteTextArea">
+        <textarea>
+        </textarea>
+    </div>
+</div>
+
+<script>
+    $(document).ready(event =>{
+        if(typeof notesHistory === 'undefined'){
+            window.notesHistory = true;
+            var fs = require('fs'); 
+            var path = require('path');
+            $("notesList").children().remove();
+            let files = fs.readdirSync('./notes');
+            for(let i = 0; i < files.length; i++) {
+                if(path.extname(files[i]) === ".txt"){
+                    var text = fs.readFileSync(`./notes/${files[i]}`,'utf8');
+                    $("#notesList").append(`
+                        <li>
+                            <span class="title">${files[i].substring(0,files[i].length - 4)}</span>
+                            <span class="date">date</span>
+                            <div class="content">${text}</div>
+                        </li>
+                    `);
+                }
+            }  
+            $(document).on('click', "notesList li", event => {
+
+            });
+        }
+    });
+</script>
