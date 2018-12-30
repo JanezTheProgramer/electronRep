@@ -1,15 +1,19 @@
-var drag = {
+window.$ = window.jQuery = require("jquery");
+const { ipcRenderer } = require('electron'); 
+
+let drag = {
     isDown: false,
     iX: null,
     iY: null
 }; // object for element dragging properties
-const { ipcRenderer } = require('electron'); 
+
 const worldClock = () => {
     let time = new Date();
     const timeFix = x => parseInt(x) < 10 ?  `0${x}` : x;
     $("#clock").text(`${timeFix(time.getHours())}:${timeFix(time.getMinutes())}`);  
     setTimeout(worldClock, 60000);
 }
+
 $( document ).ready(() => {
     worldClock();
     $(".roundBtn").click(e => {
@@ -63,7 +67,7 @@ $( document ).ready(() => {
 
     setTimeout(() => $( "body" ).fadeIn(1500), 1000);
 
-    var userData;
+    let userData;
     const getUserData = () => {
         require('./query').resetValues();
         const callBack = () => {

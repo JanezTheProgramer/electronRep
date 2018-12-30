@@ -11,7 +11,8 @@
 </div>
 <script>
     $(document).ready(() => {
-        typeof WorldMap === 'undefined'? window.WorldMap = require("world-map") : null;
-        var map = new WorldMap("my-map");
+        if(typeof mapsHistory === 'undefined'){
+            window.mapsHistory = true;
+        }
     });
 </script>
