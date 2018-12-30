@@ -1,5 +1,5 @@
 "# electronRep" 
 tasks/ 
-  remove custom font 
-  chnage main 
-  window focused
+  loads transformations
+  apis 
+  typescript --maybe
