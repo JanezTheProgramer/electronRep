@@ -10,35 +10,33 @@
     <script>
       const { ipcRenderer } = require('electron');
       $( document ).ready(() => {
+
         $("#usernameId").focus();
-        $("#minimize").click(() => {
-          ipcRenderer.send('request-register-minimize');
-        });
-        $("#exit").click(() => {
-          window.close();
-        });
+        
+        $("#minimize").click(() => ipcRenderer.send('request-register-minimize'));
+        $("#exit").click(() => window.close());
+
         const CreateAccount = () => {
+
           if($("#usernameId").val().toString().length > 4 
             && $("#passwordId").val().toString().length > 4 
             && $("#reEnterPasw").val().toString().length > 4){
-              if($("#passwordId").val().toString() == $("#reEnterPasw").val().toString()){
+
+              if($("#passwordId").val().toString() == $("#reEnterPasw").val().toString())
                 require('./query').reqFunc($("#usernameId").val(), $("#passwordId").val());
-              }else{
+
+              else
                 ipcRenderer.send('request-pasw-dont-match-action');
-              }
-          }else{
-            ipcRenderer.send('request-req-not-met-action');
           }
+          else
+            ipcRenderer.send('request-req-not-met-action');
+
           $("#usernameId").val("");
           $("#passwordId").val("");
           $("#reEnterPasw").val("");
         }
-        $( "#registerButton" ).click(() => {
-          CreateAccount();
-        });
-        $( "#reEnterPasw" ).keypress(e => {
-          if(e.keyCode == 13)CreateAccount();
-        });
+        $( "#registerButton" ).click(() => CreateAccount());
+        $( "#reEnterPasw" ).keypress(e => e.keyCode == 13 ? CreateAccount() : null);
       });
     </script>
   </head>

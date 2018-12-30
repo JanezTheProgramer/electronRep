@@ -9,30 +9,27 @@
     <script>
       const { ipcRenderer } = require('electron'); 
       $( document ).ready(() => {
+
         $("#usernameId").focus();
-        $("#minimize").click(() => {
-          ipcRenderer.send('request-login-minimize');
-        });
-        $("#exit").click(() => {
-          window.close();
-        });
+
+        $("#minimize").click(() => ipcRenderer.send('request-login-minimize'));
+        $("#exit").click(() => window.close());
+
         const Login = () => {
+
           if($("#usernameId").val().toString().length > 4 && $("#passwordId").val().toString().length > 4)
             require('./query').loginFunc($("#usernameId").val(), $("#passwordId").val());
           else
             ipcRenderer.send('request-req-not-met-action');
+
           $("#usernameId").val("");
           $("#passwordId").val("");
+
         }
-        $( "#loginButton" ).click(() => {
-          Login();
-        });
-        $( "#passwordId" ).keypress(event => {
-          if(event.keyCode == 13)Login();
-        });
-        $( "#noAcc" ).click(() => {
-          ipcRenderer.send('request-registration-action');
-        });
+
+        $( "#loginButton" ).click(() => Login());
+        $( "#passwordId" ).keypress(event => event.keyCode == 13 ? Login() : null);
+        $( "#noAcc" ).click(() => ipcRenderer.send('request-registration-action'));
 
       });
     </script>

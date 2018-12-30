@@ -490,7 +490,7 @@ tr {
    overflow-y: auto;
 }
 
-#music-box-window .box-window-content ul, #notes-box-window .box-window-content ul, #games-box-window .box-window-content ul {
+#music-box-window .box-window-content ul, #notes-box-window .box-window-content ul, #weather-box-window .box-window-content ul, #games-box-window .box-window-content ul {
     padding: 0;
     margin: 0;
     position: absolute;
@@ -499,7 +499,7 @@ tr {
     width: 100%;
 }
 
-#music-box-window .box-window-content ul li, #notes-box-window .box-window-content ul li, #games-box-window .box-window-content ul li {
+#music-box-window .box-window-content ul li, #notes-box-window .box-window-content ul li, #weather-box-window .box-window-content ul li, #games-box-window .box-window-content ul li {
     --c1: rgba(13, 124, 158, 0.384);
     --c2: rgba(146, 142, 142, 0.182);
     display: block;
@@ -516,7 +516,7 @@ tr {
     transition: 0.5s;
 }
 
-#music-box-window .box-window-content ul li:hover, #notes-box-window .box-window-content ul li:hover, #games-box-window .box-window-content ul li:hover {--x: 100%}
+#music-box-window .box-window-content ul li:hover, #weather-box-window .box-window-content ul li:hover, #notes-box-window .box-window-content ul li:hover, #games-box-window .box-window-content ul li:hover {--x: 100%}
 
 #music-box-window .box-window-content ul li span, #games-box-window .box-window-content ul li span {
     font-family: custom;
@@ -526,7 +526,7 @@ tr {
     color: white;
 }
 
-#games-box-window .box-window-content ul li:hover span {
+#games-box-window .box-window-content ul li:hover span , #weather-box-window .box-window-content ul li:hover span {
     text-shadow: 0px .1vw .5vw rgba(255,255,255,0.6);
 }
 
@@ -593,7 +593,7 @@ input:focus{
     transition: all .2s;
 }
 
-.equationInput:hover, #equation:hover, input[type=submit]:hover{
+.equationInput:hover, #equation:hover, #calculator-box-window input[type=submit]:hover{
     border-radius: 1vw; 
 }
 
@@ -698,4 +698,41 @@ input:focus{
 
 #brightness-box-window {
     height: 20vh;
+}
+#weather-box-window {
+    height: 50vh;
+}
+
+#weather-box-window .box-window-content {
+    top: 28%;
+    height: 60%;
+}
+
+#weather-box-window #locationInput {
+    position: absolute;
+    top: 15%;
+    left: 5%;
+    width: 90%;
+    font-size: 2vw;
+    display: block; 
+    font-family: custom; 
+    color: #eee;
+    border: none;
+    user-select: none;
+    outline: none;
+    border-bottom: .3vw solid #eee;
+    background: transparent;
+}
+
+#weather-box-window .box-window-content ul li span {
+    font-family: custom;
+    position: absolute;
+    top: 5%;
+    left: 10%;
+    font-size: 2vw;
+    color: white;
+}
+
+#actualLocationData * {
+    display: block;
 }

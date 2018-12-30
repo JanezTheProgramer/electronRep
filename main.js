@@ -1,15 +1,13 @@
 const { app, BrowserWindow, ipcMain, nativeImage } = require('electron');
 const path = require('path');
 const icon = nativeImage.createFromPath(path.join(__dirname, "./util/icon.png"));
-//require('./query').createDB();
+require('./query').createDB();
 require('electron-debug')({
  showDevTools: process.env.NODE_ENV === 'development' 
 });
 
 
-ipcMain.on('request-close-action', event => {
-  popUp.close();
-});
+ipcMain.on('request-close-action', event => popUp.close());
 
 ipcMain.on('request-mainprocess-action', event => {
   mainProgram = new BrowserWindow({
@@ -25,9 +23,7 @@ ipcMain.on('request-mainprocess-action', event => {
   }catch(e){/*ingore*/}
   mainProgram.loadFile('mainProgram.html');
   mainProgram.setMenu(null);
-  mainProgram.on('closed', () => {
-    mainProgram = null;
-  });
+  mainProgram.on('closed', () => mainProgram = null);
 });
 //
 //
@@ -45,9 +41,7 @@ ipcMain.on('request-registration-action', event => {
   });
   reqWindow.loadFile('registerForm.html')
   reqWindow.setMenu(null);
-  reqWindow.on('closed', () => {
-    reqWindow = null
-  });
+  reqWindow.on('closed', () => reqWindow = null);
 });
 //
 //minimize
@@ -96,16 +90,14 @@ ipcMain.on('request-mainwindow-logOut', event => {
     title: "Logged out!",
   }));
   popUp.loadURL(file);
-  loginWindow.on('closed', () => {
-    loginWindow = null
-  });
+  loginWindow.on('closed', () => loginWindow = null);
   mainProgram.close();
 });
 //
 //
 // everything below is generated on load! || default functions
 //
-let loginWindow;
+var loginWindow;
 
 const createWindow = () => {
   loginWindow = new BrowserWindow({
@@ -122,21 +114,12 @@ const createWindow = () => {
   });
   loginWindow.loadFile('loginForm.html');
   loginWindow.setMenu(null);
-  loginWindow.on('closed', () => {
-    loginWindow = null;
-  });
+  loginWindow.on('closed', () => loginWindow = null);
 }
 app.on('ready', createWindow);
-app.on('window-all-closed', () => {
-  if (process.platform !== "darwin" )
-    app.quit();
-});
+app.on('window-all-closed', () => process.platform !== "darwin" ? app.quit() : null);
+app.on('activate', () => mainProgram === null ? createWindow() : null);
 
-app.on('activate', () => {
-  if (mainProgram === null) {
-    createWindow();
-  }
-});
 let popUp; 
 ipcMain.on('request-failed-to-generate-action', event => {
   closePopUP();

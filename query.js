@@ -63,9 +63,7 @@ exports.getUser = () => {
     return user;
 }
 
-exports.resetValues = () => {
-    user = null;
-}
+exports.resetValues = () => user = null;
 
 exports.generateNotes = () => {
     let htmlObject = "";
