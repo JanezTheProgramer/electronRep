@@ -140,13 +140,13 @@ $( document ).ready(() => {
                 }
                 break;
 
-            case 4:
+            /*case 4:
 
                 if(!document.getElementById("brightness-box-window")){
                     $('#content .box-window').css({'z-index': "0"});
                     $.get("./components/brightness.html", data => $("#platformDiv #content").append(data))
                 };
-                break;
+                break;*/
 
             case 5:
 
@@ -169,6 +169,14 @@ $( document ).ready(() => {
                 if(!document.getElementById("photoEditor-box-window")){
                     $('#content .box-window').css({'z-index': "0"});
                     $.get("./components/photoEditor.html", data => $("#platformDiv #content").append(data));
+                }
+                break;
+
+            case 8: 
+            
+                if(!document.getElementById("sysInfo-box-window")){
+                    $('#content .box-window').css({'z-index': "0"});
+                    $.get("./components/sysInfo.html", data => $("#platformDiv #content").append(data));
                 }
                 break;
 

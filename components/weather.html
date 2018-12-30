@@ -45,13 +45,11 @@
 
                                 $("#actualLocationData").append(`
                                     <div id="${i}locDiv">   
-                                        <ul>
-                                            <li><div>Temp: ${result[i].current.temperature}°C</div></li>
-                                            <li><div>Weather: ${result[i].current.skytext}</div></li>
-                                            <li><div>Wind speed: ${result[i].current.windspeed}</div></li>
-                                            <li><label for="${i}forecast">Forecast</label></li>
-                                            <li><div id="${i}forecast"></div></li>
-                                        </ul>                 
+                                            <div>Temp: ${result[i].current.temperature}°C</div>
+                                            <div>Weather: ${result[i].current.skytext}</div>
+                                            <div>Wind speed: ${result[i].current.windspeed}</div>
+                                            <label for="${i}forecast">Forecast</label>
+                                            <div id="${i}forecast"></div>                
                                     </div>
                                 `);
 
@@ -81,5 +79,5 @@
             $(document).on('keypress',"#locationInput", event => event.keyCode == 13 ? getWeatherData($("#locationInput").val()) : null);
 
         }
-    })
+    });
 </script>

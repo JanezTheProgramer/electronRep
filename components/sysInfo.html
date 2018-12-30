@@ -1,0 +1,39 @@
+<div id="sysInfo-box-window" class="box-window">
+    <div class="box-window-top">
+        <div class="box-window-top-draggable">
+            <h3>eXo-sysInfo</h3>
+        </div>
+        <span class="exit">&times;</span>
+    </div>
+    <div class="box-window-content">
+        <input type="button" value="getInfo"/>
+    </div>
+</div>
+<script>
+    $(document).ready(() => {
+        if(typeof sysHistory === 'undefined'){
+            window.sysHistory = true;
+
+            const sysInfo = require('systeminformation');
+            const screenInfo = require('electron').screen.getAllDisplays();
+
+            sysInfo.cpu()
+                .then(data => console.log(data))
+                .catch(error => ipcRenderer.send('request-failed-to-generate-action'));
+
+            sysInfo.osInfo()
+                .then(data => console.log(data))
+                .catch(error => ipcRenderer.send('request-failed-to-generate-action'));
+
+            sysInfo.graphics()
+                .then(data => console.log(data))
+                .catch(error => ipcRenderer.send('request-failed-to-generate-action'));
+            
+            try{
+                console.log(screenInfo);
+            } catch (err) {
+                ipcRenderer.send('request-failed-to-generate-action')
+            }
+        }
+    })
+</script>

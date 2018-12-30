@@ -6,5 +6,12 @@
         <span class="exit">&times;</span>
     </div>
     <div class="box-window-content">
+        <div id="my-map"></div>
     </div>
 </div>
+<script>
+    $(document).ready(() => {
+        typeof WorldMap === 'undefined'? window.WorldMap = require("world-map") : null;
+        var map = new WorldMap("my-map");
+    });
+</script>

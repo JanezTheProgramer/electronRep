@@ -28,7 +28,9 @@
     "jquery": "^3.3.1",
     "node-gyp": "^3.8.0",
     "sqlite3": "^4.0.4",
+    "systeminformation": "^3.54.0",
     "update-v8": "^3.5.3",
-    "weather-js": "^2.0.0"
+    "weather-js": "^2.0.0",
+    "world-map": "0.0.9"
   }
 }
