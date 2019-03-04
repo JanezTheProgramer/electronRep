@@ -135,23 +135,6 @@ body {
     border-radius: .3vw;
 }
 
-#noteControls div img:hover:after {
-    position: absolute;
-    right: .3vw;
-    top: 3vh;
-    display: inline-block;
-    padding: .3vw;
-    opacity: 1;
-    font-size: 1.3vw;
-    content: attr(custom_title);
-    background-image: radial-gradient(rgba(30, 50, 60, .35), rgba(10, 10, 10, .42));
-    color: #fff;
-    white-space: nowrap;
-    z-index: 10;
-    animation: fadein .5s;
-    border-radius: .3vw; 
-}
-
 .roundBtn {
     outline: none;
     position: absolute;
@@ -853,6 +836,23 @@ input:focus {
     width: 7.2%;
     height: 85%; 
     cursor: pointer;   
+}
+
+#notes-box-window #noteControls div:hover:after {
+    position: absolute;
+    right: .3vw;
+    top: 3vh;
+    display: inline-block;
+    padding: .3vw;
+    opacity: 1;
+    font-size: 1.3vw;
+    content: attr(custom_title);
+    background-image: radial-gradient(rgba(30, 50, 60, .35), rgba(10, 10, 10, .42));
+    color: #fff;
+    white-space: nowrap;
+    z-index: 10;
+    animation: fadein .5s;
+    border-radius: .3vw; 
 }
 
 #notes-box-window #noteControls #newFileName {

@@ -5,6 +5,8 @@ const msgBox = require('./scripts/renderAlert');
 const icon = nativeImage.createFromPath(path.join(__dirname, './util/icon.png'));
 
 require('./scripts/query').createDB();
+
+//only for developers
 require('electron-debug')({
     showDevTools: process.env.NODE_ENV === 'development'
 });
@@ -63,7 +65,6 @@ function drawAlert(_msg_) {
 }
 
 /// default app operations
-
 app.on('ready', () => {
     screenWidth = electron.screen.getPrimaryDisplay().workAreaSize.width;
     createWindow();
