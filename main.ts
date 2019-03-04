@@ -9,12 +9,12 @@ require('electron-debug')({
     showDevTools: process.env.NODE_ENV === 'development'
 });
 
-let loginWindow,
-    mainWindow,
-    reqWindow,
-    loadingWindow,
-    popUpWindow,
-    screenWidth;
+let loginWindow: any,
+    mainWindow: any,
+    reqWindow: any,
+    loadingWindow: any,
+    popUpWindow: any,
+    screenWidth: any;
     //curr_user = null;
 
 ////global functions throughout the app
