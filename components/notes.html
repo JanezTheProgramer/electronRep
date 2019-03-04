@@ -10,31 +10,20 @@
         </ul>
     </div>
     <div id="noteControls">
-        <div id="deleteFileControl" custom_title="Delete file">
-            <img 
-                src="../util/icons/notes/delete.ico" 
-                alt="/"
-            />
+        <div class="hasTollTip" id="deleteFileControl" custom_title="Delete file">
+            <img src="../util/icons/notes/delete.ico" alt="/" />
         </div>
-        <div id="saveFileControl" custom_title="Save content">
-            <img 
-                src="../util/icons/notes/save.png" 
-                alt="/"
-            />
+        <div class="hasTollTip" id="saveFileControl" custom_title="Save content">
+            <img src="../util/icons/notes/save.png" alt="/" />
         </div>
-        <div id="newFileControl" custom_title="Create file">
-            <img 
-                src="../util/icons/notes/new.png" 
-                alt="/"
-            />
+        <div class="hasTollTip" id="newFileControl" custom_title="Create file">
+            <img src="../util/icons/notes/new.png" alt="/" />
         </div>
         <div>
-            <input 
-                type="text" 
-                value="" 
-                placeholder="new file" 
-                id="newFileName"
-            />
+            <input type="text" value="" placeholder="new file" id="newFileName" />
+        </div>
+        <div id="notes_error">
+            <span></span>
         </div>
         <br style="clear:both;">
     </div>
@@ -44,9 +33,9 @@
     </div>
     <script>
         $(document).ready(() => {
-            !fs.existsSync('./notes') ? fs.mkdirSync('./notes') : null; 
+            !fs.existsSync('./notes') ? fs.mkdirSync('./notes') : null;
             let curr_fileName = null;
-            function refresh () {
+            function refresh() {
                 $("#notesList").html("");
                 let files = fs.readdirSync('./notes');
                 for (let i = 0; i < files.length; i++) {
@@ -62,29 +51,27 @@
                         `);
                     }
                 }
-                $('#notesList li .title').css({color: 'white'});
+                $('#notesList li .title').css({ color: 'white' });
                 $('#textarea').val("");
+                $("#notes_error span").text("");
                 curr_fileName = null;
                 return files;
-            }(refresh)(); // initial call
+            } (refresh)(); // initial call
 
             const generateNewFile = () => {
                 let fileName = $("#newFileName").val();
-                if(fs.existsSync(`./notes/${fileName}.txt`)){
-                    $("#newFileName").css({color: '#ff471a'});
-                    $("#newFileName").val('file already exsists!');
+                if (fs.existsSync(`./notes/${fileName}.txt`)) {
+                    $("#notes_error span").text('File already exsists!');
                     return;
-                }
-                if(!fileName.length){
-                    $("#newFileName").css({color: '#ff471a'});
-                    $("#newFileName").val('insert file name!');
+                } else if (!fileName.length) {
+                    $("#notes_error span").text('Insert file name!');
                     return;
                 }
                 let previousFiles = refresh();
                 fs.writeFile(
-                    `./notes/${fileName}.txt`, 
+                    `./notes/${fileName}.txt`,
                     `${moment().format('L')}\n`, err => err ? console.log(err) : null
-                ); 
+                );
                 $("#notesList").append(`
                     <li id="${previousFiles.length}note">
                         <span class="title">${fileName}</span>
@@ -97,19 +84,25 @@
 
             $(document).on('click', "#notesList li", event => {
                 curr_fileName = event.currentTarget.id;
-                $('#notesList li .title').css({color: 'white'});
+                $('#notesList li .title').css({ color: 'white' });
                 $(`#textarea`).val($(`#${curr_fileName} .content`).html());
-                $(`#${curr_fileName} .title`).css({color: 'rgb(199, 64, 40)'});
+                $(`#${curr_fileName} .title`).css({ color: 'rgb(199, 64, 40)' });
             });
-            $(document).on('keypress', "#newFileName", event => 
-                event.keyCode == 13 ? 
+            $(document).on('keypress', "#newFileName", event =>
+                event.keyCode == 13 ?
                     generateNewFile() :
                     null
             );
 
-            function saveFile () {
+            function saveFile() {
                 let path = $(`#${curr_fileName} .title`).text();
-                if(!curr_fileName || !fs.existsSync(`./notes/${path}.txt`)) return;
+                if (!curr_fileName) {
+                    $("#notes_error span").text('No file active!');
+                    return;
+                } else if (!fs.existsSync(`./notes/${path}.txt`)) {
+                    $("#notes_error span").text('Unknown error!');
+                    return;
+                }
                 fs.writeFileSync(
                     `./notes/${path}.txt`,
                     `${moment().format('L')}\n${$(`#textarea`).val()}`,
@@ -118,31 +111,38 @@
                 refresh();
                 $("#textarea").val("");
                 $("#newFileName").val("");
-                $("#textarea").css({color: 'white'});
+                $("#textarea").css({ color: 'white' });
+                $("#notes_error span").text("");
             }
 
             let keys = {
-                "13_": {pressed: false, name: "enter"},
-                "17_": {pressed: false, name: "ctrl"},
+                "13_": { pressed: false, name: "enter" },
+                "17_": { pressed: false, name: "ctrl" },
             };
 
-        
+
             $(document).on('mousedown', '#deleteFileControl', () => {
                 let path = $(`#${curr_fileName} .title`).text();
-                if(!curr_fileName || !fs.existsSync(`./notes/${path}.txt`)) return;
+                if (!curr_fileName) {
+                    $("#notes_error span").text('No file active!');
+                    return;
+                } else if (!fs.existsSync(`./notes/${path}.txt`)) {
+                    $("#notes_error span").text('Unknown error!');
+                    return;
+                }
                 fs.unlinkSync(`./notes/${path}.txt`);
                 refresh();
             });
 
             $(document).on('mousedown', '#saveFileControl', saveFile);
             $(document).on('mousedown', '#newFileControl', generateNewFile);
-            $(document).on('input', '#textarea', () => $("#textarea").css({color: '#ff471a'}));
-            $(document).on('input', '#newFileName', () => $("#newFileName").css({color: 'white'}));
+            $(document).on('input', '#textarea', () => $("#textarea").css({ color: '#ff471a' }));
+            $(document).on('input', '#newFileName', () => $("#notes_error span").text(""));
 
             $("#textarea").keydown(e => {
-                if(e.which == 13 || e.which == 17){
+                if (e.which == 13 || e.which == 17) {
                     keys[`${e.which}_`].pressed = true;
-                    if(!keys['13_'].pressed || !keys['17_'].pressed)return;
+                    if (!keys['13_'].pressed || !keys['17_'].pressed) return;
                     saveFile();
                 }
             });

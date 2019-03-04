@@ -9,72 +9,92 @@
         <input id="locationInput" type="text" placeholder="enter location" value="" />
     </div>
     <div class="box-window-content">
-        <ul id="locationList">
-        </ul>
-        <div id="actualLocationData">
+        <div id="weatherData">
         </div>
     </div>
     <script>
         $(document).ready(() => {
+
+            var weatherTypes = [
+                {keyCode: "Sunny", imgPath: './imgs/suuny.png'},
+                {keyCode: "Sunny", imgPath: './imgs/suuny.png'},
+                {keyCode: "Sunny", imgPath: './imgs/suuny.png'},
+                {keyCode: "Sunny", imgPath: './imgs/suuny.png'},
+                {keyCode: "Sunny", imgPath: './imgs/suuny.png'},
+                {keyCode: "Sunny", imgPath: './imgs/suuny.png'},
+                {keyCode: "Sunny", imgPath: './imgs/suuny.png'}
+            ];
+            
             const getWeatherData = location => {
                 try {
                     $("#locationList").html("");
                     weather.find({ search: String(location), degreeType: 'C' }, (err, result) => {
-                        err ? console.log(err) : null;
-                        console.log(result);
+                        if (!result.length || err) return;
 
-                        if (result.length)
+                        $("#weatherData").append(`
+                            <span>Today</span><hr>
+                            <div id="today_weather"></div>
+                            <span>Forecast</span><hr>
+                            <div id="forecast_weather"></div>
+                        `)
 
-                            for (let i = 0; i < result.length; i++) {
-                                $("#locationList").append(`
-                                    <li>
-                                        <span class="locSpan" id="${i}place">
-                                            ${result[i].location.name}
-                                        </span>
-                                    </li>
-                                `);
+                        //globalWeatherData = result;
+                        $("#today_weather").html(`
+                            <div>Temp: ${result[0].current.temperature}°C</div>
+                            <div>Weather: ${result[0].current.skytext}</div>
+                            <div>Wind speed: ${result[0].current.windspeed}</div>
+                            <img src="http://blob.weather.microsoft.com/static/weather4/en-us/law/${result[0].current.skycode}.gif" alt="/" />
+                            <br style="margin-bottom: 10vw">
+                        `);
 
-                                $("#actualLocationData").append(`
-                                    <div id="${i}locDiv">   
-                                            <div>Temp: ${result[i].current.temperature}°C</div>
-                                            <div>Weather: ${result[i].current.skytext}</div>
-                                            <div>Wind speed: ${result[i].current.windspeed}</div>
-                                            <label for="${i}forecast">Forecast</label>
-                                            <div id="${i}forecast"></div>                
-                                    </div>
-                                `);
+                        result[0].forecast.forEach(day => $(`#forecast_weather`).append(`
+                                <div>Date: ${day.date}<div><br>
+                                <div>Lowest temp: ${day.low}<div><br>
+                                <div>Highest temp: ${day.high}<div><br> 
+                                <div>Weather: ${day.skytextday}<div><br>
+                        `));
+
+                        /*for (let i = 0; i < result.length; i++) {
+                            $("#locationList").append(`
+                                <li>
+                                    <span class="locSpan" id="${i}_place">
+                                        ${result[i].location.name}
+                                    </span>
+                                </li>
+                            `);
+
+                            /*$("#actualLocationData").append(`
+                                <div id="${i}locDiv">   
+                                        <div>Temp: ${result[i].current.temperature}°C</div>
+                                        <div>Weather: ${result[i].current.skytext}</div>
+                                        <div>Wind speed: ${result[i].current.windspeed}</div>
+                                        <label for="${i}forecast">Forecast</label>
+                                        <div id="${i}forecast"></div>                
+                                </div>
+                            `);
 
 
-                                result[i].forecast.forEach(day => $(`#${i}forecast`).append(`
-                                    <div>Date: ${day.date}<div><br>
-                                    <div>Lowest temp: ${day.low}<div><br>
-                                    <div>Highest temp: ${day.high}<div><br> 
-                                    <div>Weather: ${day.skytextday}<div><br>
-                                `));
+                            result[0].forecast.forEach(day => $(`#${i}forecast`).append(`
+                                <div>Date: ${day.date}<div><br>
+                                <div>Lowest temp: ${day.low}<div><br>
+                                <div>Highest temp: ${day.high}<div><br> 
+                                <div>Weather: ${day.skytextday}<div><br>
+                            `));
 
-                            }
-
-                        else
-                            console.log("no loactions found");
+                        }*/
+                            
                     });
                 } catch (err) {
                     ipcRenderer.send('request-failed-to-generate-action');
                 }
             }
 
-            $(document).on('click', ".locSpan", event => {
-                try{
-                    //console.log("click");
-                    console.log($(`#${event.currentTarget.id[0]}locDiv`));
-                    $(`#actualLocationData`).show();
-                    $("#locationList").html("");
-                } catch (err) { console.log(err)/* ignore */}
+            $(document).on('keypress', "#locationInput", event => {
+                if(event.keyCode == 13){
+                    $("#weatherData").html('');
+                    getWeatherData($("#locationInput").val());
+                } 
             });
-            $(document).on('keypress', "#locationInput", event => 
-                event.keyCode == 13 ? 
-                    getWeatherData($("#locationInput").val()) :
-                    null
-            );
         });
     </script>
 </div>
