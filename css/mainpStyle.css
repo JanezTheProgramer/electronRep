@@ -1,69 +1,74 @@
-@font-face{
-  font-family:'digital';
-  src: url('./digital.ttf');
+@font-face {
+    font-family: 'digital';
+    src: url('./digital.ttf');
 }
 
+@font-face {
+    font-family: 'welcome-text';
+    src: url('./welcomef.ttf');
+}
 
-@font-face{
-  font-family:'custom';
-  src: url('./custom.otf');
+@font-face {
+    font-family: 'custom';
+    src: url('./custom.otf');
 }
 
 @keyframes spin {
-    from{
+    from {
         transform: rotate(0deg);
-    }to{
+    }
+    to {
         transform: rotate(360deg);
     }
 }
 
 @keyframes fadein {
-    from { 
-        opacity: 0; 
+    from {
+        opacity: 0;
         font-size: 0;
     }
-    to { 
-        opacity: 1; 
+    to {
+        opacity: 1;
         font-size: 1.3vw;
     }
 }
 
 @keyframes displayNav {
-    from { 
-        opacity: 0; 
+    from {
+        opacity: 0;
         width: 0;
     }
-    to { 
-        opacity: 1; 
+    to {
+        opacity: 1;
         width: 6vw;
     }
 }
 
-@keyframes glow {
-    0%,100%{ text-shadow:0 0 30px #900C3E}
-    25%{ text-shadow:0 0 30px #C70039}
-    50%{ text-shadow:0 0 30px #FF5733}
-    75%{ text-shadow:0 0 30px #FFC300}
-}
-
-
 @keyframes wobble {
-    0%,100%{ transform:rotate3d(1,1,0,40deg)}
-    25%{transform:rotate3d(-1,1,0,40deg)}
-    50%{transform:rotate3d(-1,-1,0,40deg)}
-    75%{transform:rotate3d(1,-1,0,40deg)}
+    0%, 100% {
+        transform: rotate3d(1, 1, 0, 40deg)
+    }
+    25% {
+        transform: rotate3d(-1, 1, 0, 40deg)
+    }
+    50% {
+        transform: rotate3d(-1, -1, 0, 40deg)
+    }
+    75% {
+        transform: rotate3d(1, -1, 0, 40deg)
+    }
 }
 
-@keyframes display-calculator-box-window {
-    from { 
+@keyframes displayWindow {
+    from {
         top: 0;
         height: 0;
-        opacity: 0; 
+        opacity: 0;
     }
-    to { 
-        height: 50vh;
+    to {
+        height: var(--height);
         top: 5vh;
-        opacity: 1; 
+        opacity: 1;
     }
 }
 
@@ -72,125 +77,129 @@
     border-radius: .2vw;
     overflow: hidden;
 }
+
 ::-webkit-scrollbar-track {
-    background: rgba(87, 87, 104, 0.199); 
+    background: rgba(87, 87, 104, 0.199);
     overflow: hidden;
 }
+
 ::-webkit-scrollbar-thumb {
-    background: rgb(47, 123, 185); 
+    background: rgb(47, 123, 185);
     border-radius: 2vw;
     overflow: hidden;
 }
 
-body {         
-  background-image: url("./../util/mainback.jpg"); 
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-size: cover;
-  overflow: hidden;
-  display: none;
+body {
+    background-image: url("./../util/mainback.jpg");
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: cover;
+    overflow: hidden;
 }
 
-.spinner{
+*:focus, *:hover {
+    outline: none;
+    user-select: none;
+}
+
+.spinner {
     width: 10vw;
     height: 10vw;
-    
     border: .6vw solid #f3f3f3;
     border-top: .6vw solid #f25a41;
     border-radius: 100%;
-    
     position: absolute;
-    top:0;
-    bottom:0;
-    left:0;
+    top: 0;
+    bottom: 0;
+    left: 0;
     right: 0;
     margin: auto;
     overflow: hidden;
-    
     animation: spin 1s infinite linear;
 }
 
 .roundBtn:hover:after {
-  position: absolute;
-  right: .3vw;
-  top: 3vh;
-  display: inline-block;
-  padding: .3vw;
-  opacity: 1;
-  font-size: 1.3vw;
-  content: attr(custom_title);
-  background-image: radial-gradient(rgba(30,50,60,.35), rgba(10,10,10,.42));
-  color: #fff;
-  white-space: nowrap;
-  z-index: 1;
-  animation: fadein .5s;
-  border-radius: .3vw;
+    position: absolute;
+    right: .3vw;
+    top: 3vh;
+    display: inline-block;
+    padding: .3vw;
+    opacity: 1;
+    font-size: 1.3vw;
+    content: attr(id);
+    background-image: radial-gradient(rgba(30, 50, 60, .35), rgba(10, 10, 10, .42));
+    color: #fff;
+    white-space: nowrap;
+    z-index: 1;
+    animation: fadein .5s;
+    border-radius: .3vw;
 }
 
 .roundBtn {
-  outline: none;
-  position: absolute;
-  top: 5vh;
-  display:block;
-  height: 2vh;
-  width: 2vh;
-  border-radius: 50%;
-  border: 0px;
-  user-select: none;
-  background-color: rgb(141, 145, 143)
+    outline: none;
+    position: absolute;
+    top: 5vh;
+    display: block;
+    height: 2vh;
+    width: 2vh;
+    border-radius: 50%;
+    border: 0px;
+    user-select: none;
+    background-color: #555;
 }
-#exit{right: 3vw}
-#minimize{right: 5vw}
+
+#exit {right: 3vw}
+#minimize {right: 5vw}
 #reset {right: 7vw}
 
-.roundBtn:hover{
-  cursor: pointer;
-  height: 2.2vh;
-  width: 2.2vh;
+.roundBtn:hover {
+    cursor: pointer;
+    height: 2.2vh;
+    width: 2.2vh;
 }
 
-#exit:hover{background-color: rgb(221, 85, 53)}
-#minimize:hover{background-color: rgb(211, 170, 3)}
-#reset:hover{background-color: rgb(21, 115, 220)}
-
-.roundBtn:focus{outline: none}
+#exit:hover {background-color: rgb(221, 85, 53)}
+#minimize:hover {background-color: rgb(211, 170, 3)}
+#reset:hover {background-color: rgb(21, 115, 220)}
 
 .dropbtn {
-    outline:none;
+    outline: none;
     position: absolute;
     left: 2.5vw;
-    top: 2vh;
-    background: #222;
+    top: 1.4vh;
+    background: rgba(34, 35, 37, 0.897);
     font-family: custom;
     width: 15vw;
-    height: 5vh;
-    color: rgba(50,80,100,0.94);
+    height: 3vw;
+    color: rgba(43, 90, 121, 0.94);
     font-size: 2vw;
     font-weight: 600;
-    border: .2vw solid rgba(50,80,100,0.94);
+    border: none;
+    border-bottom: .3vw solid rgba(50, 80, 100, 0.94);
     text-align: center;
     vertical-align: baseline;
     user-select: none;
-    border-radius: .3vw;
-    transition: all .4s;
-    transition: letter-spacing .6s;
+    border-radius: .4vw;
+    transition: letter-spacing 1s;
 }
 
 .dropdown {
     position: relative;
     display: inline-block;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 }
-.dropdown:hover .dropbtn{
-    outline:none;
+
+.dropdown:hover .dropbtn {
+    outline: none;
     cursor: pointer;
     user-select: none;
     color: rgb(112, 191, 218);
-    border-color: rgb(112, 191, 218); 
+    border-color: rgb(112, 191, 218);
     letter-spacing: .5vw;
 }
-.dropbtn:focus{
-    outline:none;
+
+.dropbtn:focus {
+    outline: none;
     cursor: pointer;
     user-select: none;
 }
@@ -198,13 +207,14 @@ body {
 .dropdown-content {
     display: none;
     left: 2.5vw;
-    top: 7vh;
+    top: 3.8vw;
     width: 15vw;
     position: absolute;
     background-color: #f1f1f1;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 3;
 }
+
 .dropdown-content a {
     user-select: none;
     text-align: center;
@@ -212,12 +222,13 @@ body {
     color: black;
     font-size: 1.3vw;
     font-family: custom;
-    background-image: radial-gradient(rgba(90,150,170,0.94), rgba(80,80,80,1));
+    background-image: radial-gradient(rgba(90, 150, 170, 0.94), rgba(80, 80, 80, 1));
     display: block;
 }
+
 .dropdown-content a:hover {
     user-select: none;
-    background-image: radial-gradient(rgba(80,80,80,1), rgba(90,150,170,0.94));
+    background-image: radial-gradient(rgba(80, 80, 80, 1), rgba(90, 150, 170, 0.94));
     cursor: pointer;
 }
 
@@ -228,159 +239,146 @@ body {
 #clock {
     position: absolute;
     left: 18.5vw;
-    top: 3.8vh;
+    top: 2vw;
     font-size: 3vw;
     font-weight: bold;
-    color: rgba(50,80,100,0.94);
+    color: rgba(50, 80, 100, 0.94);
     font-stretch: expanded;
     width: 15vw;
     height: 5vh;
     cursor: default;
     font-family: digital;
-    user-select: none; 
+    user-select: none;
 }
 
-#clock:hover{
-  cursor: default;
-  user-select: none; 
+#clock:hover {
+    cursor: default;
+    user-select: none;
 }
 
-.bodyDiv{
-  position: absolute;
-  top: 10vh;
-  left: 2.5vw;
-  width: 95vw;
-  height: 85vh;
-  background-image: radial-gradient(rgba(30,50,60,0.94), rgba(30,50,60,0.7), rgba(30,50,60,0.93), rgba(10,10,10,0.1));
-  border: 3px solid black;
-  overflow: hidden;
+.bodyDiv {
+    position: absolute;
+    top: 10vh;
+    left: 2.5vw;
+    width: 95vw;
+    height: 85vh;
+    background-image: radial-gradient(rgba(30, 50, 60, 0.94), rgba(30, 50, 60, 0.7), rgba(30, 50, 60, 0.93), rgba(10, 10, 10, 0.1));
+    border: 3px solid black;
+    overflow: hidden;
 }
 
 #content {overflow: hidden}
 
-h1 {animation:glow 10s ease-in-out infinite}
-
-* { 
+* {
     user-select: none;
-    box-sizing:border-box;
+    box-sizing: border-box;
 }
 
 figure {
-  user-select: none;
-  text-align: center;
-  cursor: default;
-  animation:wobble 6s ease-in-out infinite;
-  transform-origin:center center;
-  transform-style:preserve-3d;
+    user-select: none;
+    text-align: center;
+    cursor: default;
+    animation: wobble 6s ease-in-out infinite;
+    transform-origin: center center;
+    transform-style: preserve-3d;
 }
 
-figure:hover{
-  cursor: default;
-}
+figure:hover {cursor: default}
 
 h1 {
-  user-select: none;
-  display:block;
-  width:100%;
-  padding:40px;
-  line-height:1.5;
-  font:13.5vw custom;
-  font-stretch: expanded;
-  font-weight: bold;
-  text-transform:uppercase;
-  position:absolute;
-  color:#0a0a0a;
-  cursor: default;
-}
-h1:hover{
-  cursor: default;
+    user-select: none;
+    display: block;
+    width: 100%;
+    font-size: 15.5vw;
+    text-shadow: 0 0 2vw rgb(33, 97, 200);
+    font-family: welcome-text;
+    position: absolute;
 }
 
-h1:nth-child(2){transform:translateZ(5px)}
-h1:nth-child(3){transform:translateZ(10px)}
-h1:nth-child(4){transform:translateZ(15px)}
-h1:nth-child(5){transform:translateZ(20px)}
-h1:nth-child(6){transform:translateZ(25px)}
-h1:nth-child(7){transform:translateZ(30px)}
+h1:hover {cursor: default}
+h1:nth-child(2) {transform: translateZ(6px)}
+h1:nth-child(3) {transform: translateZ(12px)}
+h1:nth-child(4) {transform: translateZ(18px)}
+h1:nth-child(5) {transform: translateZ(24px)}
+h1:nth-child(6) {transform: translateZ(30px)}
 
-#labels{
-  user-select: none;
-  position: absolute;
-  left: 10vw;
-  top: 10vh;
-  color: white;
-  font-family: custom;
-  font-size: 2.7vw;
+#labels {
+    user-select: none;
+    position: absolute;
+    left: 10vw;
+    top: 10vh;
+    color: white;
+    font-family: custom;
+    font-size: 2.7vw;
 }
 
-#accData{
-  user-select: none;
-  position: absolute;
-  left: 50vw;
-  top: 10vh;
-  color: white;
-  font-family: custom;
-  font-size: 2.7vw;
+#accData {
+    user-select: none;
+    position: absolute;
+    left: 50vw;
+    top: 10vh;
+    color: white;
+    font-family: custom;
+    font-size: 2.7vw;
 }
 
-#labels:hover, #accData:hover{
-  cursor: default;
+#labels:hover, #accData:hover {
+    cursor: default;
 }
 
 #labels div input {
-  outline:none;
-  background-color: transparent;
-  background-image: radial-gradient(rgba(30,90,60,0.94), rgba(30,90,60,0.64), rgba(20,20,20,0.2));
-  border: 2px solid black;
-  font-family: custom;
-  width: 15vw;
-  height: 5vh;
-  color: rgb(200,200,200);
-  font-size: 2vw;
-  text-align: center;
-  vertical-align: baseline;
-  user-select: none;
-  border: none;
-  border-bottom: 2px solid grey;
+    outline: none;
+    background-color: transparent;
+    background-image: radial-gradient(rgba(30, 90, 60, 0.94), rgba(30, 90, 60, 0.64), rgba(20, 20, 20, 0.2));
+    border: 2px solid black;
+    font-family: custom;
+    width: 15vw;
+    height: 5vh;
+    color: rgb(200, 200, 200);
+    font-size: 2vw;
+    text-align: center;
+    vertical-align: baseline;
+    user-select: none;
+    border: none;
+    border-bottom: 2px solid grey;
 }
 
-#labels div input:hover{
-  outline:none;
-  cursor: default;
-  user-select: none;
-  color:white;
-  text-shadow: 0px .1vw .5vw rgba(255,255,255,0.6);
+#labels div input:hover {
+    outline: none;
+    cursor: default;
+    user-select: none;
+    color: white;
+    text-shadow: 0px .1vw .5vw rgba(255, 255, 255, 0.6);
 }
-
 
 #accData div input {
-  background: none;
-  color: white;
-  font-family: custom;
-  font-size: 2.7vw;
-  border: none;
-  border-bottom: 2px solid grey;
+    background: none;
+    color: white;
+    font-family: custom;
+    font-size: 2.7vw;
+    border: none;
+    border-bottom: 2px solid grey;
 }
 
-#accData div input:focus, #labels div input:focus{
-  outline: none;
+#accData div input:focus, #labels div input:focus {
+    outline: none;
 }
 
 table {
-  position: absolute;
-  left: 30vw;
-  top: 5vh;
-  width: 40vw;
-  height: 70vh;
-  border: 1px solid black;
+    position: absolute;
+    left: 30vw;
+    top: 5vh;
+    width: 40vw;
+    height: 70vh;
+    border: 1px solid black;
 }
 
 tr {
-  display: table-row;
-  width: 100%;
-  height: 5vh;
-  background-color: #999;
-  border: 1px solid black;
+    display: table-row;
+    width: 100%;
+    height: 5vh;
+    background-color: #999;
+    border: 1px solid black;
 }
 
 #leftNav {
@@ -394,7 +392,7 @@ tr {
     font-size: 2.7vw;
     width: 6vw;
     height: 100%;
-    background: rgba(10,10,10, 0.3);
+    background: rgba(10, 10, 10, 0.3);
     transition: .5s all;
     animation: displayNav 1s;
     z-index: 2;
@@ -433,11 +431,11 @@ tr {
     top: -5vw;
     left: 4vw;
     content: attr(custom_title);
-    background-image: radial-gradient(rgba(30,50,60,.6), rgba(10,10,10,.8));
+    background-image: radial-gradient(rgba(30, 50, 60, .6), rgba(10, 10, 10, .8));
     color: #fff;
     white-space: nowrap;
     z-index: 1;
-    animation: fadein 1s;
+    animation: fadein .5s;
     border-radius: .3vw;
 }
 
@@ -448,22 +446,22 @@ tr {
     top: 5vh;
     width: 50vw;
     height: 70vh;
-    background: rgb(70, 80, 132);
-    border-radius: 1vw;
+    background-image: linear-gradient(rgb(82, 120, 139), rgb(203, 206, 207));
     overflow: hidden;
-    box-shadow: 0 0 4vw rgba(34, 34, 34, 1);
+    box-shadow: 0 0 4vw rgba(34, 34, 34, .71);
 }
 
-.box-window-top{
+.box-window-top {
     position: relative;
     left: 0;
     top: 0;
     width: 100%;
-    height: 4vh;
-    background-color: #222;
+    height: 2.9vh;
+    background-color: rgba(19, 58, 90, 0.967);
     display: inline-block;
     padding: 0;
     margin: 0;
+    overflow-y: visible;
 }
 
 .box-window-top-draggable {
@@ -478,8 +476,8 @@ tr {
 .box-window-top span {
     top: 1vh;
     float: right;
-    margin-right: 1vw; 
-    font-size: 3vh;
+    margin-right: 1vw;
+    font-size: 2.7vh;
     font-weight: 900;
     transition: .3s;
     font-weight: bold;
@@ -490,15 +488,15 @@ tr {
     padding: 0;
     margin: 0;
     font-family: custom;
-    top: 1vh;
+    top: 0;
     float: left;
-    margin-left: 2vw; 
-    font-size: 3vh;
+    margin-left: 2vw;
+    font-size: 2.8vh;
     font-weight: 900;
     font-weight: bold;
     color: #fff;
+    overflow-y: visible;
 }
-
 
 .box-window-top span:hover {
     cursor: pointer;
@@ -506,15 +504,15 @@ tr {
 }
 
 .box-window-content {
-   position: absolute;
-   top: 7vh;
-   left: 5%;
-   width: 90%;
-   height: 80%;
-   background-color: rgba(34, 34, 34, 0.7); 
-   box-shadow: 0 0 4vw rgba(34, 34, 34, 1);
-   overflow-x: hidden;
-   overflow-y: scroll;
+    position: absolute;
+    top: 5vh;
+    left: 2%;
+    width: 96%;
+    height: 85%;
+    background-color: rgba(34, 34, 34, 0.7);
+    box-shadow: 0 0 4vw rgba(34, 34, 34, 1);
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 #music-box-window .box-window-content ul, #notes-box-window .box-window-content ul, #weather-box-window .box-window-content ul, #games-box-window .box-window-content ul {
@@ -538,12 +536,14 @@ tr {
     height: 10vh;
     width: 100%;
     background: linear-gradient(90deg, var(--c2), var(--c1) 51%, var(--c1)) var(--x, 0)/ 200%;
-    box-shadow: 0 .3vw 0 0 rgba(10,10,10,.5);
+    box-shadow: 0 .3vw 0 0 rgba(10, 10, 10, .5);
     border-radius: .2vw;
     transition: 0.5s;
 }
 
-#music-box-window .box-window-content ul li:hover, #weather-box-window .box-window-content ul li:hover, #notes-box-window .box-window-content ul li:hover, #games-box-window .box-window-content ul li:hover {--x: 100%}
+#music-box-window .box-window-content ul li:hover, #weather-box-window .box-window-content ul li:hover, #notes-box-window .box-window-content ul li:hover, #games-box-window .box-window-content ul li:hover {
+    --x: 100%
+}
 
 #music-box-window .box-window-content ul li span, #games-box-window .box-window-content ul li span {
     font-family: custom;
@@ -553,32 +553,34 @@ tr {
     color: white;
 }
 
-#games-box-window .box-window-content ul li:hover span , #weather-box-window .box-window-content ul li:hover span {
-    text-shadow: 0px .1vw .5vw rgba(255,255,255,0.6);
+#games-box-window .box-window-content ul li:hover span, #weather-box-window .box-window-content ul li:hover span {
+    text-shadow: 0px .1vw .5vw rgba(255, 255, 255, 0.6);
 }
 
 #music-box-window .box-window-content ul li:hover span, #notes-box-window .box-window-content ul li:hover span, #games-box-window .box-window-content ul li:hover span {
-    text-shadow: 0px .1vw .5vw rgba(255,255,255,0.6);
+    text-shadow: 0px .1vw .5vw rgba(255, 255, 255, 0.6);
 }
 
-.box-window-top-draggable:hover, .box-window-top .box-window-top-draggable h3:hover{
+.box-window-top-draggable:hover, .box-window-top .box-window-top-draggable h3:hover {
     cursor: pointer;
 }
 
-input:focus{
+input:focus {
     outline: none;
 }
 
-#calculator-box-window{
+#calculator-box-window {
+    --height: 50vh;
     width: 40vw;
-    height: 50vh;
-    animation: 1s display-calculator-box-window;
+    height: var(--height);
+    animation: 1s displayWindow;
 }
 
 #calculator-box-window .box-window-content {
-    background-color: rgb(72, 66, 122);
+    background-color: rgb(66, 109, 122);
     top: 5vh;
     height: 84%;
+    overflow: hidden;
 }
 
 #calculator-box-window .box-window-content div {
@@ -587,12 +589,13 @@ input:focus{
     padding-left: 4%;
     margin: 0;
     margin-top: 2%;
-} 
+    overflow: hidden;
+}
 
 #equation {
     margin-left: 1%;
     margin-top: 3%;
-    background: transparent;
+    background: rgba(50,50,50,.227);
     color: white;
     font-family: custom;
     font-weight: 600;
@@ -606,7 +609,7 @@ input:focus{
     transition: all .2s;
 }
 
-.equationInput  {
+.equationInput {
     background: transparent;
     color: white;
     font-family: custom;
@@ -620,11 +623,11 @@ input:focus{
     transition: all .2s;
 }
 
-.equationInput:hover, #equation:hover, #calculator-box-window input[type=submit]:hover{
-    border-radius: 1vw; 
+.equationInput:hover, #equation:hover, #calculator-box-window input[type=submit]:hover {
+    border-radius: 1vw;
 }
 
-#calculator-box-window input[type=submit]{
+#calculator-box-window input[type=submit] {
     margin-left: 1%;
     background: transparent;
     color: #fff;
@@ -638,7 +641,7 @@ input:focus{
     transition: all .2s;
 }
 
-#notes-box-window .box-window-content ul li .title{
+#notes-box-window .box-window-content ul li .title {
     font-family: custom;
     position: absolute;
     left: 10%;
@@ -657,6 +660,7 @@ input:focus{
 }
 
 #notes-box-window .box-window-content ul li .content {
+    display: none;
     font-family: custom;
     position: absolute;
     top: 50%;
@@ -667,11 +671,11 @@ input:focus{
 
 #notes-box-window #noteTextArea {
     position: absolute;
-    top: calc(10vh + 50%);
-    height: 30%;
+    top: calc(10vh + 40%);
+    height: 40%;
     left: 5%;
     width: 90%;
-    background-color: rgba(87, 87, 87, 0.7); 
+    background-color: rgba(87, 87, 87, 0.7);
     box-shadow: 0 0 4vw rgb(77, 77, 77);
     overflow-x: hidden;
     overflow-y: scroll;
@@ -679,32 +683,32 @@ input:focus{
 
 #notes-box-window .box-window-content {
     position: absolute;
-    top: 7vh;
+    top: 6vh;
     left: 5%;
     width: 90%;
-    height: 50%;
-    background-color: rgba(51, 51, 51, 0.7); 
+    height: 36%;
+    background-color: rgba(51, 51, 51, 0.7);
     box-shadow: 0 0 4vw rgb(54, 54, 54);
     overflow-x: hidden;
     overflow-y: scroll;
 }
 
-#notes-box-window #noteTextArea textarea{
+#notes-box-window #noteTextArea textarea {
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
     height: 150%;
-    background-color: rgba(51, 51, 51, 0.7); 
+    background-color: rgba(51, 51, 51, 0.7);
     color: white;
     outline: none;
-    margin: 0; 
+    margin: 0;
     padding: 0;
     font-size: 2vw;
     font-family: custom;
 }
 
-#brightness-box-window label {
+/*#brightness-box-window label {
     margin-left: 5%;
     font-size: 2vw;
     display: block;
@@ -724,10 +728,54 @@ input:focus{
 }
 
 #brightness-box-window {
-    height: 20vh;
+    --height: 20vh;
+    height: var(--height);
+}*/
+
+#games-box-window {
+    --height: 50vh;
+    height: var(--height);
+    animation: 1s displayWindow;
 }
+
+#maps-box-window {
+    --height: 50vh;
+    height: var(--height);
+    animation: 1s displayWindow;
+}
+
 #weather-box-window {
-    height: 50vh;
+    --height: 50vh;
+    height: var(--height);
+    animation: 1s displayWindow;
+}
+
+#music-box-window {
+    --height: 50vh;
+    height: var(--height);
+    animation: 1s displayWindow;
+}
+
+#notes-box-window {
+    --height: 65vh;
+    height: var(--height);
+    animation: 1s displayWindow;
+}
+
+#photoEditor-box-window {
+    --height: 50vh;
+    height: var(--height);
+    animation: 1s displayWindow;
+}
+
+#sysInfo-box-window {
+    --height: 50vh;
+    height: var(--height);
+    animation: 1s displayWindow;
+}
+
+#maps-box-window .box-window-content {
+    overflow: hidden;
 }
 
 #weather-box-window .box-window-content {
@@ -738,16 +786,16 @@ input:focus{
 #weather-box-window #locationInput {
     position: absolute;
     top: 15%;
-    left: 5%;
-    width: 90%;
+    left: 2%;
+    width: 96%;
     font-size: 2vw;
-    display: block; 
-    font-family: custom; 
+    display: block;
+    font-family: custom;
     color: #eee;
     border: none;
     user-select: none;
     outline: none;
-    border-bottom: .3vw solid #eee;
+    border-bottom: .3vw solid #555;
     background: transparent;
 }
 
@@ -760,6 +808,61 @@ input:focus{
     color: white;
 }
 
+#notes-box-window #noteControls {
+    position: absolute;
+    top: calc(10vh + 32%);
+    height: 6%;
+    left: 5%;
+    width: 90%;
+    overflow: hidden;
+}
+
+#notes-box-window #noteControls div { 
+    margin-left: 4%;
+    width: 7%;
+    height: 100%;
+    float: left;
+}
+
+#notes-box-window #noteControls div img {
+    position: absolute;
+    top: 10%;
+    width: 7%;
+    height: 80%; 
+}
+
+#notes-box-window #noteControls div img:hover {
+    top: 8%;
+    width: 7.2%;
+    height: 85%; 
+    cursor: pointer;   
+}
+
+#notes-box-window #noteControls #newFileName {
+    background: transparent;
+    border: none;
+    height: 90%;
+    border-bottom: .2vw solid #ccc;
+    color: #ccc;
+    font-family: custom;
+    font-size: 150%;
+    overflow: visible;
+}
+
+
 #actualLocationData * {
-    display: block;
+    display: none;
+}
+
+#mainDiv #gameWindow {
+    position: absolute;
+    left:0;
+    top:0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin:0;
+    padding: none;
+    background: #555;
+    display: none;
 }

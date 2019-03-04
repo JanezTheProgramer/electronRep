@@ -1,0 +1,54 @@
+<div id="account-info-div-content" style="display: none">
+    <div id="labels">
+        <div>Username:</div><br>
+        <div>Member since:</div><br>
+        <div>Last seen:</div><br>
+        <div>Account age:</div><br>
+        <div><input id="save" type="button" value="Save"></div>
+    </div>
+    <div id="accData">
+        <div><input id="username" type=text value=""></div><br>
+        <div><span id="member_since"></span></div><br>
+        <div><span id="last_seen"></span></div><br>
+        <div><span id="age"></span></div>
+    </div>
+    <script>
+        $(document).ready(() => {
+            let userData = null;
+            resetValues();
+            window.retriveUserPromise = () => {
+                userData = getUser();
+                setTimeout(() => {
+                    if (!userData) 
+                        retriveUserPromise();
+                    else {   
+                        //console.log(userData);
+                        $("#username").val(String(userData.name));
+                        $("#member_since").text(format_date(userData.date_c));
+                        $("#last_seen").text(format_date(userData.date_l));
+                        setTimeout(() => $('#account-info-div-content').fadeIn(100), 10);
+                    }
+                }, 300);
+            }
+            retriveUserPromise();
+
+            window.updateUser = () => {
+                if($("#username").val() != userData.name && $("#username").val().length > 4) {
+                    userData.name = $("#username").val();
+                    setUsername(userData) ? $("#username").css({ background: "transparent"}) : null;         
+                }
+            }
+
+            window.format_date = _date_ => new Date(_date_).toLocaleDateString("en-US");
+
+            $('#username').on('input', () => 
+                $("#username").val() != userData.name ?
+                    $("#username").css({ background: "linear-gradient(to bottom, rgba(0,0,0,0), rgba(200,0,0, 0.4))"}) :
+                    $("#username").css({ background: "transparent"})
+            );
+
+            $('#username').keypress(event => event.keyCode == 13 ? updateUser() : null);
+            $('input#save').click(() => updateUser());
+        });
+    </script>
+</div>

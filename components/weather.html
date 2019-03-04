@@ -6,33 +6,24 @@
         <span class="exit">&times;</span>
     </div>
     <div>
-        <input 
-            id="locationInput"
-            type="text" 
-            placeholder="enter location" 
-            value=""
-        />
-        </div>
+        <input id="locationInput" type="text" placeholder="enter location" value="" />
+    </div>
     <div class="box-window-content">
         <ul id="locationList">
         </ul>
         <div id="actualLocationData">
         </div>
     </div>
-</div>
-<script>
-    $(document).ready(() => {
-        if(typeof weatherHistory === 'undefined'){
-            window.weatherHistory = true;
-
+    <script>
+        $(document).ready(() => {
             const getWeatherData = location => {
                 try {
-                    $("#locationList").children().remove();
-                    var weather = require('weather-js');
-                    weather.find({search: String(location), degreeType: 'C'}, (err, result) => {
+                    $("#locationList").html("");
+                    weather.find({ search: String(location), degreeType: 'C' }, (err, result) => {
                         err ? console.log(err) : null;
+                        console.log(result);
 
-                        if (result.length) 
+                        if (result.length)
 
                             for (let i = 0; i < result.length; i++) {
                                 $("#locationList").append(`
@@ -54,16 +45,16 @@
                                 `);
 
 
-                                result[i].forecast.forEach( day => $(`#${i}forecast`).append(`
+                                result[i].forecast.forEach(day => $(`#${i}forecast`).append(`
                                     <div>Date: ${day.date}<div><br>
                                     <div>Lowest temp: ${day.low}<div><br>
                                     <div>Highest temp: ${day.high}<div><br> 
                                     <div>Weather: ${day.skytextday}<div><br>
                                 `));
-                                
+
                             }
 
-                        else 
+                        else
                             console.log("no loactions found");
                     });
                 } catch (err) {
@@ -72,12 +63,18 @@
             }
 
             $(document).on('click', ".locSpan", event => {
-                $("#locationList").children().remove();
-                $(`#${event.currentTarget.id[0]}locDiv`).fadeOut(100);
-                $(`#${event.currentTarget.id[0]}forecast`).show();
+                try{
+                    //console.log("click");
+                    console.log($(`#${event.currentTarget.id[0]}locDiv`));
+                    $(`#actualLocationData`).show();
+                    $("#locationList").html("");
+                } catch (err) { console.log(err)/* ignore */}
             });
-            $(document).on('keypress',"#locationInput", event => event.keyCode == 13 ? getWeatherData($("#locationInput").val()) : null);
-
-        }
-    });
-</script>
+            $(document).on('keypress', "#locationInput", event => 
+                event.keyCode == 13 ? 
+                    getWeatherData($("#locationInput").val()) :
+                    null
+            );
+        });
+    </script>
+</div>
