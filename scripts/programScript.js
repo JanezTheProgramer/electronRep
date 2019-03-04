@@ -117,7 +117,14 @@ $(document).ready(() => {
         { id: 'maps-box-window', file: 'maps.html', enabled: true },
         { id: 'photoEditor-box-window', file: 'photoEditor.html', enabled: true },
         { id: 'sysInfo-box-window', file: 'sysInfo.html', enabled: true },
+        { id: 'systemControl-box-window', file: 'systemControl.html', enabled: false}
     ];
+
+    (() => {
+        if(navigator.platform.indexOf('Win') > -1){
+            components[9].enabled = true;
+        }
+    })();
 
     const closeTargetWindow = (targetID, speed) => {
         speed = speed || 700;
