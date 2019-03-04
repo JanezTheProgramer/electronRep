@@ -11,13 +11,25 @@
     </div>
     <div id="noteControls">
         <div id="deleteFileControl">
-            <img src="../util/icons/notes/delete.ico" alt="/"/>
+            <img 
+                src="../util/icons/notes/delete.ico" 
+                alt="/"
+                custom_title="Delete file"
+            />
         </div>
         <div id="saveFileControl">
-            <img src="../util/icons/notes/save.png" alt="/"/>
+            <img 
+                src="../util/icons/notes/save.png" 
+                alt="/"
+                custom_title="Save content"
+            />
         </div>
         <div id="newFileControl">
-            <img src="../util/icons/notes/new.png" alt="/"/>
+            <img 
+                src="../util/icons/notes/new.png" 
+                alt="/"
+                custom_title="Create file"
+            />
         </div>
         <div>
             <input 
@@ -34,7 +46,7 @@
         </textarea>
     </div>
     <script>
-        $(document).ready(event => {
+        $(document).ready(() => {
             !fs.existsSync('./notes') ? fs.mkdirSync('./notes') : null; 
             let curr_fileName = null;
             function refresh () {
