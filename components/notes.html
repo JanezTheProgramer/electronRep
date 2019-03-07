@@ -16,11 +16,11 @@
         <div class="hasTollTip" id="saveFileControl" custom_title="Save content">
             <img src="../util/icons/notes/save.png" alt="/" />
         </div>
-        <div class="hasTollTip" id="newFileControl" custom_title="Create file">
-            <img src="../util/icons/notes/new.png" alt="/" />
-        </div>
         <div>
             <input type="text" value="" placeholder="new file" id="newFileName" />
+        </div>
+        <div class="hasTollTip" id="newFileControl" custom_title="Create file">
+            <img src="../util/icons/notes/new.png" alt="/" />
         </div>
         <div id="notes_error">
             <span></span>
@@ -33,9 +33,20 @@
     </div>
     <script>
         $(document).ready(() => {
+            /*(() => {
+                ClassicEditor
+                    .create( document.querySelector('#textarea'))
+                    .then( editor => {
+                        console.log( editor );
+                    })
+                    .catch( error => {
+                        console.error( error );
+                    }).width = '150%';
+            })();*/
             !fs.existsSync('./notes') ? fs.mkdirSync('./notes') : null;
             let curr_fileName = null;
             function refresh() {
+                !curr_fileName ? $("#noteTextArea").hide() : $("#noteTextArea").show(); 
                 $("#notesList").html("");
                 let files = fs.readdirSync('./notes');
                 for (let i = 0; i < files.length; i++) {
@@ -84,6 +95,7 @@
 
             $(document).on('click', "#notesList li", event => {
                 curr_fileName = event.currentTarget.id;
+                $("#noteTextArea").show();
                 $('#notesList li .title').css({ color: 'white' });
                 $(`#textarea`).val($(`#${curr_fileName} .content`).html());
                 $(`#${curr_fileName} .title`).css({ color: 'rgb(199, 64, 40)' });
@@ -116,7 +128,7 @@
             }
 
             let keys = {
-                "13_": { pressed: false, name: "enter" },
+                "83_": { pressed: false, name: "enter" },
                 "17_": { pressed: false, name: "ctrl" },
             };
 
@@ -130,6 +142,7 @@
                     $("#notes_error span").text('Unknown error!');
                     return;
                 }
+                curr_fileName = null;
                 fs.unlinkSync(`./notes/${path}.txt`);
                 refresh();
             });
@@ -140,14 +153,14 @@
             $(document).on('input', '#newFileName', () => $("#notes_error span").text(""));
 
             $("#textarea").keydown(e => {
-                if (e.which == 13 || e.which == 17) {
+                if (e.which == 83 || e.which == 17) {
                     keys[`${e.which}_`].pressed = true;
-                    if (!keys['13_'].pressed || !keys['17_'].pressed) return;
+                    if (!keys['83_'].pressed || !keys['17_'].pressed) return;
                     saveFile();
                 }
             });
             $("#textarea").keyup(e => {
-                (e.which == 13 || e.which == 17) ?
+                (e.which == 83 || e.which == 17) ?
                     keys[`${e.which}_`].pressed = false :
                     null
             });

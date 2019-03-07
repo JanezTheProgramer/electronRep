@@ -23,7 +23,25 @@
     </div>
     <script>
         $(document).ready(() => {
-
+            //var wshShell = new ActiveXObject("WScript.Shell");
+            $(document).on('mousedown', '#system_shutdown', () => { 
+                let pathToFile = path.join(__dirname, '../batchScripts/shutodwn.bat`');
+                execFile(pathToFile, (err, data) => {
+                    if(err){
+                        console.error(err);
+                        return;
+                    }
+                })
+            });
+            $(document).on('mousedown', '#system_restart', () => 
+                exec('HelloJithin.exe')
+            );
+            $(document).on('mousedown', '#system_sleep', () => 
+                exec('HelloJithin.exe')
+            );
+            $(document).on('mousedown', '#system_logOut', () => 
+                exec('HelloJithin.exe')
+            );
         });
     </script>
 </div>

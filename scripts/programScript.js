@@ -1,5 +1,6 @@
 window.$ = window.jQuery = require('jquery');
 const electron = require('electron');
+const { execFile, spawn } = require('child_process');
 const { ipcRenderer } = electron;
 const { getUser, resetValues, setUsername } = require('../scripts/query');
 const sysInfo = require('systeminformation');
@@ -108,16 +109,17 @@ $(document).ready(() => {
     });
 
     const components = [
-        { id: 'games-box-window', file: 'games.html', enabled: true },
+        { id: 'games-box-window', file: 'games.html', enabled: false },
         { id: 'calculator-box-window', file: 'calculator.html', enabled: true },
         { id: 'notes-box-window', file: 'notes.html', enabled: true },
-        { id: 'music-box-window', file: 'music.html', enabled: true },
-        { id: 'brightness-box-window', file: 'brightness.html', enabled: false },
+        { id: 'music-box-window', file: 'music.html', enabled: false },
+        { id: 'video-box-window', file: 'videoPlayer.html', enabled: true},
         { id: 'weather-box-window', file: 'weather.html', enabled: true },
         { id: 'maps-box-window', file: 'maps.html', enabled: true },
-        { id: 'photoEditor-box-window', file: 'photoEditor.html', enabled: true },
+        { id: 'photoEditor-box-window', file: 'photoEditor.html', enabled: false },
         { id: 'sysInfo-box-window', file: 'sysInfo.html', enabled: true },
-        { id: 'systemControl-box-window', file: 'systemControl.html', enabled: false}
+        { id: 'systemControl-box-window', file: 'systemControl.html', enabled: false},
+        { id: 'brightness-box-window', file: 'brightness.html', enabled: false }
     ];
 
     (() => {
@@ -135,7 +137,14 @@ $(document).ready(() => {
     };
 
     const navRequest = (windowId, keyCode) => {
-        if (!components[windowId].enabled) return;
+        if (!components[windowId].enabled) {
+            $('#content .box-window').css({ zIndex: '0' });
+            if(document.getElementById('notEnabled-box-window'))
+                $('#notEnabled-box-window').remove();
+            $.get(`../components/notEnabled.html`, data => $('#platformDiv #content').append(data));
+            return;  
+        }   
+ 
         if (keyCode === 0) {
             $('#content .box-window').css({ zIndex: '0' });
             if (!document.getElementById(components[windowId].id)) {

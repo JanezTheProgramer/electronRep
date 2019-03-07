@@ -170,8 +170,12 @@ ipcMain.on('request-failed-to-generate-action', () => {
     setTimeout(() => app.quit(), 2500);
 });
 
+ipcMain.on('request-createdAcc-action', () => {
+    drawAlert('New Account was Created!');
+    reqWindow.close();
+});
+
 ipcMain.on('request-account-not-found', () => drawAlert('Invalid username or password!'));
 ipcMain.on('request-already-exsists-action', () => drawAlert('Username already exsists!'));
 ipcMain.on('request-pasw-dont-match-action', () => drawAlert('Passwords do not match!'));
 ipcMain.on('request-req-not-met-action', () => drawAlert('Data not filled in properly!'));
-ipcMain.on('request-createdAcc-action', () => drawAlert('New Account was Created!'));

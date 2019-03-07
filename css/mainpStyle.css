@@ -519,6 +519,24 @@ tr {
     height: 78%;  
 }
 
+#notEnabled-box-window .box-window-content {
+    height: 60%; 
+    text-align: center;
+    margin: 0 auto;
+    align-content: center; 
+}
+
+#notEnabled-box-window .box-window-content h3 {
+    font-size: 170%;
+    color: rgb(22, 134, 168);
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 2%;
+    align-content: center;
+    font-family: custom;
+
+}
+
 #music-box-window .box-window-content ul, 
 #notes-box-window .box-window-content ul,
 #weather-box-window .box-window-content ul, 
@@ -715,12 +733,12 @@ input:focus {
     overflow-y: scroll;
 }
 
-#notes-box-window #noteTextArea textarea {
+#notes-box-window #noteTextArea #textarea {
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
-    height: 150%;
+    height: 150% !important;
     background-color: rgba(51, 51, 51, 0.7);
     color: white;
     outline: none;
@@ -730,7 +748,7 @@ input:focus {
     font-family: custom;
 }
 
-/*#brightness-box-window label {
+#brightness-box-window label {
     margin-left: 5%;
     font-size: 2vw;
     display: block;
@@ -778,10 +796,22 @@ input:focus {
     animation: 1s displayWindow;
 }
 
+#notEnabled-box-window {
+    --height: 20vh;
+    height: var(--height);
+    animation: 1s displayWindow;  
+}
+
 #music-box-window {
     --height: 50vh;
     height: var(--height);
     animation: 1s displayWindow;
+}
+
+#video-box-window {
+    --height: 50vh;
+    height: var(--height);
+    animation: 1s displayWindow; 
 }
 
 #notes-box-window {
@@ -802,18 +832,14 @@ input:focus {
     animation: 1s displayWindow;
 }
 
-#maps-box-window .box-window-content {
-    overflow: hidden;
+#maps-box-window .box-window-content, #weather-box-window .box-window-content {
+    top: 22%;
+    height: 71%;
 }
 
-#weather-box-window .box-window-content {
-    top: 28%;
-    height: 60%;
-}
-
-#weather-box-window #locationInput {
+#weather-box-window #locationInput, #maps-box-window #mapsLocation {
     position: absolute;
-    top: 15%;
+    top: 10%;
     left: 2%;
     width: 96%;
     font-size: 2vw;
@@ -851,6 +877,10 @@ input:focus {
     height: 100%;
     float: left;
     overflow: visible;
+}
+
+#notes-box-window #noteControls #newFileControl { 
+    margin-left: 25%;
 }
 
 #notes-box-window #noteControls div img {
