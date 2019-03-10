@@ -1,3 +1,7 @@
+window.onerror = function() {
+    ipcRenderer.send('request-failed-to-generate-action');
+} // global error handling (if error exsists app closes!)
+
 window.$ = window.jQuery = require("jquery");
 const { ipcRenderer } = require('electron');
 $(document).ready(() => {

@@ -1,3 +1,7 @@
+window.onerror = function() {
+    ipcRenderer.send('request-failed-to-generate-action');
+} // global error handling (if error exsists app closes!)
+
 window.$ = window.jQuery = require('jquery');
 const electron = require('electron');
 const { execFile, spawn } = require('child_process');
@@ -10,13 +14,14 @@ const path = require('path');
 const moment = require('moment');
 const fs = require('fs');
 
-let drag = {
+window.drag = {
     isDown: false,
     iX: null,
     iY: null
 }; // object for element dragging properties
 
 $(document).ready(() => {
+
     $('#clock').text(`${moment().format('LT')}`)
     $('.roundBtn').click(element => {
         switch (String(element.target.id)) {
@@ -101,6 +106,8 @@ $(document).ready(() => {
     $(document).on('mouseleave', '.box-window-top-draggable', () => drag.isDown = false);
     $(document).mouseup(() => drag.isDown = false);
 
+    //end of draggggg functions
+
     $(document).on('click', '.exit', e => closeTargetWindow(e.currentTarget.parentNode.parentNode.id));
 
     $(document).on('mousedown', '.box-window', event => {
@@ -132,7 +139,7 @@ $(document).ready(() => {
         let targetID = e.currentTarget.parentNode.parentNode.id;
         if (!document.getElementById(targetID)) return;
         //console.log(e.currentTarget.parentNode.parentNode);
-        if (['▢', '&#9634;'].includes(e.target.innerHTML)) 
+        if (['▢', '&#9634;'].includes(e.target.innerHTML))
             goFullScreen(targetID);
         else if (['−', '&minus;'].includes(e.target.innerHTML)) {
             $('#leftNav').animate({
