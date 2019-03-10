@@ -1,6 +1,6 @@
-window.onerror = function() {
+/*window.onerror = function() {
     ipcRenderer.send('request-failed-to-generate-action');
-} // global error handling (if error exsists app closes!)
+} // global error handling (if error exsists app closes!)*/
 
 window.$ = window.jQuery = require('jquery');
 const electron = require('electron');
@@ -21,8 +21,7 @@ window.drag = {
 }; // object for element dragging properties
 
 $(document).ready(() => {
-
-    $('#clock').text(`${moment().format('LT')}`)
+    $('#clock').text(moment().format('LT'));
     $('.roundBtn').click(element => {
         switch (String(element.target.id)) {
             case 'exit':

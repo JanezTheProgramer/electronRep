@@ -4,9 +4,34 @@ const { ipcRenderer } = require('electron');
 exports.createDB = () => {
     try {
         let db = new sqlite3.Database('database.db');
+        let settings = {
+            navigationMenu: [
+                {name: "games", enabled: true},
+                {name: "calculator", enabled: true},
+                {name: "notes", enabled: true},
+                {name: "music", enabled: true},
+                {name: "video", enabled: true},
+                {name: "weather", enabled: true},
+                {name: "maps", enabled: true},
+                {name: "photoEditor", enabled: true},
+                {name: "sysInfo", enabled: true},
+                {name: "systemControl", enabled: true}
+            ]
+        };
+
         let createQueries = [
-            'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, pass TEXT, date_c TEXT)',
-            'CREATE TABLE IF NOT EXISTS log_history (id INTEGER PRIMARY KEY AUTOINCREMENT, id_user INTEGER, date_l TEXT)'
+            `CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT, 
+                pass TEXT, 
+                date_c TEXT, 
+                settings TEXT DEFAULT '${JSON.stringify(settings)}'
+            )`,
+            `CREATE TABLE IF NOT EXISTS log_history (
+                id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                id_user INTEGER, 
+                date_l TEXT
+            )`
         ];
         db.serialize(() => createQueries.forEach(query => db.run(query)));
         db.close();
@@ -60,8 +85,9 @@ exports.getUser = () => {
     try {
         let db = new sqlite3.Database('database.db');
         db.get((`
-            SELECT DISTINCT users.id, users.name, users.date_c, log_history.date_l FROM log_history 
-            INNER JOIN users on log_history.id_user = users.id
+            SELECT DISTINCT users.*, log_history.date_l 
+            FROM log_history 
+            INNER JOIN users ON log_history.id_user = users.id
             ORDER BY log_history.id DESC LIMIT 1`),
             [], (err, row) => {
                 user = !err ? row : null;
