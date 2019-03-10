@@ -320,6 +320,26 @@ h1:nth-child(6) {transform: translateZ(30px)}
     font-size: 2.7vw;
 }
 
+
+#ui_icons_set {
+    position: absolute;
+    left: 20vw;
+    top: 70vh;
+    color: white;
+    font-family: custom;
+    font-size: 2.7vw;
+}
+
+#account-info-div-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
 #labels:hover, #accData:hover {
     cursor: default;
 }

@@ -1,4 +1,4 @@
-<div id="account-info-div-content" style="display: none; overflow: scroll;">
+<div id="account-info-div-content" style="display: none;">
     <div id="labels">
         <div>Username:</div><br>
         <div>Member since:</div><br>
@@ -12,9 +12,8 @@
         <div><span id="last_seen"></span></div><br>
         <div><span id="age"></span></div>
     </div>
-    <hr>
-    <div id="ui_icons_set">
-    </div>
+    <form id="ui_icons_set">
+    </form>
     <script>
         $(document).ready(() => {
             let userData = null;
@@ -37,7 +36,13 @@
                             `${Math.floor(Math.abs(moment.duration(moment(new Date()).diff(date_created)).asDays()))} days`
                         );
                         JSON.parse(userData.settings).navigationMenu.forEach(row => $('#ui_icons_set').append(`
-                            <input type="checkbox" value="${row.name}" ${row.enabled ? "checked" : null}>${row.name}<br>
+                            <input 
+                                class="ui_filter_checboxes"
+                                type="checkbox"
+                                name="${row.name}"
+                                value=" ${row.enabled ? "checked" : "unchecked"}" 
+                                ${row.enabled ? "checked" : null}
+                            >${row.name}<br>
                         `));
 
                         setTimeout(() => $('#account-info-div-content').fadeIn(100), 10);
@@ -52,7 +57,7 @@
                 }
             }
 
-            window.format_date = _date_ => new Date(_date_).toLocaleDateString("en-US");
+            const format_date = _date_ => new Date(_date_).toLocaleDateString("en-US");
 
             $('#username').on('input', () =>
                 $("#username").val() != userData.name ?
@@ -61,7 +66,12 @@
             );
 
             $('#username').keypress(event => event.keyCode == 13 ? updateUser() : null);
-            $('input#save').click(() => updateUser());
+            $('input#save').click(() => {
+                updateUser();
+                let new_array = $('.ui_filter_checboxes').each((key, window) => {
+                    console.log(window);
+                });
+            });
         });
     </script>
 </div>
