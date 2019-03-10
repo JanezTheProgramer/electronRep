@@ -6,16 +6,16 @@ exports.createDB = () => {
         let db = new sqlite3.Database('database.db');
         let settings = {
             navigationMenu: [
-                {name: "games", enabled: true},
-                {name: "calculator", enabled: true},
-                {name: "notes", enabled: true},
-                {name: "music", enabled: true},
-                {name: "video", enabled: true},
-                {name: "weather", enabled: true},
-                {name: "maps", enabled: true},
-                {name: "photoEditor", enabled: true},
-                {name: "sysInfo", enabled: true},
-                {name: "systemControl", enabled: true}
+                { name: "games", enabled: true },
+                { name: "calculator", enabled: true },
+                { name: "notes", enabled: true },
+                { name: "music", enabled: true },
+                { name: "video", enabled: true },
+                { name: "weather", enabled: true },
+                { name: "maps", enabled: true },
+                { name: "photoEditor", enabled: true },
+                { name: "sysInfo", enabled: true },
+                { name: "systemControl", enabled: true }
             ]
         };
 
@@ -115,11 +115,11 @@ exports.setUsername = _user_ => {
     } catch (e) {
         ipcRenderer.send('request-failed-to-generate-action');
     } finally {
-        if(success)
+        if (success)
             return true;
-        else 
+        else
             return false;
-        
+
     }
 }
 

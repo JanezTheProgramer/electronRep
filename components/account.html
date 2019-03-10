@@ -14,15 +14,11 @@
     </div>
     <hr>
     <div id="ui_icons_set">
-        <input type="checkbox" value="Games">Games<br>
-        <input type="checkbox" value="Games">Games<br>
-        <input type="checkbox" value="Games">Games<br>
-        <input type="checkbox" value="Games">Games<br>
     </div>
     <script>
         $(document).ready(() => {
             let userData = null;
-            $('#ui_icons_set').html();
+            $('#ui_icons_set').html("");
             resetValues();
             function retriveUserPromise() {
                 //console.log("getting data");
@@ -32,6 +28,7 @@
                         retriveUserPromise();
                     else {
                         //console.log(JSON.parse(userData.settings));
+                        //console.log(JSON.parse(userData.settings));
                         let date_created = format_date(userData.date_c)
                         $("#username").val(String(userData.name));
                         $("#member_since").text(date_created);
@@ -39,10 +36,9 @@
                         $("#age").text(
                             `${Math.floor(Math.abs(moment.duration(moment(new Date()).diff(date_created)).asDays()))} days`
                         );
-                        /*for (let key, value in JSON.parse(userData.settings))
-                            $('#ui_icons_set').append(`
-                                <input type="checkbox" value="${key}">${key}<br>
-                            `);*/
+                        JSON.parse(userData.settings).navigationMenu.forEach(row => $('#ui_icons_set').append(`
+                            <input type="checkbox" value="${row.name}" ${row.enabled ? "checked" : null}>${row.name}<br>
+                        `));
 
                         setTimeout(() => $('#account-info-div-content').fadeIn(100), 10);
                     }

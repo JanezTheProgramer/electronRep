@@ -112,9 +112,6 @@
                 if (!curr_fileName) {
                     $("#notes_error span").text('No file active!');
                     return;
-                } else if (!fs.existsSync(`./notes/${path}.txt`)) {
-                    $("#notes_error span").text('Unknown error!');
-                    return;
                 }
                 fs.writeFileSync(
                     `./notes/${path}.txt`,
