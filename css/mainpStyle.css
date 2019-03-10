@@ -47,28 +47,26 @@
 @keyframes wobble {
     0%, 100% {
         transform: rotate3d(1, 1, 0, 40deg)
-    }
-    25% {
+    } 25% {
         transform: rotate3d(-1, 1, 0, 40deg)
-    }
-    50% {
+    } 50% {
         transform: rotate3d(-1, -1, 0, 40deg)
-    }
-    75% {
+    } 75% {
         transform: rotate3d(1, -1, 0, 40deg)
     }
 }
 
 @keyframes displayWindow {
     from {
-        top: 0;
+        min-height: 0;
         height: 0;
+        top: -3vh;
         opacity: 0;
-    }
-    to {
+    } to {
+        top: 8vh;
         height: var(--height);
-        top: 5vh;
         opacity: 1;
+        min-height: var(--minHeight);
     }
 }
 
@@ -440,10 +438,15 @@ tr {
 }
 
 .box-window {
+    min-width: 30vw;
+    min-height: 50vh;
+    max-height: 80vh;
+    max-width: 70vw;
+    resize: both;
     position: absolute;
     display: block;
     left: 15vw;
-    top: 5vh;
+    top: 8vh;
     width: 50vw;
     height: 70vh;
     background-image: linear-gradient(rgb(82, 120, 139), rgb(203, 206, 207));
@@ -614,6 +617,7 @@ input:focus {
     width: 40vw;
     height: var(--height);
     animation: 1s displayWindow;
+    resize: none;
 }
 
 #calculator-box-window .box-window-content {
@@ -748,7 +752,7 @@ input:focus {
     font-family: custom;
 }
 
-#brightness-box-window label {
+/*#brightness-box-window label {
     margin-left: 5%;
     font-size: 2vw;
     display: block;
@@ -773,18 +777,22 @@ input:focus {
 }*/
 
 #games-box-window {
+    --minHeight: 50vh; 
     --height: 50vh;
     height: var(--height);
     animation: 1s displayWindow;
 }
 
 #systemControl-box-window {
+    --minHeight: 35vh; 
     --height: 35vh;
     height: var(--height);
     animation: 1s displayWindow;
+    min-height: var(--minHeight);
 }
 
 #maps-box-window {
+    --minHeight: 50vh; 
     --height: 50vh;
     height: var(--height);
     animation: 1s displayWindow;
@@ -792,41 +800,54 @@ input:focus {
 
 #weather-box-window {
     --height: 50vh;
+    --minHeight: 50vh; 
     height: var(--height);
     animation: 1s displayWindow;
 }
 
 #notEnabled-box-window {
+    resize: none;
     --height: 20vh;
+    --minHeight: 20vh; 
     height: var(--height);
+    min-height: var(--minHeight);
     animation: 1s displayWindow;  
 }
 
 #music-box-window {
+    --minHeight: 50vh; 
     --height: 50vh;
     height: var(--height);
     animation: 1s displayWindow;
 }
 
 #video-box-window {
+    --minHeight: 50vh; 
     --height: 50vh;
     height: var(--height);
-    animation: 1s displayWindow; 
+    animation: 1s displayWindow;
+}
+
+#video-box-window video::-webkit-media-controls-fullscreen-button {
+    display: none;
 }
 
 #notes-box-window {
+    --minHeight: 50vh; 
     --height: 65vh;
     height: var(--height);
     animation: 1s displayWindow;
 }
 
 #photoEditor-box-window {
+    --minHeight: 50vh; 
     --height: 50vh;
     height: var(--height);
     animation: 1s displayWindow;
 }
 
 #sysInfo-box-window {
+    --minHeight: 50vh; 
     --height: 50vh;
     height: var(--height);
     animation: 1s displayWindow;
@@ -835,6 +856,7 @@ input:focus {
 #maps-box-window .box-window-content, #weather-box-window .box-window-content {
     top: 22%;
     height: 71%;
+    overflow: visible;
 }
 
 #weather-box-window #locationInput, #maps-box-window #mapsLocation {

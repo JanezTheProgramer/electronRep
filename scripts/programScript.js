@@ -131,7 +131,12 @@ $(document).ready(() => {
     const closeTargetWindow = (targetID, speed) => {
         speed = speed || 700;
         if (document.getElementById(targetID)) {
-            $(`#${targetID}`).slideUp(speed);
+            $(`#${targetID}`).css({ minHeight: 0 });
+            $(`#${targetID}`).animate({
+                top: '0',
+                height: '0', 
+                opacity: '0'
+            }, speed);
             setTimeout(() => $(`#${targetID}`).remove(), 800);
         }
     };
@@ -141,9 +146,10 @@ $(document).ready(() => {
             $('#content .box-window').css({ zIndex: '0' });
             if(document.getElementById('notEnabled-box-window'))
                 $('#notEnabled-box-window').remove();
+            $('.box-window').css({ minHeight: 0 });
             $.get(`../components/notEnabled.html`, data => $('#platformDiv #content').append(data));
             return;  
-        }   
+        }
  
         if (keyCode === 0) {
             $('#content .box-window').css({ zIndex: '0' });
