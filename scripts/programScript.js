@@ -109,16 +109,16 @@ $(document).ready(() => {
     });
 
     const components = [
-        { id: 'games-box-window', file: 'games.html', enabled: false, defHeight: '50vh' },
+        { id: 'games-box-window', file: 'games.html', enabled: true, defHeight: '50vh' },
         { id: 'calculator-box-window', file: 'calculator.html', enabled: true, defHeight: '50vh' },
         { id: 'notes-box-window', file: 'notes.html', enabled: true, defHeight: '50vh' },
-        { id: 'music-box-window', file: 'music.html', enabled: false, defHeight: '50vh' },
+        { id: 'music-box-window', file: 'music.html', enabled: true, defHeight: '50vh' },
         { id: 'video-box-window', file: 'videoPlayer.html', enabled: true, defHeight: '50vh' },
         { id: 'weather-box-window', file: 'weather.html', enabled: true, defHeight: '50vh' },
         { id: 'maps-box-window', file: 'maps.html', enabled: true, defHeight: '50vh' },
-        { id: 'photoEditor-box-window', file: 'photoEditor.html', enabled: false, defHeight: '50vh' },
+        { id: 'photoEditor-box-window', file: 'photoEditor.html', enabled: true, defHeight: '50vh' },
         { id: 'sysInfo-box-window', file: 'sysInfo.html', enabled: true, defHeight: '50vh' },
-        { id: 'systemControl-box-window', file: 'systemControl.html', enabled: false, defHeight: '35vh' },
+        { id: 'systemControl-box-window', file: 'systemControl.html', enabled: true, defHeight: '35vh' },
         { id: 'brightness-box-window', file: 'brightness.html', enabled: false, defHeight: '20vh' }
     ];
 
@@ -132,32 +132,51 @@ $(document).ready(() => {
         let targetID = e.currentTarget.parentNode.parentNode.id;
         if (!document.getElementById(targetID)) return;
         //console.log(e.currentTarget.parentNode.parentNode);
-        if (e.target.innerHTML == '▢') {
-            $(`#${targetID}`).css({
-                maxHeight: '100vh',
-                maxWidth: '100vw'
+        if (['▢', '&#9634;'].includes(e.target.innerHTML)) 
+            goFullScreen(targetID);
+        else if (['−', '&minus;'].includes(e.target.innerHTML)) {
+            $('#leftNav').animate({
+                width: '6vw',
+                opacity: '1'
             });
-            $(`#${targetID}`).animate({
-                top: '0',
-                left: '6vw',
-                width: '89vw',
-                height: '85vh'
-            }, 800);
-            e.target.innerHTML = '&minus;';
-        } else if (e.target.innerHTML == '−') {
             $(`#${targetID}`).animate({
                 top: '8vh',
                 left: '15vw',
                 width: '50vw',
                 height: components.find(x => x.id == targetID).defHeight
             }, 800);
+            document.getElementById('leftNav').setAttribute('toggle', '1');
             e.target.innerHTML = '&#9634;';
         }
     });
 
+    const goFullScreen = targetID => {
+        $(`#${targetID}`).css({
+            maxHeight: '100vh',
+            maxWidth: '100vw'
+        });
+        $('#leftNav').animate({
+            width: '0',
+            opacity: '0'
+        });
+        document.getElementById('leftNav').setAttribute('toggle', '0');
+        $(`#${targetID}`).animate({
+            top: '0',
+            left: '0',
+            width: '95vw',
+            height: '85vh'
+        }, 800);
+        $(`#${targetID} .box-window-top .box-window-toggle-fullScreen`).html('&minus;');
+    }
+
     const closeTargetWindow = (targetID, speed) => {
         speed = speed || 700;
         if (document.getElementById(targetID)) {
+            $('#leftNav').attr('toggle') == '0' ? $('#leftNav').animate({
+                width: '6vw',
+                opacity: '1'
+            }) : null;
+
             $(`#${targetID}`).css({ minHeight: 0 });
             $(`#${targetID}`).animate({
                 top: '0',

@@ -863,7 +863,11 @@ input:focus {
 #maps-box-window .box-window-content, #weather-box-window .box-window-content {
     top: 22%;
     height: 71%;
-    overflow: visible;
+    overflow: scroll;
+}
+
+#maps-box-window .box-window-content {
+    overflow: hidden;
 }
 
 #weather-box-window #locationInput, #maps-box-window #mapsLocation {
