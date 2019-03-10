@@ -109,24 +109,51 @@ $(document).ready(() => {
     });
 
     const components = [
-        { id: 'games-box-window', file: 'games.html', enabled: false },
-        { id: 'calculator-box-window', file: 'calculator.html', enabled: true },
-        { id: 'notes-box-window', file: 'notes.html', enabled: true },
-        { id: 'music-box-window', file: 'music.html', enabled: false },
-        { id: 'video-box-window', file: 'videoPlayer.html', enabled: true},
-        { id: 'weather-box-window', file: 'weather.html', enabled: true },
-        { id: 'maps-box-window', file: 'maps.html', enabled: true },
-        { id: 'photoEditor-box-window', file: 'photoEditor.html', enabled: false },
-        { id: 'sysInfo-box-window', file: 'sysInfo.html', enabled: true },
-        { id: 'systemControl-box-window', file: 'systemControl.html', enabled: false},
-        { id: 'brightness-box-window', file: 'brightness.html', enabled: false }
+        { id: 'games-box-window', file: 'games.html', enabled: false, defHeight: '50vh' },
+        { id: 'calculator-box-window', file: 'calculator.html', enabled: true, defHeight: '50vh' },
+        { id: 'notes-box-window', file: 'notes.html', enabled: true, defHeight: '50vh' },
+        { id: 'music-box-window', file: 'music.html', enabled: false, defHeight: '50vh' },
+        { id: 'video-box-window', file: 'videoPlayer.html', enabled: true, defHeight: '50vh' },
+        { id: 'weather-box-window', file: 'weather.html', enabled: true, defHeight: '50vh' },
+        { id: 'maps-box-window', file: 'maps.html', enabled: true, defHeight: '50vh' },
+        { id: 'photoEditor-box-window', file: 'photoEditor.html', enabled: false, defHeight: '50vh' },
+        { id: 'sysInfo-box-window', file: 'sysInfo.html', enabled: true, defHeight: '50vh' },
+        { id: 'systemControl-box-window', file: 'systemControl.html', enabled: false, defHeight: '35vh' },
+        { id: 'brightness-box-window', file: 'brightness.html', enabled: false, defHeight: '20vh' }
     ];
 
     (() => {
-        if(navigator.platform.indexOf('Win') > -1){
+        if (navigator.platform.indexOf('Win') > -1) {
             components[9].enabled = true;
         }
     })();
+
+    $(document).on('mousedown', '.box-window-top .box-window-toggle-fullScreen', e => {
+        let targetID = e.currentTarget.parentNode.parentNode.id;
+        if (!document.getElementById(targetID)) return;
+        //console.log(e.currentTarget.parentNode.parentNode);
+        if (e.target.innerHTML == '▢') {
+            $(`#${targetID}`).css({
+                maxHeight: '100vh',
+                maxWidth: '100vw'
+            });
+            $(`#${targetID}`).animate({
+                top: '0',
+                left: '6vw',
+                width: '89vw',
+                height: '85vh'
+            }, 800);
+            e.target.innerHTML = '&minus;';
+        } else if (e.target.innerHTML == '−') {
+            $(`#${targetID}`).animate({
+                top: '8vh',
+                left: '15vw',
+                width: '50vw',
+                height: components.find(x => x.id == targetID).defHeight
+            }, 800);
+            e.target.innerHTML = '&#9634;';
+        }
+    });
 
     const closeTargetWindow = (targetID, speed) => {
         speed = speed || 700;
@@ -134,7 +161,7 @@ $(document).ready(() => {
             $(`#${targetID}`).css({ minHeight: 0 });
             $(`#${targetID}`).animate({
                 top: '0',
-                height: '0', 
+                height: '0',
                 opacity: '0'
             }, speed);
             setTimeout(() => $(`#${targetID}`).remove(), 800);
@@ -144,13 +171,13 @@ $(document).ready(() => {
     const navRequest = (windowId, keyCode) => {
         if (!components[windowId].enabled) {
             $('#content .box-window').css({ zIndex: '0' });
-            if(document.getElementById('notEnabled-box-window'))
+            if (document.getElementById('notEnabled-box-window'))
                 $('#notEnabled-box-window').remove();
             $('.box-window').css({ minHeight: 0 });
             $.get(`../components/notEnabled.html`, data => $('#platformDiv #content').append(data));
-            return;  
+            return;
         }
- 
+
         if (keyCode === 0) {
             $('#content .box-window').css({ zIndex: '0' });
             if (!document.getElementById(components[windowId].id)) {

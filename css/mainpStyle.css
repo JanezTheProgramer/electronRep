@@ -440,8 +440,6 @@ tr {
 .box-window {
     min-width: 30vw;
     min-height: 50vh;
-    max-height: 80vh;
-    max-width: 70vw;
     resize: both;
     position: absolute;
     display: block;
@@ -473,11 +471,10 @@ tr {
     left: 0;
     top: 0;
     height: 100%;
-    width: 95%;
+    width: 92%;
 }
 
-.box-window-top span {
-    top: 1vh;
+.box-window-top .box-window-toggle-fullScreen, .box-window-top .exit {
     float: right;
     margin-right: 1vw;
     font-size: 2.7vh;
@@ -485,6 +482,11 @@ tr {
     transition: .3s;
     font-weight: bold;
     color: #fff;
+}
+
+.box-window-top .box-window-toggle-fullScreen {
+    margin-top: .43vh;
+    font-size: 1.9vh;
 }
 
 .box-window-top h3 {
@@ -501,7 +503,12 @@ tr {
     overflow-y: visible;
 }
 
-.box-window-top span:hover {
+.box-window-top .box-window-toggle-fullScreen:hover {
+    cursor: pointer;
+    color: #6ca;
+}
+
+.box-window-top .exit:hover {
     cursor: pointer;
     color: #e64;
 }
@@ -941,6 +948,7 @@ input:focus {
     background: transparent;
     border: none;
     height: 90%;
+    width: 500%;
     border-bottom: .2vw solid #ccc;
     color: #ccc;
     font-family: custom;
