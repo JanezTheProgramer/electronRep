@@ -6,7 +6,7 @@
         <span class="exit">&times;</span>
     </div>
     <div class="box-window-content">
-        <ul>
+        <ul id="systemCommands">
             <li id="system_shutdown">
                 <span>shutdown</span>
             </li>
@@ -20,28 +20,56 @@
                 <span>logOut</span>
             </li>
         </ul>
+        <div id="msgWindowPWS" style="display: none">
+        </div>
     </div>
     <script>
         $(document).ready(() => {
-            //var wshShell = new ActiveXObject("WScript.Shell");
-            $(document).on('mousedown', '#system_shutdown', () => { 
-                let pathToFile = path.join(__dirname, '../batchScripts/shutodwn.bat`');
-                execFile(pathToFile, (err, data) => {
-                    if(err){
-                        console.error(err);
-                        return;
-                    }
-                })
+
+            let currentCommandIndex = null;
+
+            const powerShellCommands = [
+                { code: 'shutdown /s /t 10', warning: 'Are you sure you want to turn off your pc?' },
+                { code: 'Restart-Computer', warning: 'Are you sure you want to restart your pc?' },
+                { code: 'ExitWindowsEx(EWX_LOGOFF, 0);', warning: 'Are you sure you want your pc in sleep mode?' },
+                { code: 'ExitWindows(0, 0);', warning: 'Are you sure you want to log out of your pc?' }
+            ];
+
+            const finalExcecute = index => {
+                const ps = new Shell({
+                    executionPolicy: 'Bypass',
+                    noProfile: true
+                });
+
+                ps.addCommand(powerShellCommands[index].code);
+                ps.invoke();
+            }
+
+            const runPowerS = index => {
+                currentCommandIndex = index;
+                $("#systemCommands").hide();
+                $("#msgWindowPWS").html(`
+                    <h3>${powerShellCommands[index].warning}</h3>
+                    <input type="button" id="yes_powershell" value="YES" />
+                    <input type="button" id="no_powershell" value="CANCEL" />
+                `);
+                $("#msgWindowPWS").fadeIn(200);
+            }
+            $(document).on('mousedown', '#yes_powershell', () => currentCommandIndex ?
+                finalExcecute(currentCommandIndex) : null
+            );
+            $(document).on('mousedown', '#no_powershell', () => {
+                currentCommandIndex = null;
+                $("#msgWindowPWS").hide();
+                $("#systemCommands").fadeIn(200);
+                $("#msgWindowPWS").html("");
             });
-            $(document).on('mousedown', '#system_restart', () => 
-                exec('HelloJithin.exe')
-            );
-            $(document).on('mousedown', '#system_sleep', () => 
-                exec('HelloJithin.exe')
-            );
-            $(document).on('mousedown', '#system_logOut', () => 
-                exec('HelloJithin.exe')
-            );
+
+
+            $(document).on('mousedown', '#system_shutdown', () => runPowerS(0));
+            $(document).on('mousedown', '#system_restart', () => runPowerS(1));
+            $(document).on('mousedown', '#system_sleep', () => runPowerS(2));
+            $(document).on('mousedown', '#system_logOut', () => runPowerS(3));
         });
     </script>
 </div>

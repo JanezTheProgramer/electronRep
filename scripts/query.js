@@ -17,7 +17,7 @@ exports.createDB = () => {
                 { name: "sysInfo", enabled: true },
                 { name: "systemControl", enabled: true }
             ]
-        };
+        }; //also written in a migration file
 
         let createQueries = [
             `CREATE TABLE IF NOT EXISTS users (

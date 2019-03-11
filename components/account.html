@@ -40,7 +40,7 @@
                                 class="ui_filter_checboxes"
                                 type="checkbox"
                                 name="${row.name}"
-                                value=" ${row.enabled ? "checked" : "unchecked"}" 
+                                value=${row.enabled ? true : false}
                                 ${row.enabled ? "checked" : null}
                             >${row.name}<br>
                         `));
@@ -68,9 +68,15 @@
             $('#username').keypress(event => event.keyCode == 13 ? updateUser() : null);
             $('input#save').click(() => {
                 updateUser();
-                let new_array = $('.ui_filter_checboxes').each((key, window) => {
-                    console.log(window);
+                let finalSqlArray = [];
+                $('.ui_filter_checboxes').each((key, window) => {
+                    finalSqlArray.push($(this).prop( "checked" ));
+                    console.log($(this), $(this).is(':checked'));
                 });
+                console.log(finalSqlArray);
+                /*let new_array = $('.ui_filter_checboxes').each((key, window) => {
+                    console.log(window);
+                });*/
             });
         });
     </script>

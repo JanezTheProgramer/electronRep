@@ -4,7 +4,6 @@
 
 window.$ = window.jQuery = require('jquery');
 const electron = require('electron');
-const { execFile, spawn } = require('child_process');
 const { ipcRenderer } = electron;
 const { getUser, resetValues, setUsername } = require('../scripts/query');
 const sysInfo = require('systeminformation');
@@ -13,6 +12,7 @@ const weather = require('weather-js');
 const path = require('path');
 const moment = require('moment');
 const fs = require('fs');
+const Shell = require('node-powershell');
 
 window.drag = {
     isDown: false,
@@ -124,8 +124,7 @@ $(document).ready(() => {
         { id: 'maps-box-window', file: 'maps.html', enabled: true, defHeight: '50vh' },
         { id: 'photoEditor-box-window', file: 'photoEditor.html', enabled: true, defHeight: '50vh' },
         { id: 'sysInfo-box-window', file: 'sysInfo.html', enabled: true, defHeight: '50vh' },
-        { id: 'systemControl-box-window', file: 'systemControl.html', enabled: true, defHeight: '35vh' },
-        { id: 'brightness-box-window', file: 'brightness.html', enabled: false, defHeight: '20vh' }
+        { id: 'systemControl-box-window', file: 'systemControl.html', enabled: true, defHeight: '35vh' }
     ];
 
     (() => {

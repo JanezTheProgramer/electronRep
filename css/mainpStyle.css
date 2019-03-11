@@ -549,6 +549,40 @@ tr {
     height: 78%;  
 }
 
+#systemControl-box-window .box-window-content #msgWindowPWS {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    align-content: center;
+    text-align: center;
+}
+
+#systemControl-box-window .box-window-content #msgWindowPWS h3 {
+    color: rgb(32, 148, 184);
+    font-size: 200%;
+}
+#systemControl-box-window .box-window-content #msgWindowPWS input[type=button] {
+    width: 20%;
+    border: none;
+    background: rgba(49, 49, 49, .8);
+    transition: .32s all;
+    font-size: 120%;
+    color: #aaa;
+    font-family: custom;
+    margin-left: 1vw;
+    padding: .3vw;
+    border: none;
+}
+
+#systemControl-box-window .box-window-content #msgWindowPWS #no_powershell:hover,
+#systemControl-box-window .box-window-content #msgWindowPWS #yes_powershell:hover {
+    background: rgb(37, 37, 37, .9);
+}
+
+
 #notEnabled-box-window .box-window-content {
     height: 60%; 
     text-align: center;
@@ -778,30 +812,6 @@ input:focus {
     font-size: 2vw;
     font-family: custom;
 }
-
-/*#brightness-box-window label {
-    margin-left: 5%;
-    font-size: 2vw;
-    display: block;
-    font-family: custom;
-}
-
-#brightness-box-window input[type=range]{
-    margin-left: 5%;
-    width: 90%;
-    font-size: 2vw;
-    display: block; 
-    font-family: custom;   
-}
-#brightness-box-window .box-window-content {
-    top: 5.7vh;
-    height: 60%;
-}
-
-#brightness-box-window {
-    --height: 20vh;
-    height: var(--height);
-}*/
 
 #games-box-window {
     --minHeight: 50vh; 
