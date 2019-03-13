@@ -115,6 +115,7 @@ $(document).ready(() => {
     $('body').keydown(e => {
         if ($('input[type=text]').is(':focus') || $('textarea').is(':focus')) return;
         if (e.which == 81) window.close(); //close application on 'q' pressed
+        else if (e.which == 116 ) e.preventDefault(); //dont refresh with F5
         else if (e.which == 82) self.location.assign(location); //restart app on 'r' pressed
     });
 
