@@ -119,16 +119,37 @@ $(document).ready(() => {
         event.currentTarget.style.zIndex = '1';
     });
 
-    (() => {
+    function generateConfig() {
+
+        let configuration = {
+            'games': {tooltip: 'eXo-games', imgPath: ''},
+            'calculator': {tooltip: 'exo-Calculator', imgPath: ''},
+            'weather': {tooltip: 'exo-Weather', imgPath: ''},
+            'maps': {tooltip: 'eXo-maps', imgPath: ''},
+            'photoEditor': {tooltip: 'exo-PhotoEditor', imgPath: ''},
+            'sysInfo': {tooltip: 'eXo-sysInfo', imgPath: ''},
+            'systemControl': {tooltip: 'exo-systemControl', imgPath: ''},
+            'video': {tooltip: 'eXo-music', imgPath: ''},
+            'music': {tooltip: 'eXo-music', imgPath: ''}
+        };
+
+        let config = getUserConfig();
         $('#leftNav').html("");
-        getUserConfig().forEach(index, value => {
-            $('#leftNav').append(`
-                <div id="${index}nav" custom_title="eXo-${value.name}">
-                    <img src="../util/icons/calc.png" alt="/" />
-                </div>
-            `);
-        });
-    })();
+        setTimeout(() => {
+            if(!config)
+                generateConfig();
+            else {
+                JSON.parse(config.settings).navigationMenu.forEach(obj => {
+                    console.log(obj.name);
+                    $('#leftNav').append(`
+                        <div id="${0}nav" custom_title="eXo-${obj.name}">
+                            <img src="../util/icons/calc.png" alt="/" />
+                        </div>
+                    `);
+                });
+            }
+        }, 300);
+    }(generateConfig)();
 
     const components = [
         { id: 'games-box-window', file: 'games.html', enabled: true, defHeight: '50vh' },
