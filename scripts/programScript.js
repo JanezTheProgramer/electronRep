@@ -158,7 +158,7 @@ $(document).ready(() => {
                     generatePlatform();
                 else {
                     JSON.parse(config.settings).navigationMenu.forEach(obj => {
-                        if (obj.enabled && components[obj.name].enabled) {
+                        if (obj.enabled) {
                             $('#leftNav').append(`
                                 <div id="${obj.name}_nav" custom_title="${components[obj.name].tooltip}">
                                     <img src="../util/icons/${obj.name}.png" alt="/" />
@@ -258,9 +258,9 @@ $(document).ready(() => {
             }
         } else if (keyCode === 1) {
             let opened = false;
-            $('.box-window').each((key, window) => {
-                (window.id !== components[windowId].id) ? closeTargetWindow(window.id, 400) : opened = true;
-            });
+            $('.box-window').each((key, window) => window.id !== components[windowId].id ?
+                closeTargetWindow(window.id, 400) : opened = true
+            );
             if (opened) return;
             setTimeout(() => {
                 $.get(`../components/${components[windowId].file}`, data => $('#platformDiv #content').append(data));
