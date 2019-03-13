@@ -545,11 +545,11 @@ tr {
     overflow-y: scroll;
 }
 
-#systemControl-box-window .box-window-content {
+#sysControl-box-window .box-window-content {
     height: 78%;  
 }
 
-#systemControl-box-window .box-window-content #msgWindowPWS {
+#sysControl-box-window .box-window-content #msgWindowPWS {
     position: absolute;
     left: 0;
     top: 0;
@@ -560,11 +560,11 @@ tr {
     text-align: center;
 }
 
-#systemControl-box-window .box-window-content #msgWindowPWS h3 {
+#sysControl-box-window .box-window-content #msgWindowPWS h3 {
     color: rgb(32, 148, 184);
     font-size: 200%;
 }
-#systemControl-box-window .box-window-content #msgWindowPWS input[type=button] {
+#sysControl-box-window .box-window-content #msgWindowPWS input[type=button] {
     width: 20%;
     border: none;
     background: rgba(49, 49, 49, .8);
@@ -577,8 +577,8 @@ tr {
     border: none;
 }
 
-#systemControl-box-window .box-window-content #msgWindowPWS #no_powershell:hover,
-#systemControl-box-window .box-window-content #msgWindowPWS #yes_powershell:hover {
+#sysControl-box-window .box-window-content #msgWindowPWS #no_powershell:hover,
+#sysControl-box-window .box-window-content #msgWindowPWS #yes_powershell:hover {
     background: rgb(37, 37, 37, .9);
 }
 
@@ -605,7 +605,7 @@ tr {
 #notes-box-window .box-window-content ul,
 #weather-box-window .box-window-content ul, 
 #games-box-window .box-window-content ul,
-#systemControl-box-window .box-window-content ul {
+#sysControl-box-window .box-window-content ul {
     padding: 0;
     margin: 0;
     position: absolute;
@@ -618,7 +618,7 @@ tr {
 #notes-box-window .box-window-content ul li, 
 #weather-box-window .box-window-content ul li, 
 #games-box-window .box-window-content ul li,
-#systemControl-box-window .box-window-content ul li {
+#sysControl-box-window .box-window-content ul li {
     --c1: rgba(13, 124, 158, 0.384);
     --c2: rgba(146, 142, 142, 0.182);
     display: block;
@@ -639,13 +639,13 @@ tr {
 #weather-box-window .box-window-content ul li:hover, 
 #notes-box-window .box-window-content ul li:hover, 
 #games-box-window .box-window-content ul li:hover,
-#systemControl-box-window .box-window-content ul li:hover {
+#sysControl-box-window .box-window-content ul li:hover {
     --x: 100%
 }
 
 #music-box-window .box-window-content ul li span, 
 #games-box-window .box-window-content ul li span,
-#systemControl-box-window .box-window-content ul li span{
+#sysControl-box-window .box-window-content ul li span{
     font-family: custom;
     position: absolute;
     left: 10%;
@@ -654,14 +654,14 @@ tr {
 }
 
 #games-box-window .box-window-content ul li:hover span,
-#systemControl-box-window .box-window-content ul li:hover span {
+#sysControl-box-window .box-window-content ul li:hover span {
     text-shadow: 0px .1vw .5vw rgba(255, 255, 255, 0.6);
 }
 
 #music-box-window .box-window-content ul li:hover span, 
 #notes-box-window .box-window-content ul li:hover span,
 #games-box-window .box-window-content ul li:hover span,
-#systemControl-box-window .box-window-content ul li:hover span {
+#sysControl-box-window .box-window-content ul li:hover span {
     text-shadow: 0px .1vw .5vw rgba(255, 255, 255, 0.6);
 }
 
@@ -820,7 +820,7 @@ input:focus {
     animation: 1s displayWindow;
 }
 
-#systemControl-box-window {
+#sysControl-box-window {
     --minHeight: 35vh; 
     --height: 35vh;
     height: var(--height);

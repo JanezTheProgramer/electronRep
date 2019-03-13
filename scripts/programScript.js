@@ -45,13 +45,8 @@ $(document).ready(() => {
         }
     });
 
-    $('.dropbtn').click(() => {
-        $('#mainDiv').children().hide();
-        $('#platformDiv').fadeIn();
-        $('#accInfoDiv').children().remove();
-        $('#tutorialDiv').children().remove();
-        $('#platformDiv #content').children().remove();
-    });
+    $('.dropbtn').click(() => generatePlatform());
+
     $('.data').click(e => {
         $('#mainDiv').children().hide();
         $('#platformDiv #content').children().remove();
@@ -59,7 +54,7 @@ $(document).ready(() => {
         $('#tutorialDiv').children().remove();
         switch (Number(e.target.id[0])) {
             case 1:
-                $('#accInfoDiv').fadeIn(100);
+                $('#accInfoDiv').fadeIn("fast");
                 if (!document.getElementById('account-info-div-content'))
                     $.get('../components/account.html', data => $('#accInfoDiv').append(data));
                 break;
@@ -119,52 +114,72 @@ $(document).ready(() => {
         event.currentTarget.style.zIndex = '1';
     });
 
-    function generateConfig() {
+    const generatePlatform = () => {
+        try {
+    
+            let config = getUserConfig();
+            $('#leftNav').html("");
+            setTimeout(() => {
+                if(!config)
+                    generatePlatform();
+                else {
+                    JSON.parse(config.settings).navigationMenu.forEach(obj => {
+                        if (obj.enabled) {
+                            $('#leftNav').append(`
+                                <div id="${obj.name}_nav" custom_title="${components[obj.name].tooltip}">
+                                    <img src="../util/icons/${obj.name}.png" alt="/" />
+                                </div>
+                            `);
+                        }
+                    });
+                }
+            }, 300);
+        } catch (err) {
+            console.log("error");
+        } finally {
+            $('#mainDiv').children().hide();
+            $('#accInfoDiv').children().remove();
+            $('#tutorialDiv').children().remove();
+            $('#platformDiv #content').children().remove();
+            setTimeout(() => $('#platformDiv').fadeIn(200), 300);
+        }
+    }
 
-        let configuration = {
-            'games': {tooltip: 'eXo-games', imgPath: ''},
-            'calculator': {tooltip: 'exo-Calculator', imgPath: ''},
-            'weather': {tooltip: 'exo-Weather', imgPath: ''},
-            'maps': {tooltip: 'eXo-maps', imgPath: ''},
-            'photoEditor': {tooltip: 'exo-PhotoEditor', imgPath: ''},
-            'sysInfo': {tooltip: 'eXo-sysInfo', imgPath: ''},
-            'systemControl': {tooltip: 'exo-systemControl', imgPath: ''},
-            'video': {tooltip: 'eXo-music', imgPath: ''},
-            'music': {tooltip: 'eXo-music', imgPath: ''}
-        };
+    const components = {
+        games: { 
+            id: 'games-box-window', file: 'games.html', enabled: true, 
+            tooltip: 'eXo-games', defHeight: '50vh'
+        }, calculator: { 
+            id: 'calculator-box-window', file: 'calculator.html', enabled: true, 
+            tooltip: 'eXo-calculator', defHeight: '50vh' 
+        }, notes: { 
+            id: 'notes-box-window', file: 'notes.html', enabled: true, 
+            tooltip: 'eXo-notes', defHeight: '50vh' 
+        }, music: { 
+            id: 'music-box-window', file: 'music.html', enabled: true, 
+            tooltip: 'eXo-music', defHeight: '50vh' 
+        }, video: { 
+            id: 'video-box-window', file: 'videoPlayer.html', enabled: true, 
+            tooltip: 'eXo-video', defHeight: '50vh' 
+        }, weather: { 
+            id: 'weather-box-window', file: 'weather.html', enabled: true, 
+            tooltip: 'eXo-weather', defHeight: '50vh' 
+        }, maps: { 
+            id: 'maps-box-window', file: 'maps.html', enabled: true, 
+            tooltip: 'eXo-maps', defHeight: '50vh' 
+        }, photoEditor: { 
+            id: 'photoEditor-box-window', file: 'photoEditor.html', enabled: true, 
+            tooltip: 'eXo-photoEditor', defHeight: '50vh' 
+        }, sysInfo: { 
+            id: 'sysInfo-box-window', file: 'sysInfo.html', enabled: true, 
+            tooltip: 'eXo-sysInfo', defHeight: '50vh' 
+        }, sysControl: { 
+            id: 'sysControl-box-window', file: 'sysControl.html', enabled: true, 
+            tooltip: 'exo-sysControl', defHeight: '35vh' 
+        }
+    };
 
-        let config = getUserConfig();
-        $('#leftNav').html("");
-        setTimeout(() => {
-            if(!config)
-                generateConfig();
-            else {
-                JSON.parse(config.settings).navigationMenu.forEach(obj => {
-                    console.log(obj.name);
-                    $('#leftNav').append(`
-                        <div id="${0}nav" custom_title="eXo-${obj.name}">
-                            <img src="../util/icons/calc.png" alt="/" />
-                        </div>
-                    `);
-                });
-            }
-        }, 300);
-    }(generateConfig)();
-
-    const components = [
-        { id: 'games-box-window', file: 'games.html', enabled: true, defHeight: '50vh' },
-        { id: 'calculator-box-window', file: 'calculator.html', enabled: true, defHeight: '50vh' },
-        { id: 'notes-box-window', file: 'notes.html', enabled: true, defHeight: '50vh' },
-        { id: 'music-box-window', file: 'music.html', enabled: true, defHeight: '50vh' },
-        { id: 'video-box-window', file: 'videoPlayer.html', enabled: true, defHeight: '50vh' },
-        { id: 'weather-box-window', file: 'weather.html', enabled: true, defHeight: '50vh' },
-        { id: 'maps-box-window', file: 'maps.html', enabled: true, defHeight: '50vh' },
-        { id: 'photoEditor-box-window', file: 'photoEditor.html', enabled: true, defHeight: '50vh' },
-        { id: 'sysInfo-box-window', file: 'sysInfo.html', enabled: true, defHeight: '50vh' },
-        { id: 'systemControl-box-window', file: 'systemControl.html', enabled: true, defHeight: '35vh' }
-    ];
-
-    (() => components[9].enabled = navigator.platform.indexOf('Win') > -1 ? true : false)();
+    (() => components['sysControl'].enabled = navigator.platform.indexOf('Win') > -1 ? true : false)();
 
     $(document).on('mousedown', '.box-window-top .box-window-toggle-fullScreen', e => {
         let targetID = e.currentTarget.parentNode.parentNode.id;
@@ -226,6 +241,7 @@ $(document).ready(() => {
     };
 
     const navRequest = (windowId, keyCode) => {
+        console.log(windowId);
         if (!components[windowId].enabled) {
             $('#content .box-window').css({ zIndex: '0' });
             if (document.getElementById('notEnabled-box-window'))
@@ -256,10 +272,10 @@ $(document).ready(() => {
         }
     };
 
-    $('#leftNav div').mousedown(e => {
+    $(document).on('mousedown', '#leftNav div', e => {
         let winId = e.currentTarget.id;
-        winId = winId.substr(0, /[a-z]/i.exec(winId.toLowerCase()).index);
-        navRequest(Number(winId), e.button)
+        winId = winId.substr(0, winId.indexOf('_'));
+        navRequest(String(winId), e.button)
     });
 
 });
