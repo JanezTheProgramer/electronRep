@@ -1,6 +1,9 @@
 const sqlite3 = require('sqlite3');
 const { ipcRenderer } = require('electron');
 
+var user,
+    uConfig;
+
 exports.createDB = () => {
     try {
         let db = new sqlite3.Database('database.db');
@@ -80,7 +83,7 @@ exports.reqFunc = (name, pass) => {
         ipcRenderer.send('request-failed-to-generate-action');
     }
 }
-var user;
+
 exports.getUser = () => {
     try {
         let db = new sqlite3.Database('database.db');
@@ -89,9 +92,7 @@ exports.getUser = () => {
             FROM log_history 
             INNER JOIN users ON log_history.id_user = users.id
             ORDER BY log_history.id DESC LIMIT 1`),
-            [], (err, row) => {
-                user = !err ? row : null;
-            });
+            [], (err, row) => user = !err ? row : null);
         db.close();
     } catch (e) {
         ipcRenderer.send('request-failed-to-generate-action');
@@ -99,28 +100,61 @@ exports.getUser = () => {
     return user;
 }
 
-exports.setUsername = _user_ => {
+exports.setUserConfiguration = (_user_, _jsonCfg_) => {
+    _jsonCfg_ = _jsonCfg_ || null;
     let success = false;
-    try {
-        let db = new sqlite3.Database('database.db');
-        db.serialize(() => {
-            db.run(`
+    if (!_jsonCfg_) {
+        try {
+            let db = new sqlite3.Database('database.db');
+            db.serialize(() => db.run(`
                 UPDATE users
                 SET name='${_user_.name}'
                 WHERE id='${_user_.id}';
-            `);
-        });
-        db.close();
-        success = true;
-    } catch (e) {
-        ipcRenderer.send('request-failed-to-generate-action');
-    } finally {
-        if (success)
-            return true;
-        else
-            return false;
-
+            `));
+            db.close();
+            success = true;
+        } catch (e) {
+            ipcRenderer.send('request-failed-to-generate-action');
+        }
+    } else if (_jsonCfg_) {
+        //console.log(JSON.stringify(_jsonCfg_));
+        try {
+            let db = new sqlite3.Database('database.db');
+            db.serialize(() => db.run(`
+                UPDATE users
+                SET name='${_user_.name}',
+                    settings='${JSON.stringify(_jsonCfg_)}'
+                WHERE id='${_user_.id}';
+            `));
+            db.close();
+            success = true;
+        } catch (e) {
+            ipcRenderer.send('request-failed-to-generate-action');
+        }
+    } else {
+        success = false;
     }
+
+    return success;
 }
 
-exports.resetValues = () => user = null;
+exports.getUserConfig = () => {
+    try {
+        let db = new sqlite3.Database('database.db');
+        db.get((`
+            SELECT DISTINCT u.settings 
+            FROM log_history AS l
+            INNER JOIN users AS u ON l.id_user = u.id
+            ORDER BY l.id DESC LIMIT 1`),
+            [], (err, row) => uConfig = !err ? row : null);
+        db.close();
+    } catch (e) {
+        ipcRenderer.send('request-failed-to-generate-action');
+    }
+    return uConfig;   
+}
+
+exports.resetValues = () => {
+    user = null;
+    uConfig = null;
+};

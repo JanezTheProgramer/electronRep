@@ -5,7 +5,12 @@
 window.$ = window.jQuery = require('jquery');
 const electron = require('electron');
 const { ipcRenderer } = electron;
-const { getUser, resetValues, setUsername } = require('../scripts/query');
+const { 
+    getUser, 
+    resetValues, 
+    setUserConfiguration, 
+    getUserConfig 
+} = require('../scripts/query');
 const sysInfo = require('systeminformation');
 const screenInfo = electron.screen.getAllDisplays();
 const weather = require('weather-js');
@@ -114,6 +119,17 @@ $(document).ready(() => {
         event.currentTarget.style.zIndex = '1';
     });
 
+    (() => {
+        $('#leftNav').html("");
+        getUserConfig().forEach(index, value => {
+            $('#leftNav').append(`
+                <div id="${index}nav" custom_title="eXo-${value.name}">
+                    <img src="../util/icons/calc.png" alt="/" />
+                </div>
+            `);
+        });
+    })();
+
     const components = [
         { id: 'games-box-window', file: 'games.html', enabled: true, defHeight: '50vh' },
         { id: 'calculator-box-window', file: 'calculator.html', enabled: true, defHeight: '50vh' },
@@ -127,11 +143,7 @@ $(document).ready(() => {
         { id: 'systemControl-box-window', file: 'systemControl.html', enabled: true, defHeight: '35vh' }
     ];
 
-    (() => {
-        if (navigator.platform.indexOf('Win') > -1) {
-            components[9].enabled = true;
-        }
-    })();
+    (() => components[9].enabled = navigator.platform.indexOf('Win') > -1 ? true : false)();
 
     $(document).on('mousedown', '.box-window-top .box-window-toggle-fullScreen', e => {
         let targetID = e.currentTarget.parentNode.parentNode.id;

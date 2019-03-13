@@ -14,7 +14,7 @@
                 <span>restart</span>
             </li>
             <li id="system_sleep">
-                <span>sleep</span>
+                <span>hibernate</span>
             </li>
             <li id="system_logOut">
                 <span>logOut</span>
@@ -31,8 +31,8 @@
             const powerShellCommands = [
                 { code: 'shutdown /s /t 10', warning_msg: 'Are you sure you want to turn off your pc?' },
                 { code: 'Restart-Computer', warning_msg: 'Are you sure you want to restart your pc?' },
-                { code: 'ExitWindowsEx(EWX_LOGOFF, 0);', warning_msg: 'Are you sure you want your pc in sleep mode?' },
-                { code: 'ExitWindows(0, 0);', warning_msg: 'Are you sure you want to log out of your pc?' }
+                { code: 'shutdown.exe /h', warning_msg: 'Are you sure you want your pc in hibernate mode?' },
+                { code: 'shutdown -L -F', warning_msg: 'Are you sure you want to log out of your pc?' }
             ];
 
             const finalExcecute = () => {

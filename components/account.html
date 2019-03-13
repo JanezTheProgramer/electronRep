@@ -4,7 +4,7 @@
         <div>Member since:</div><br>
         <div>Last seen:</div><br>
         <div>Account age:</div><br>
-        <div><input id="save" type="button" value="Save"></div>
+        <div><input id="saveUserCfg" type="button" value="Save username"></div>
     </div>
     <div id="accData">
         <div><input id="username" type=text value=""></div><br>
@@ -40,7 +40,6 @@
                                 class="ui_filter_checboxes"
                                 type="checkbox"
                                 name="${row.name}"
-                                value=${row.enabled ? true : false}
                                 ${row.enabled ? "checked" : null}
                             >${row.name}<br>
                         `));
@@ -50,11 +49,25 @@
                 }, 300);
             } (retriveUserPromise)();
 
-            const updateUser = () => {
+            const updateUser = key => {
                 if ($("#username").val() != userData.name && $("#username").val().length > 4) {
                     userData.name = $("#username").val();
-                    setUsername(userData) ? $("#username").css({ background: "transparent" }) : null;
                 }
+                if (key < 1) {
+                    if(setUserConfiguration(userData, null)) {
+                        $("#username").css({ background: "transparent" });
+                        null;
+                    } 
+                    return;
+                } 
+                let finalSqlArray = [];
+                $('#ui_icons_set input[type=checkbox]').each(function () {
+                    finalSqlArray.push({
+                        name: $(this).attr('name'),
+                        enabled: $(this).is(":checked") ? true : false
+                    });
+                });
+                setUserConfiguration(userData, { navigationMenu: finalSqlArray });
             }
 
             const format_date = _date_ => new Date(_date_).toLocaleDateString("en-US");
@@ -65,19 +78,8 @@
                     $("#username").css({ background: "transparent" })
             );
 
-            $('#username').keypress(event => event.keyCode == 13 ? updateUser() : null);
-            $('input#save').click(() => {
-                updateUser();
-                let finalSqlArray = [];
-                $('.ui_filter_checboxes').each((key, window) => {
-                    finalSqlArray.push($(this).prop( "checked" ));
-                    console.log($(this), $(this).is(':checked'));
-                });
-                console.log(finalSqlArray);
-                /*let new_array = $('.ui_filter_checboxes').each((key, window) => {
-                    console.log(window);
-                });*/
-            });
+            $('#username').keypress(event => event.keyCode == 13 ? updateUser(0) : null);
+            $('input#saveUserCfg').click(() => updateUser(1));
         });
     </script>
 </div>
