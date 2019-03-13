@@ -25,7 +25,47 @@ window.drag = {
     iY: null
 }; // object for element dragging properties
 
+window.components = {
+    games: { 
+        id: 'games-box-window', file: 'games.html', enabled: true, 
+        tooltip: 'eXo-games', defHeight: '50vh'
+    }, calculator: { 
+        id: 'calculator-box-window', file: 'calculator.html', enabled: true, 
+        tooltip: 'eXo-calculator', defHeight: '50vh' 
+    }, notes: { 
+        id: 'notes-box-window', file: 'notes.html', enabled: true, 
+        tooltip: 'eXo-notes', defHeight: '50vh' 
+    }, music: { 
+        id: 'music-box-window', file: 'music.html', enabled: true, 
+        tooltip: 'eXo-music', defHeight: '50vh' 
+    }, video: { 
+        id: 'video-box-window', file: 'videoPlayer.html', enabled: true, 
+        tooltip: 'eXo-video', defHeight: '50vh' 
+    }, weather: { 
+        id: 'weather-box-window', file: 'weather.html', enabled: true, 
+        tooltip: 'eXo-weather', defHeight: '50vh' 
+    }, maps: { 
+        id: 'maps-box-window', file: 'maps.html', enabled: true, 
+        tooltip: 'eXo-maps', defHeight: '50vh' 
+    }, photoEditor: { 
+        id: 'photoEditor-box-window', file: 'photoEditor.html', enabled: true, 
+        tooltip: 'eXo-photoEditor', defHeight: '50vh' 
+    }, sysInfo: { 
+        id: 'sysInfo-box-window', file: 'sysInfo.html', enabled: true, 
+        tooltip: 'eXo-sysInfo', defHeight: '50vh' 
+    }, sysControl: { 
+        id: 'sysControl-box-window', file: 'sysControl.html', enabled: true, 
+        tooltip: 'exo-sysControl', defHeight: '35vh' 
+    }
+};
+
 $(document).ready(() => {
+
+    //automated functions 
+    setTimeout(() => $('body').fadeIn(500), 1000);
+    (() => setInterval(() => $('#clock').text(`${moment().format('LT')}`), 60000))();
+    (() => components['sysControl'].enabled = navigator.platform.indexOf('Win') > -1 ? true : false)();
+
     $('#clock').text(moment().format('LT'));
     $('.roundBtn').click(element => {
         switch (String(element.target.id)) {
@@ -72,16 +112,11 @@ $(document).ready(() => {
         }
     });
 
-    (() => setInterval(() => $('#clock').text(`${moment().format('LT')}`), 60000))();
-
-
     $('body').keydown(e => {
         if ($('input[type=text]').is(':focus') || $('textarea').is(':focus')) return;
         if (e.which == 81) window.close(); //close application on 'q' pressed
         else if (e.which == 82) self.location.assign(location); //restart app on 'r' pressed
     });
-
-    setTimeout(() => $('body').fadeIn(500), 1000);
 
     // the draggg functions
     $(document).on('mousedown', '.box-window-top-draggable', down => {
@@ -116,7 +151,6 @@ $(document).ready(() => {
 
     const generatePlatform = () => {
         try {
-    
             let config = getUserConfig();
             $('#leftNav').html("");
             setTimeout(() => {
@@ -124,7 +158,7 @@ $(document).ready(() => {
                     generatePlatform();
                 else {
                     JSON.parse(config.settings).navigationMenu.forEach(obj => {
-                        if (obj.enabled) {
+                        if (obj.enabled && components[obj.name].enabled) {
                             $('#leftNav').append(`
                                 <div id="${obj.name}_nav" custom_title="${components[obj.name].tooltip}">
                                     <img src="../util/icons/${obj.name}.png" alt="/" />
@@ -144,42 +178,6 @@ $(document).ready(() => {
             setTimeout(() => $('#platformDiv').fadeIn(200), 300);
         }
     }
-
-    const components = {
-        games: { 
-            id: 'games-box-window', file: 'games.html', enabled: true, 
-            tooltip: 'eXo-games', defHeight: '50vh'
-        }, calculator: { 
-            id: 'calculator-box-window', file: 'calculator.html', enabled: true, 
-            tooltip: 'eXo-calculator', defHeight: '50vh' 
-        }, notes: { 
-            id: 'notes-box-window', file: 'notes.html', enabled: true, 
-            tooltip: 'eXo-notes', defHeight: '50vh' 
-        }, music: { 
-            id: 'music-box-window', file: 'music.html', enabled: true, 
-            tooltip: 'eXo-music', defHeight: '50vh' 
-        }, video: { 
-            id: 'video-box-window', file: 'videoPlayer.html', enabled: true, 
-            tooltip: 'eXo-video', defHeight: '50vh' 
-        }, weather: { 
-            id: 'weather-box-window', file: 'weather.html', enabled: true, 
-            tooltip: 'eXo-weather', defHeight: '50vh' 
-        }, maps: { 
-            id: 'maps-box-window', file: 'maps.html', enabled: true, 
-            tooltip: 'eXo-maps', defHeight: '50vh' 
-        }, photoEditor: { 
-            id: 'photoEditor-box-window', file: 'photoEditor.html', enabled: true, 
-            tooltip: 'eXo-photoEditor', defHeight: '50vh' 
-        }, sysInfo: { 
-            id: 'sysInfo-box-window', file: 'sysInfo.html', enabled: true, 
-            tooltip: 'eXo-sysInfo', defHeight: '50vh' 
-        }, sysControl: { 
-            id: 'sysControl-box-window', file: 'sysControl.html', enabled: true, 
-            tooltip: 'exo-sysControl', defHeight: '35vh' 
-        }
-    };
-
-    (() => components['sysControl'].enabled = navigator.platform.indexOf('Win') > -1 ? true : false)();
 
     $(document).on('mousedown', '.box-window-top .box-window-toggle-fullScreen', e => {
         let targetID = e.currentTarget.parentNode.parentNode.id;
@@ -241,7 +239,7 @@ $(document).ready(() => {
     };
 
     const navRequest = (windowId, keyCode) => {
-        console.log(windowId);
+        //console.log(windowId);
         if (!components[windowId].enabled) {
             $('#content .box-window').css({ zIndex: '0' });
             if (document.getElementById('notEnabled-box-window'))
