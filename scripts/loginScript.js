@@ -4,6 +4,7 @@ window.onerror = function() {
 
 const { ipcRenderer } = require('electron');
 window.$ = window.jQuery = require('jquery');
+const { loginFunc } = require('../scripts/sqliteQuery');
 
 $(document).ready(() => {
     $('#usernameId').focus();
@@ -24,7 +25,7 @@ $(document).ready(() => {
     const Login = () => {
 
         if ($('#usernameId').val().toString().length > 4 && $('#passwordId').val().toString().length > 4)
-            require('../scripts/query').loginFunc($('#usernameId').val(), $('#passwordId').val());
+            loginFunc($('#usernameId').val(), $('#passwordId').val());
         else
             ipcRenderer.send('request-req-not-met-action');
 

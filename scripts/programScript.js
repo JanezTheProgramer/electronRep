@@ -4,13 +4,17 @@
 
 window.$ = window.jQuery = require('jquery');
 const electron = require('electron');
+const { MongoClient } = require('mongodb');
 const { ipcRenderer } = electron;
 const { 
     getUser, 
     resetValues, 
     setUserConfiguration, 
     getUserConfig 
-} = require('../scripts/query');
+} = require('../scripts/sqliteQuery');
+const { 
+    connectToMongo
+} = require('../scripts/mongoQuery');
 const sysInfo = require('systeminformation');
 const screenInfo = electron.screen.getAllDisplays();
 const weather = require('weather-js');
@@ -60,7 +64,7 @@ window.components = {
 };
 
 $(document).ready(() => {
-
+    connectToMongo();
     //automated functions 
     setTimeout(() => $('body').fadeIn(500), 1000);
     (() => setInterval(() => $('#clock').text(`${moment().format('LT')}`), 60000))();
@@ -182,6 +186,10 @@ $(document).ready(() => {
 
     $(document).on('mousedown', '.box-window-top .box-window-toggle-fullScreen', e => {
         let targetID = e.currentTarget.parentNode.parentNode.id;
+        const find = object => {
+            for (let component in object) 
+                if (object[component].id == targetID) return component;
+        }
         if (!document.getElementById(targetID)) return;
         //console.log(e.currentTarget.parentNode.parentNode);
         if (['▢', '&#9634;'].includes(e.target.innerHTML))
@@ -195,7 +203,7 @@ $(document).ready(() => {
                 top: '8vh',
                 left: '15vw',
                 width: '50vw',
-                height: components.find(x => x.id == targetID).defHeight
+                height: components[find(components)].defHeight
             }, 800);
             document.getElementById('leftNav').setAttribute('toggle', '1');
             e.target.innerHTML = '&#9634;';

@@ -80,10 +80,11 @@
             );
 
             $('#toggleAccCfg').mousedown(() => {
-                let toggleValue = null;
-                $('#ui_icons_set input[type=checkbox]').each(function () {
-                    toggleValue = toggleValue ? toggleValue : !$(this).is(":checked");
-                    $(this).prop('checked', toggleValue);
+                let toggleValue = !$('#ui_icons_set input[type=checkbox]')
+                    .first()
+                    .is(":checked");
+                $('#ui_icons_set input[type=checkbox]').each(function() {
+                    $(this).prop('checked',toggleValue);
                 });
             });
 

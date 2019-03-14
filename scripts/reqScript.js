@@ -4,6 +4,7 @@ window.onerror = function() {
 
 window.$ = window.jQuery = require("jquery");
 const { ipcRenderer } = require('electron');
+const { reqFunc } = require('../scripts/query');
 $(document).ready(() => {
 
     $("#usernameId").focus();
@@ -30,7 +31,7 @@ $(document).ready(() => {
             && $("#reEnterPasw").val().toString().length > 4) {
 
             if ($("#passwordId").val().toString() == $("#reEnterPasw").val().toString())
-                require('../scripts/query').reqFunc($("#usernameId").val(), $("#passwordId").val());
+                reqFunc($("#usernameId").val(), $("#passwordId").val());
 
             else
                 ipcRenderer.send('request-pasw-dont-match-action');

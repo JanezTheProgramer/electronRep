@@ -4,7 +4,7 @@ const path = require('path');
 const msgBox = require('./scripts/renderAlert');
 const icon = nativeImage.createFromPath(path.join(__dirname, './util/icon.png'));
 
-require('./scripts/query').createDB();
+require('./scripts/sqliteQuery').createDB();
 
 //only for developers
 require('electron-debug')({
