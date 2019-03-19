@@ -36,7 +36,34 @@
                             <span>Today</span><hr>
                             <div id="today_weather"></div>
                             <span>Forecast</span><hr>
-                            <div id="forecast_weather"></div>
+                            <table style="
+                                position: relative; 
+                                width: 100%; 
+                                margin-left: 0;
+                                margin-top: 0;
+                                border-collapse: collapse;
+                            ">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>$Lowest temp</th>
+                                        <th>Highest temp</th>
+                                        <th>Weather</th>    
+                                    </tr>    
+                                </thead>
+                                <tbody id="forecast_weather">
+
+                                </tbody>
+                            </table>
+                            <style>
+                                thead {
+                                    backgorund-color: blue;
+                                }
+                                tr {
+                                    margin-bottom: 15px;
+                                    border-bottom: 1px solid black;
+                                }
+                            </style>
                         `);
 
                         //globalWeatherData = result;
@@ -45,14 +72,15 @@
                             <div>Weather: ${result[0].current.skytext}</div>
                             <div>Wind speed: ${result[0].current.windspeed}</div>
                             <img src="http://blob.weather.microsoft.com/static/weather4/en-us/law/${result[0].current.skycode}.gif" alt="/" />
-                            <br style="margin-bottom: 10vw">
                         `);
 
                         result[0].forecast.forEach(day => $(`#forecast_weather`).append(`
-                                <div>Date: ${day.date}<div><br>
-                                <div>Lowest temp: ${day.low}<div><br>
-                                <div>Highest temp: ${day.high}<div><br> 
-                                <div>Weather: ${day.skytextday}<div><br>
+                            <tr>
+                                <td>${day.date}</td>
+                                <td>${day.low}</td>
+                                <td>${day.high}</td>
+                                <td>${day.skytextday}</td>
+                            </tr>
                         `));
 
                         /*for (let i = 0; i < result.length; i++) {

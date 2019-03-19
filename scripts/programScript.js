@@ -4,7 +4,6 @@
 
 window.$ = window.jQuery = require('jquery');
 const electron = require('electron');
-const { MongoClient } = require('mongodb');
 const { ipcRenderer } = electron;
 const { 
     getUser, 
@@ -12,9 +11,6 @@ const {
     setUserConfiguration, 
     getUserConfig 
 } = require('../scripts/sqliteQuery');
-const { 
-    connectToMongo
-} = require('../scripts/mongoQuery');
 const sysInfo = require('systeminformation');
 const screenInfo = electron.screen.getAllDisplays();
 const weather = require('weather-js');
@@ -22,6 +18,7 @@ const path = require('path');
 const moment = require('moment');
 const fs = require('fs');
 const Shell = require('node-powershell');
+//const ClassicEditor = require('@ckeditor/ckeditor5-build-classic');
 
 window.drag = {
     isDown: false,
@@ -64,11 +61,10 @@ window.components = {
 };
 
 $(document).ready(() => {
-    connectToMongo();
     //automated functions 
     setTimeout(() => $('body').fadeIn(500), 1000);
     (() => setInterval(() => $('#clock').text(`${moment().format('LT')}`), 60000))();
-    (() => components['sysControl'].enabled = navigator.platform.indexOf('Win') > -1 ? true : false)();
+    (() => components.sysControl.enabled = navigator.platform.indexOf('Win') > -1 ? true : false)();
 
     $('#clock').text(moment().format('LT'));
     $('.roundBtn').click(element => {
