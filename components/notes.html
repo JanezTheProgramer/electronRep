@@ -112,7 +112,6 @@
             function saveFile() {
                 let path = $(`#${curr_fileName} .title`).text();
                 if (!curr_fileName) {
-                    $("#notes_error span").text('No file active!');
                     return;
                 }
                 fs.writeFileSync(
@@ -136,10 +135,8 @@
             $(document).on('mousedown', '#deleteFileControl', () => {
                 let path = $(`#${curr_fileName} .title`).text();
                 if (!curr_fileName) {
-                    $("#notes_error span").text('No file active!');
                     return;
                 } else if (!fs.existsSync(`./notes/${path}.txt`)) {
-                    $("#notes_error span").text('Unknown error!');
                     return;
                 }
                 curr_fileName = null;

@@ -125,8 +125,8 @@ $(document).ready(() => {
 
     // the draggg functions
     $(document).on('mousedown', '.box-window-top-draggable', down => {
-        if (drag.isDown === false && down.target.className === 'box-window-top-draggable') {
-            drag.isDown = true;
+        if (down.target.className === 'box-window-top-draggable') {
+            !drag.isDown ? drag.isDown = true : null;
             drag.iX = down.clientX - down.offsetX;
             drag.iY = down.clientY - down.offsetY;
         }
@@ -134,10 +134,8 @@ $(document).ready(() => {
 
     $(document).on('mousemove', '.box-window-top-draggable', move => {
         if (drag.isDown && move.currentTarget.className === 'box-window-top-draggable') {
-            let oX = move.clientX - drag.iX;
-            let oY = move.clientY - drag.iY;
-            move.currentTarget.parentNode.parentNode.style.top = `${oY + (screen.height * 0.1) / 2}px`;
-            move.currentTarget.parentNode.parentNode.style.left = `${oX + (screen.width * 0.025) / 2}px`;
+            move.currentTarget.parentNode.parentNode.style.top = `${move.clientY - drag.iY}px`;
+            move.currentTarget.parentNode.parentNode.style.left = `${move.clientX - drag.iX}px`;
             move.currentTarget.parentNode.parentNode.style.zIndex = '1';
         }
     });
@@ -227,8 +225,8 @@ $(document).ready(() => {
         $(`#${targetID}`).animate({
             top: '0',
             left: '0',
-            width: '95vw',
-            height: '85vh'
+            width: '100%',
+            height: '100%'
         }, 800);
         $(`#${targetID} .box-window-top .box-window-toggle-fullScreen`).html('&minus;');
     }
@@ -243,7 +241,7 @@ $(document).ready(() => {
 
             $(`#${targetID}`).css({ minHeight: 0 });
             $(`#${targetID}`).animate({
-                top: '0',
+                top: '-1vh',
                 height: '0',
                 opacity: '0'
             }, speed);

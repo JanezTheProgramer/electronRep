@@ -90,6 +90,7 @@
                         parseInt((Number(day.low) + Number(day.high)) / 2, 10)
                     );
                 });
+                weatherObj = null;
 
                 let weatherChart = new Chart(
                     document.querySelector('#chart_analyze').getContext('2d'), {
@@ -99,28 +100,27 @@
                             datasets: [{
                                 data: foreacastObj.high,
                                 label: "High",
-                                borderColor: "rgb(175, 119, 16)",
+                                borderColor: "#a55d40",
                                 fill: true
-                            }, {
-                                data: foreacastObj.low,
-                                label: "Low",
-                                borderColor: "rgb(55, 164, 214)",
-                                fill: true
-                            }, {
+                            },{
                                 data: foreacastObj.avg,
                                 label: "Avg",
-                                borderColor: "rgb(231, 164, 214)",
+                                borderColor: "#40a5a0",
+                                fill: true
+                            },{
+                                data: foreacastObj.low,
+                                label: "Low",
+                                borderColor: "#55bd7d",
                                 fill: true
                             }]
                         },
                         options: {
                             title: {
                                 display: true,
-                                text: 'forecast temperature chart'.toUpperCase()
+                                text: 'forecast temperature chart (°C)'.toUpperCase()
                             }
                         }
-                    });
-                //console.log(weatherChart);
+                });
             });
 
             $("#locationInput").on('keypress', event => (event.keyCode == 13) ?
