@@ -938,6 +938,8 @@ input:focus {
     padding: 0;
     width: 100%;
     table-layout: fixed;
+    font-family: custom;
+    font-weight: 600;
 }
 
 #weather-box-window .box-window-content table thead th {
@@ -957,10 +959,26 @@ input:focus {
     text-align: center;
 }
 
+#weather-box-window .box-window-content table tbody *, #weather-box-window .box-window-content table tbody * * {
+    background: rgba(216, 216, 216, 0.7);
+    transition: .2s all;
+}
+#weather-box-window .box-window-content table tbody tr:hover td {
+    letter-spacing: 0.1em; 
+    background: rgba(34, 34, 34, 0.7);
+    color: white;
+}
+
 #weather-box-window .box-window-content table th {
     font-size: 0.85em;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+}
+
+#weather-box-window .box-window-content canvas {
+    position: relative;
+    height: 20vh; 
+    width: 80%
 }
 
 #notes-box-window #noteControls {

@@ -28,7 +28,7 @@
                 <tbody id="tbody_forecast">
                 </tbody>
             </table>
-            <canvas style="height: 50vh; width: 100%" id="chart_analyze"></canvas>
+            <canvas id="chart_analyze"></canvas>
         </div>
     </div>
     <script>
@@ -63,11 +63,18 @@
 
             $('#locationList').on("click", event => {
                 let for_dislay = String(event.target.id);
+                if (for_dislay == '_1') return; // no places found widget
                 for_dislay = for_dislay.substr(0, for_dislay.indexOf('_'));
                 $("#locationList").fadeOut(200);
                 $('#weatherData').delay(100).fadeIn(100);
                 $("#tbody_forecast").html("");
-                weatherObj[Number(for_dislay)].forecast.forEach(day =>
+                let foreacastObj = {
+                    low: [],
+                    avg: [],
+                    high: [],
+                    days: []
+                };
+                weatherObj[Number(for_dislay)].forecast.forEach(day => {
                     $("#tbody_forecast").append(`
                         <tr>
                             <td>${day.date}</td>
@@ -75,46 +82,45 @@
                             <td>${day.high}°C</td>
                             <td>${day.skytextday}</td>
                         </tr>
-                    `)
-                );
-
-                var myChart = new Chart(
-                    document.getElementById('chart_analyze').getContext('2d'), {
-                    type: 'bar',
-                    data: {
-                        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                        datasets: [{
-                            label: '# of Votes',
-                            data: [12, 19, 3, 5, 2, 3],
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    }
+                    `);
+                    foreacastObj.days.push(day.date);
+                    foreacastObj.high.push(day.high);
+                    foreacastObj.low.push(day.low);
+                    foreacastObj.avg.push(
+                        parseInt((Number(day.low) + Number(day.high)) / 2, 10)
+                    );
                 });
+
+                let weatherChart = new Chart(
+                    document.querySelector('#chart_analyze').getContext('2d'), {
+                        type: 'line',
+                        data: {
+                            labels: foreacastObj.days,
+                            datasets: [{
+                                data: foreacastObj.high,
+                                label: "High",
+                                borderColor: "rgb(175, 119, 16)",
+                                fill: true
+                            }, {
+                                data: foreacastObj.low,
+                                label: "Low",
+                                borderColor: "rgb(55, 164, 214)",
+                                fill: true
+                            }, {
+                                data: foreacastObj.avg,
+                                label: "Avg",
+                                borderColor: "rgb(231, 164, 214)",
+                                fill: true
+                            }]
+                        },
+                        options: {
+                            title: {
+                                display: true,
+                                text: 'forecast temperature chart'.toUpperCase()
+                            }
+                        }
+                    });
+                //console.log(weatherChart);
             });
 
             $("#locationInput").on('keypress', event => (event.keyCode == 13) ?

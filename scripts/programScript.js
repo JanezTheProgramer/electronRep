@@ -18,6 +18,7 @@ const path = require('path');
 const moment = require('moment');
 const fs = require('fs');
 const Shell = require('node-powershell');
+const Chart = require('chart.js');
 
 window.drag = {
     isDown: false,
@@ -63,7 +64,12 @@ $(document).ready(() => {
     //automated functions 
     setTimeout(() => $('body').fadeIn(500), 1000);
     (() => setInterval(() => $('#clock').text(`${moment().format('LT')}`), 60000))();
-    (() => components.sysControl.enabled = navigator.platform.indexOf('Win') > -1 ? true : false)();
+    (() => {
+        if(navigator.onLine) return;
+        let require_internet = ['sysControl', 'maps', 'weather'];
+        for(let key in require_internet)
+            components[key].enabled = false;
+    })();
 
     $('#clock').text(moment().format('LT'));
     $('.roundBtn').click(element => {
