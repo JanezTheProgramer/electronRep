@@ -10,120 +10,116 @@
         <input id="locationInput" type="text" placeholder="enter location" value="" />
     </div>
     <div class="box-window-content">
-        <div id="weatherData">
+        <ul id="locationList" style="display: none">
+        </ul>
+        <div id="weatherData" style="display: none">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan='4'>Forecast</th>
+                    </tr>
+                    <tr>
+                        <th>Date</th>
+                        <th>low. temp</th>
+                        <th>hig. temp</th>
+                        <th>weather</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody_forecast">
+                </tbody>
+            </table>
+            <canvas style="height: 50vh; width: 100%" id="chart_analyze"></canvas>
         </div>
     </div>
     <script>
         $(document).ready(() => {
-
-            var weatherTypes = [
-                {keyCode: "Sunny", imgPath: './imgs/suuny.png'},
-                {keyCode: "Sunny", imgPath: './imgs/suuny.png'},
-                {keyCode: "Sunny", imgPath: './imgs/suuny.png'},
-                {keyCode: "Sunny", imgPath: './imgs/suuny.png'},
-                {keyCode: "Sunny", imgPath: './imgs/suuny.png'},
-                {keyCode: "Sunny", imgPath: './imgs/suuny.png'},
-                {keyCode: "Sunny", imgPath: './imgs/suuny.png'}
-            ];
-            
+            var weatherObj = null;
             const getWeatherData = location => {
                 try {
+                    $('#weatherData').hide();
                     $("#locationList").html("");
                     weather.find({ search: String(location), degreeType: 'C' }, (err, result) => {
-                        if (!result.length || err) return;
-
-                        $("#weatherData").append(`
-                            <span>Today</span><hr>
-                            <div id="today_weather"></div>
-                            <span>Forecast</span><hr>
-                            <table style="
-                                position: relative; 
-                                width: 100%; 
-                                margin-left: 0;
-                                margin-top: 0;
-                                border-collapse: collapse;
-                            ">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>$Lowest temp</th>
-                                        <th>Highest temp</th>
-                                        <th>Weather</th>    
-                                    </tr>    
-                                </thead>
-                                <tbody id="forecast_weather">
-
-                                </tbody>
-                            </table>
-                            <style>
-                                thead {
-                                    backgorund-color: blue;
-                                }
-                                tr {
-                                    margin-bottom: 15px;
-                                    border-bottom: 1px solid black;
-                                }
-                            </style>
-                        `);
-
-                        //globalWeatherData = result;
-                        $("#today_weather").html(`
-                            <div>Temp: ${result[0].current.temperature}°C</div>
-                            <div>Weather: ${result[0].current.skytext}</div>
-                            <div>Wind speed: ${result[0].current.windspeed}</div>
-                            <img src="http://blob.weather.microsoft.com/static/weather4/en-us/law/${result[0].current.skycode}.gif" alt="/" />
-                        `);
-
-                        result[0].forecast.forEach(day => $(`#forecast_weather`).append(`
-                            <tr>
-                                <td>${day.date}</td>
-                                <td>${day.low}</td>
-                                <td>${day.high}</td>
-                                <td>${day.skytextday}</td>
-                            </tr>
-                        `));
-
-                        /*for (let i = 0; i < result.length; i++) {
-                            $("#locationList").append(`
-                                <li>
-                                    <span class="locSpan" id="${i}_place">
-                                        ${result[i].location.name}
-                                    </span>
-                                </li>
-                            `);
-
-                            /*$("#actualLocationData").append(`
-                                <div id="${i}locDiv">   
-                                        <div>Temp: ${result[i].current.temperature}°C</div>
-                                        <div>Weather: ${result[i].current.skytext}</div>
-                                        <div>Wind speed: ${result[i].current.windspeed}</div>
-                                        <label for="${i}forecast">Forecast</label>
-                                        <div id="${i}forecast"></div>                
-                                </div>
-                            `);
-
-
-                            result[0].forecast.forEach(day => $(`#${i}forecast`).append(`
-                                <div>Date: ${day.date}<div><br>
-                                <div>Lowest temp: ${day.low}<div><br>
-                                <div>Highest temp: ${day.high}<div><br> 
-                                <div>Weather: ${day.skytextday}<div><br>
-                            `));
-
-                        }*/
-                            
+                        if (err) {
+                            console.log(err, result);
+                            return;
+                        }
+                        weatherObj = result || [];
+                        for (var key in weatherObj)
+                            if (result.hasOwnProperty(key))
+                                $("#locationList").append(`
+                                    <li id="${key}_place">
+                                        <span class="locSpan">
+                                            ${result[key].location.name}
+                                        </span>
+                                    </li>
+                                `);
+                        $("#locationList").delay(100).fadeIn(200);
+                        $("#locationList").focus();
                     });
                 } catch (err) {
                     ipcRenderer.send('request-failed-to-generate-action');
                 }
             }
 
-            $(document).on('keypress', "#locationInput", event => {
-                if(event.keyCode == 13){
-                    $("#weatherData").html('');
-                    getWeatherData($("#locationInput").val());
-                } 
+            $('#locationList').on("click", event => {
+                let for_dislay = String(event.target.id);
+                for_dislay = for_dislay.substr(0, for_dislay.indexOf('_'));
+                $("#locationList").fadeOut(200);
+                $('#weatherData').delay(100).fadeIn(100);
+                $("#tbody_forecast").html("");
+                weatherObj[Number(for_dislay)].forecast.forEach(day =>
+                    $("#tbody_forecast").append(`
+                        <tr>
+                            <td>${day.date}</td>
+                            <td>${day.low}°C</td>
+                            <td>${day.high}°C</td>
+                            <td>${day.skytextday}</td>
+                        </tr>
+                    `)
+                );
+
+                var myChart = new Chart(
+                    document.getElementById('chart_analyze').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                        datasets: [{
+                            label: '# of Votes',
+                            data: [12, 19, 3, 5, 2, 3],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
             });
+
+            $("#locationInput").on('keypress', event => (event.keyCode == 13) ?
+                getWeatherData($("#locationInput").val()) : null
+            );
         });
     </script>
 </div>

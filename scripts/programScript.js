@@ -18,7 +18,6 @@ const path = require('path');
 const moment = require('moment');
 const fs = require('fs');
 const Shell = require('node-powershell');
-//const ClassicEditor = require('@ckeditor/ckeditor5-build-classic');
 
 window.drag = {
     isDown: false,
@@ -177,6 +176,10 @@ $(document).ready(() => {
             $('#tutorialDiv').children().remove();
             $('#platformDiv #content').children().remove();
             setTimeout(() => $('#platformDiv').fadeIn(200), 300);
+            setTimeout(() => {
+                if($('#leftNav').is(':visible')) return;
+                $('#leftNav').show();
+            }, 2000);
         }
     }
 
