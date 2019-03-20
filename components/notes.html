@@ -83,7 +83,8 @@
                 let previousFiles = refresh();
                 fs.writeFile(
                     `./notes/${fileName}.txt`,
-                    `${moment().format('L')}\n`, err => err ? console.log(err) : null
+                    `${moment().format('L')}\n`, 
+                    err => err ? console.log(err) : null
                 );
                 $("#notesList").append(`
                     <li id="${previousFiles.length}note">

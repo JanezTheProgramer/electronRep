@@ -72,18 +72,18 @@
                     low: [],
                     avg: [],
                     high: [],
-                    days: []
+                    dates: []
                 };
                 weatherObj[Number(for_dislay)].forecast.forEach(day => {
                     $("#tbody_forecast").append(`
                         <tr>
-                            <td>${day.date}</td>
+                            <td>${moment(day.date).format('L')}</td>
                             <td>${day.low}°C</td>
                             <td>${day.high}°C</td>
                             <td>${day.skytextday}</td>
                         </tr>
                     `);
-                    foreacastObj.days.push(day.date);
+                    foreacastObj.dates.push(moment(day.date).format('L'));
                     foreacastObj.high.push(day.high);
                     foreacastObj.low.push(day.low);
                     foreacastObj.avg.push(
@@ -95,7 +95,7 @@
                     document.querySelector('#chart_analyze').getContext('2d'), {
                         type: 'line',
                         data: {
-                            labels: foreacastObj.days,
+                            labels: foreacastObj.dates,
                             datasets: [{
                                 data: foreacastObj.high,
                                 label: "High",

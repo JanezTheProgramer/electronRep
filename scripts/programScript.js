@@ -5,11 +5,11 @@
 window.$ = window.jQuery = require('jquery');
 const electron = require('electron');
 const { ipcRenderer } = electron;
-const { 
-    getUser, 
-    resetValues, 
-    setUserConfiguration, 
-    getUserConfig 
+const {
+    getUser,
+    resetValues,
+    setUserConfiguration,
+    getUserConfig
 } = require('../scripts/sqliteQuery');
 const sysInfo = require('systeminformation');
 const screenInfo = electron.screen.getAllDisplays();
@@ -27,36 +27,36 @@ window.drag = {
 }; // object for element dragging properties
 
 window.components = {
-    games: { 
-        id: 'games-box-window', file: 'games.html', enabled: true, 
+    games: {
+        id: 'games-box-window', file: 'games.html', enabled: true,
         tooltip: 'eXo-games', defHeight: '50vh'
-    }, calculator: { 
-        id: 'calculator-box-window', file: 'calculator.html', enabled: true, 
-        tooltip: 'eXo-calculator', defHeight: '50vh' 
-    }, notes: { 
-        id: 'notes-box-window', file: 'notes.html', enabled: true, 
-        tooltip: 'eXo-notes', defHeight: '50vh' 
-    }, music: { 
-        id: 'music-box-window', file: 'music.html', enabled: true, 
-        tooltip: 'eXo-music', defHeight: '50vh' 
-    }, video: { 
-        id: 'video-box-window', file: 'videoPlayer.html', enabled: true, 
-        tooltip: 'eXo-video', defHeight: '50vh' 
-    }, weather: { 
-        id: 'weather-box-window', file: 'weather.html', enabled: true, 
-        tooltip: 'eXo-weather', defHeight: '50vh' 
-    }, maps: { 
-        id: 'maps-box-window', file: 'maps.html', enabled: true, 
-        tooltip: 'eXo-maps', defHeight: '50vh' 
-    }, photoEditor: { 
-        id: 'photoEditor-box-window', file: 'photoEditor.html', enabled: true, 
-        tooltip: 'eXo-photoEditor', defHeight: '50vh' 
-    }, sysInfo: { 
-        id: 'sysInfo-box-window', file: 'sysInfo.html', enabled: true, 
-        tooltip: 'eXo-sysInfo', defHeight: '50vh' 
-    }, sysControl: { 
-        id: 'sysControl-box-window', file: 'sysControl.html', enabled: true, 
-        tooltip: 'exo-sysControl', defHeight: '35vh' 
+    }, calculator: {
+        id: 'calculator-box-window', file: 'calculator.html', enabled: true,
+        tooltip: 'eXo-calculator', defHeight: '50vh'
+    }, notes: {
+        id: 'notes-box-window', file: 'notes.html', enabled: true,
+        tooltip: 'eXo-notes', defHeight: '50vh'
+    }, music: {
+        id: 'music-box-window', file: 'music.html', enabled: true,
+        tooltip: 'eXo-music', defHeight: '50vh'
+    }, video: {
+        id: 'video-box-window', file: 'videoPlayer.html', enabled: true,
+        tooltip: 'eXo-video', defHeight: '50vh'
+    }, weather: {
+        id: 'weather-box-window', file: 'weather.html', enabled: true,
+        tooltip: 'eXo-weather', defHeight: '50vh'
+    }, maps: {
+        id: 'maps-box-window', file: 'maps.html', enabled: true,
+        tooltip: 'eXo-maps', defHeight: '50vh'
+    }, photoEditor: {
+        id: 'photoEditor-box-window', file: 'photoEditor.html', enabled: true,
+        tooltip: 'eXo-photoEditor', defHeight: '50vh'
+    }, sysInfo: {
+        id: 'sysInfo-box-window', file: 'sysInfo.html', enabled: true,
+        tooltip: 'eXo-sysInfo', defHeight: '50vh'
+    }, sysControl: {
+        id: 'sysControl-box-window', file: 'sysControl.html', enabled: true,
+        tooltip: 'exo-sysControl', defHeight: '35vh'
     }
 };
 
@@ -65,9 +65,8 @@ $(document).ready(() => {
     setTimeout(() => $('body').fadeIn(500), 1000);
     (() => setInterval(() => $('#clock').text(`${moment().format('LT')}`), 60000))();
     (() => {
-        if(navigator.onLine) return;
-        let require_internet = ['sysControl', 'maps', 'weather'];
-        for(let key in require_internet)
+        if (navigator.onLine) return;
+        for (let key in ['sysControl', 'maps', 'weather'])
             components[key].enabled = false;
     })();
 
@@ -120,7 +119,7 @@ $(document).ready(() => {
     $('body').keydown(e => {
         if ($('input[type=text]').is(':focus') || $('textarea').is(':focus')) return;
         if (e.which == 81) window.close(); //close application on 'q' pressed
-        else if (e.which == 116 ) e.preventDefault(); //dont refresh with F5
+        else if (e.which == 116) e.preventDefault(); //dont refresh with F5
         else if (e.which == 82) self.location.assign(location); //restart app on 'r' pressed
     });
 
@@ -160,7 +159,7 @@ $(document).ready(() => {
             let config = getUserConfig();
             $('#leftNav').html("");
             setTimeout(() => {
-                if(!config)
+                if (!config)
                     generatePlatform();
                 else {
                     JSON.parse(config.settings).navigationMenu.forEach(obj => {
@@ -183,7 +182,7 @@ $(document).ready(() => {
             $('#platformDiv #content').children().remove();
             setTimeout(() => $('#platformDiv').fadeIn(200), 300);
             setTimeout(() => {
-                if($('#leftNav').is(':visible')) return;
+                if ($('#leftNav').is(':visible')) return;
                 $('#leftNav').show();
             }, 2000);
         }
@@ -192,7 +191,7 @@ $(document).ready(() => {
     $(document).on('mousedown', '.box-window-top .box-window-toggle-fullScreen', e => {
         let targetID = e.currentTarget.parentNode.parentNode.id;
         const find = object => {
-            for (let component in object) 
+            for (let component in object)
                 if (object[component].id == targetID) return component;
         }
         if (!document.getElementById(targetID)) return;
