@@ -833,6 +833,14 @@ input:focus {
     font-family: custom;
 }
 
+#photoEditor-box-window .box-window-content #img_edit{
+    position: absolute;
+    width: 80%;
+    left: 10%;
+    top: 5vh;
+    margin: 0 auto;
+}
+
 #games-box-window {
     --minHeight: 50vh;
     --height: 50vh;
@@ -945,10 +953,11 @@ input:focus {
 }
 
 #weather-box-window .box-window-content table {
+    margin: 0;
+    margin-top: 2vh;
     position: relative;
     left: 0%;
     border: none;
-    margin: 0;
     padding: 0;
     width: 100%;
     table-layout: fixed;
@@ -994,6 +1003,28 @@ input:focus {
     position: relative;
     height: 20vh;
     width: 80%
+}
+
+#weather-box-window .box-window-content #todayWeather{
+    margin-top: 2vh;
+}
+#weather-box-window .box-window-content #todayWeather span {
+    position: relative;
+    float: left;
+    left: 0;
+    width: 30%;
+    margin-left: 3%;
+    color: white;
+    font-size: 0.8em;
+    font-weight: 550;
+    font-family: custom;
+}
+
+#weather-box-window .box-window-content #todayWeather span p {
+    display: inline;
+    font-size: 0.95em;
+    color: rgb(196, 166, 110);
+    font-weight: 650;
 }
 
 #notes-box-window #noteControls {

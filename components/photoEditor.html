@@ -14,10 +14,15 @@
                 <input type="file" name="image" id="image-upload" />
             </div>
         </div>
+        <img id="img_edit" style="display: none;" src="" alt="/" />
     </div>
     <script>
         $(document).ready(event => {
-            //
+            $('input[type=file]').change(function (event) {
+                $('#img_edit').attr({
+                    src: URL.createObjectURL(event.target.files[0])
+                }).fadeIn(100);
+            });
         });
     </script>
 </div>

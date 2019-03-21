@@ -13,6 +13,8 @@
         <ul id="locationList" style="display: none">
         </ul>
         <div id="weatherData" style="display: none">
+            <div id="todayWeather">
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -43,6 +45,7 @@
                             return;
                         }
                         weatherObj = result || [];
+                        console.log(weatherObj);
                         $("#locationList").html("");
                         for (var key in weatherObj)
                             if (result.hasOwnProperty(key))
@@ -63,18 +66,26 @@
             }
 
             $('#locationList').on("click", event => {
+                $('#todayWeather').html("");
                 let for_dislay = String(event.target.id);
                 for_dislay = for_dislay.substr(0, for_dislay.indexOf('_'));
                 $("#locationList").fadeOut(200);
                 $('#weatherData').delay(100).fadeIn(100);
                 $("#tbody_forecast").html("");
-                let foreacastObj = {
-                    low: [],
-                    avg: [],
-                    high: [],
-                    dates: []
-                };
-                weatherObj[Number(for_dislay)].forecast.forEach(day => {
+                let clickedObject = weatherObj[Number(for_dislay)];
+                $('#todayWeather').html(`
+                    <span><p>Location:</p> ${clickedObject.location.name}</span>
+                    <span><p>Longitude:</p> ${clickedObject.location.long}</span>
+                    <span><p>Latitude:</p> ${clickedObject.location.lat}</span>
+                    <span><p>Date:</p> ${moment(clickedObject.current.date).format('L')}</span>
+                    <span><p>Time:</p> ${moment(clickedObject.current.observationtime, "HH:mm:ss").format("hh:mm A")}</span>
+                    <span><p>Weather:</p> ${clickedObject.current.skytext}</span>
+                    <span><p>Temp:</p> ${clickedObject.current.temperature}°C</span>
+                    <span><p>Windspeed:</p> ${clickedObject.current.winddisplay}</span>
+                    <span><p>Humidity:</p> ${clickedObject.current.humidity}%</span>
+                `);
+                let foreacastObj = null;
+                clickedObject.forecast.forEach(day => {
                     $("#tbody_forecast").append(`
                         <tr>
                             <td>${moment(day.date).format('L')}</td>
@@ -83,12 +94,15 @@
                             <td>${day.skytextday}</td>
                         </tr>
                     `);
-                    foreacastObj.dates.push(moment(day.date).format('L'));
-                    foreacastObj.high.push(day.high);
-                    foreacastObj.low.push(day.low);
-                    foreacastObj.avg.push(
-                        parseInt(Math.ceil((Number(day.low) + Number(day.high)) / 2), 10)
-                    );
+                    foreacastObj = {
+                        dates: [...(foreacastObj ? foreacastObj.dates : []), ...[moment(day.date).format('L')]],
+                        high: [...(foreacastObj ? foreacastObj.high : []), ...[day.high]],
+                        low: [...(foreacastObj ? foreacastObj.low : []), ...[day.low]],
+                        avg: [
+                            ...(foreacastObj ? foreacastObj.avg : []), 
+                            ...[parseInt(Math.ceil((Number(day.low) + Number(day.high)) / 2), 10)]
+                        ]
+                    };
                 });
                 weatherObj = null;
 
