@@ -7,21 +7,33 @@
         <span class="box-window-toggle-fullScreen">&#9634;</span>
     </div>
     <div class="box-window-content">
-        <!--<div class="spinner"></div>-->
         <div>
-            <div id="image-preview">
-                <label for="image-upload" id="image-label">Choose File</label>
-                <input type="file" name="image" id="image-upload" />
+            <input id="uploadFile" class="f-input" accept="image/*" />
+            <div class="fileUpload btn btn--browse">
+                <span>File</span>
+                <input id="uploadBtn" type="file" class="upload" accept="image/*" />
             </div>
         </div>
-        <img id="img_edit" style="display: none;" src="" alt="/" />
+        <div id="img_edit_container">
+            <img id="img_edit" height="95%" alt="/" />
+        </div>
+        <div id="image_options">
+            <span>Adjustments</span>
+            <span>Effects</span>
+            <span>Overlay</span>
+        </div>
     </div>
     <script>
         $(document).ready(event => {
-            $('input[type=file]').change(function (event) {
+            $("input[type=file]#uploadBtn").change(img => {
+                document.getElementById("uploadFile").value = img.target.value.replace("C:\\fakepath\\", "");
                 $('#img_edit').attr({
-                    src: URL.createObjectURL(event.target.files[0])
-                }).fadeIn(100);
+                    src: URL.createObjectURL(img.target.files[0])
+                })
+                $('#img_edit_container').animate({ height: '95%' }, 500);
+                $('#img_edit').css({
+                    filter: "sepia(100%)"
+                });
             });
         });
     </script>

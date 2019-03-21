@@ -75,11 +75,11 @@
                 let clickedObject = weatherObj[Number(for_dislay)];
                 $('#todayWeather').html(`
                     <span><p>Location:</p> ${clickedObject.location.name}</span>
+                    <span><p>Weather:</p> ${clickedObject.current.skytext}</span>
                     <span><p>Longitude:</p> ${clickedObject.location.long}</span>
                     <span><p>Latitude:</p> ${clickedObject.location.lat}</span>
                     <span><p>Date:</p> ${moment(clickedObject.current.date).format('L')}</span>
                     <span><p>Time:</p> ${moment(clickedObject.current.observationtime, "HH:mm:ss").format("hh:mm A")}</span>
-                    <span><p>Weather:</p> ${clickedObject.current.skytext}</span>
                     <span><p>Temp:</p> ${clickedObject.current.temperature}°C</span>
                     <span><p>Windspeed:</p> ${clickedObject.current.winddisplay}</span>
                     <span><p>Humidity:</p> ${clickedObject.current.humidity}%</span>

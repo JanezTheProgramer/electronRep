@@ -7,8 +7,23 @@
         <span class="box-window-toggle-fullScreen">&#9634;</span>
     </div>
     <div style="overflow: visible"class="box-window-content">
-        <video width="100%" height="100%" controls>
-            <source src="" type="video/mp4">
-          </video>
+        <input id="uploadFile" class="f-input" accept="video/*"/>
+        <div class="fileUpload btn btn--browse">
+            <span>File</span>
+            <input id="uploadBtn" type="file" class="upload" accept="video/*"/>
+        </div>
+        <video id="video_source" width="100%" height="95%" controls>
+            <source  src="" type="video/mp4">
+        </video>
     </div>
+    <script>
+        $(document).ready(() => {
+            $("input[type=file]#uploadBtn").change(video => {
+                document.getElementById("uploadFile").value = video.target.value.replace("C:\\fakepath\\", "");
+                $('#video_source').html(` 
+                    <source  src="${String(video.target.files[0].path)}" type="video/mp4"> 
+                `);
+            });
+        });
+    </script>
 </div>
