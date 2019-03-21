@@ -19,6 +19,7 @@ const moment = require('moment');
 const fs = require('fs');
 const Shell = require('node-powershell');
 const Chart = require('chart.js');
+const htmlToImage = require('html-to-image');
 
 window.drag = {
     isDown: false,
@@ -191,9 +192,9 @@ $(document).ready(() => {
         }
         if (!document.getElementById(targetID)) return;
         //console.log(e.currentTarget.parentNode.parentNode);
-        if (['▢', '&#9634;'].includes(e.target.innerHTML))
+        if (['▢', '&#9634;'].includes(e.target.innerHTML)) {
             goFullScreen(targetID);
-        else if (['−', '&minus;'].includes(e.target.innerHTML)) {
+        } else if (['−', '&minus;'].includes(e.target.innerHTML)) {
             $('#leftNav').animate({
                 width: '7vw',
                 opacity: '1'

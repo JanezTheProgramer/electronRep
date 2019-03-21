@@ -842,10 +842,12 @@ input:focus {
     position: relative;
     margin: 0 auto;
     top: 3vh;
+    min-width: 30%;
+    min-height: 10%;
     max-width: 95%;
     max-height: 70%;
-    height: 5%;
-    background-color: #254144;
+    height: 10%;
+    background-color: #666666;
     resize: both;
     display: block;
     overflow: hidden !important;
@@ -1150,10 +1152,12 @@ input:focus {
 }
 
 /* <file input type css fix> */
+
 .fileUpload {
     position: relative;
     overflow: hidden;
 }
+
 .fileUpload input.upload {
     position: absolute;
     top: 0;
@@ -1166,19 +1170,32 @@ input:focus {
     filter: alpha(opacity=0);
 }
 
-.btn--browse{
+.btn--browse, .btn--save {
     border: none;
+    float: left;
     background-color: rgb(46, 46, 46);
     color: #aaa;
     height: 2vh;
     width: 10%;
+    margin-left: 1vw;
     text-align: center;
     font-family: custom;
     font-weight: 500;
     font-size: 105%;
 }
 
-.f-input{
+.btn--browse:hover, .btn--save:hover {
+    background-color: rgb(67, 72, 83); 
+    cursor: pointer;
+}
+
+.btn--save {
+    position: relative;
+    top: 0;
+    float: left;
+}
+
+.f-input {
     display: none;
 }
 
