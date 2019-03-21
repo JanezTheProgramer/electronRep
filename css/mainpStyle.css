@@ -151,15 +151,15 @@ body {
 }
 
 #exit {
-    right: 3vw
+    right: 1.5vw
 }
 
 #minimize {
-    right: 5vw
+    right: 3.5vw
 }
 
 #reset {
-    right: 7vw
+    right: 5.5vw
 }
 
 .roundBtn:hover {
@@ -262,7 +262,7 @@ body {
     position: absolute;
     left: 8vw;
     top: 0;
-    font-size: 3vw;
+    font-size: 2.7vw;
     letter-spacing: .05em;
     font-weight: bold;
     color: rgb(29, 85, 121);
@@ -285,7 +285,7 @@ body {
     left: 0;
     width: 100%;
     height: 95vh;
-    background-image: radial-gradient(rgba(30, 50, 60, 0.94), rgba(30, 50, 60, 0.7), rgba(30, 50, 60, 0.93), rgba(10, 10, 10, 0.1));
+    background-image: linear-gradient(rgba(20, 35, 43, 0.91), rgba(48, 39, 39, 0.91));
     border: none;
     overflow: hidden;
 }
@@ -433,7 +433,8 @@ h1:nth-child(6) {
     left: 0;
     width: 100%;
     height: 5vh;
-    background-image: linear-gradient(to left, #04030faa, #34333faa, #2b2b2caa);
+    background-image: linear-gradient(to left, #04030fcf, #34333fcf, #2b2b2ccf);
+    border-bottom: .1vw solid #04030fca;
 }
 
 #leftNav {

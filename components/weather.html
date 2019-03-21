@@ -21,7 +21,7 @@
                     <tr>
                         <th>Date</th>
                         <th>low. temp</th>
-                        <th>hig. temp</th>
+                        <th>high. temp</th>
                         <th>weather</th>
                     </tr>
                 </thead>
@@ -37,13 +37,13 @@
             const getWeatherData = location => {
                 try {
                     $('#weatherData').hide();
-                    $("#locationList").html("");
                     weather.find({ search: String(location), degreeType: 'C' }, (err, result) => {
                         if (err) {
                             console.log(err, result);
                             return;
                         }
                         weatherObj = result || [];
+                        $("#locationList").html("");
                         for (var key in weatherObj)
                             if (result.hasOwnProperty(key))
                                 $("#locationList").append(`
@@ -59,11 +59,11 @@
                 } catch (err) {
                     ipcRenderer.send('request-failed-to-generate-action');
                 }
+                inProgress = false;
             }
 
             $('#locationList').on("click", event => {
                 let for_dislay = String(event.target.id);
-                if (for_dislay == '_1') return; // no places found widget
                 for_dislay = for_dislay.substr(0, for_dislay.indexOf('_'));
                 $("#locationList").fadeOut(200);
                 $('#weatherData').delay(100).fadeIn(100);
@@ -87,7 +87,7 @@
                     foreacastObj.high.push(day.high);
                     foreacastObj.low.push(day.low);
                     foreacastObj.avg.push(
-                        parseInt((Number(day.low) + Number(day.high)) / 2, 10)
+                        parseInt(Math.ceil((Number(day.low) + Number(day.high)) / 2), 10)
                     );
                 });
                 weatherObj = null;
@@ -105,12 +105,12 @@
                             },{
                                 data: foreacastObj.avg,
                                 label: "Avg",
-                                borderColor: "#40a5a0",
+                                borderColor: "#55bd7d",
                                 fill: true
                             },{
                                 data: foreacastObj.low,
                                 label: "Low",
-                                borderColor: "#55bd7d",
+                                borderColor: "#40a5a0",
                                 fill: true
                             }]
                         },

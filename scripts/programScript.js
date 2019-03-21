@@ -133,11 +133,10 @@ $(document).ready(() => {
     });
 
     $(document).on('mousemove', '.box-window-top-draggable', move => {
-        if (drag.isDown && move.currentTarget.className === 'box-window-top-draggable') {
-            move.currentTarget.parentNode.parentNode.style.top = `${move.clientY - drag.iY}px`;
-            move.currentTarget.parentNode.parentNode.style.left = `${move.clientX - drag.iX}px`;
-            move.currentTarget.parentNode.parentNode.style.zIndex = '1';
-        }
+        if (!drag.isDown) return;
+        move.currentTarget.parentNode.parentNode.style.top = `${move.clientY - drag.iY}px`;
+        move.currentTarget.parentNode.parentNode.style.left = `${move.clientX - drag.iX}px`;
+        move.currentTarget.parentNode.parentNode.style.zIndex = '1';
     });
 
     $(document).on('mouseleave', '.box-window-top-draggable', () => drag.isDown = false);
