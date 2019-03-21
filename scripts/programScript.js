@@ -125,11 +125,9 @@ $(document).ready(() => {
 
     // the draggg functions
     $(document).on('mousedown', '.box-window-top-draggable', down => {
-        if (down.target.className === 'box-window-top-draggable') {
-            !drag.isDown ? drag.isDown = true : null;
-            drag.iX = down.clientX - down.offsetX;
-            drag.iY = down.clientY - down.offsetY;
-        }
+        !drag.isDown ? drag.isDown = true : null;
+        drag.iX = down.clientX - down.offsetX;
+        drag.iY = down.clientY - down.offsetY;
     });
 
     $(document).on('mousemove', '.box-window-top-draggable', move => {
@@ -197,7 +195,7 @@ $(document).ready(() => {
             goFullScreen(targetID);
         else if (['−', '&minus;'].includes(e.target.innerHTML)) {
             $('#leftNav').animate({
-                width: '6vw',
+                width: '7vw',
                 opacity: '1'
             });
             $(`#${targetID}`).animate({
@@ -234,7 +232,7 @@ $(document).ready(() => {
         speed = speed || 700;
         if (document.getElementById(targetID)) {
             $('#leftNav').attr('toggle') == '0' ? $('#leftNav').animate({
-                width: '6vw',
+                width: '7vw',
                 opacity: '1'
             }) : null;
 
