@@ -20,12 +20,24 @@ const fs = require('fs');
 const Shell = require('node-powershell');
 const Chart = require('chart.js');
 const htmlToImage = require('html-to-image');
+const { determineTheme } = require('../scripts/theme');
 
 window.drag = {
     isDown: false,
     iX: null,
     iY: null
 }; // object for element dragging properties
+
+
+window.Theme = {
+    id: '#alternate-css',
+    actualCSS: (`
+        .box-window-top {
+            background-color: rgb(0, 90, 42)
+        }
+    `),
+    change: () => $(window.Theme.id).html(window.Theme.actualCSS)
+};
 
 window.components = {
     games: {
@@ -68,8 +80,7 @@ $(document).ready(() => {
     (() => {
         if (!navigator.onLine) 
             for (let key in ['sysControl', 'maps', 'weather'])
-                components[key].enabled = false;         
-
+                components[key].enabled = false;        
     })();
 
     $('#clock').text(moment().format('LT'));

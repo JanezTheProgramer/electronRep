@@ -525,7 +525,7 @@ h1:nth-child(6) {
     top: 0;
     width: 100%;
     height: 2.9vh;
-    background-color: rgba(48, 113, 129, 0.967);
+    background-color: rgb(170, 170, 170);
     display: inline-block;
     padding: 0;
     margin: 0;
