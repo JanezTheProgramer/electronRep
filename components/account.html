@@ -1,5 +1,4 @@
 <div id="account-info-div-content" style="display: none;">
-    <script src="../scripts/jscolor_library.js"></script>
     <div id="labels">
         <div>Username:</div><br>
         <div>Member since:</div><br>
@@ -16,14 +15,8 @@
     <form id="ui_icons_set">
     </form>
     <input id="toggleAccCfg" type="button" value="toggle all" />
-    <input id="ui_color_set" class="jscolor" value="ab2567">
     <script>
         $(document).ready(() => {
-            $('#ui_color_set').change(function () {
-                console.log(determineTheme($(this).val()));
-                window.Theme.actualCSS = determineTheme($(this).val());
-                window.Theme.change();
-            });
             let userData = null;
             $('#ui_icons_set').html("");
             resetValues();
