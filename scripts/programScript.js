@@ -66,9 +66,10 @@ $(document).ready(() => {
     setTimeout(() => $('body').fadeIn(500), 1000);
     (() => setInterval(() => $('#clock').text(`${moment().format('LT')}`), 60000))();
     (() => {
-        if (navigator.onLine) return;
-        for (let key in ['sysControl', 'maps', 'weather'])
-            components[key].enabled = false;
+        if (!navigator.onLine) 
+            for (let key in ['sysControl', 'maps', 'weather'])
+                components[key].enabled = false;         
+
     })();
 
     $('#clock').text(moment().format('LT'));

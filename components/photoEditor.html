@@ -28,7 +28,6 @@
     <script>
         $(document).ready(() => {
             $("input[type=file]#uploadBtnImg").change(img => {
-                document.getElementById("uploadImg").value = img.target.value.replace("C:\\fakepath\\", "");
                 $('#img_edit').attr({
                     src: URL.createObjectURL(img.target.files[0])
                 });
