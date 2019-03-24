@@ -1,0 +1,41 @@
+<div id="sysInfo-box-window" class="box-window">
+    <div class="box-window-top">
+        <div class="box-window-top-draggable">
+            <h3>eXo-sysInfo</h3>
+        </div>
+        <span class="exit">&times;</span>
+    </div>
+    <div class="box-window-content">
+        <div id="systemData"></div>
+    </div>
+    <script>
+        $(document).ready(() => {
+            sysInfo.cpu()
+                .then(data => {
+                    $("#systemData").append(JSON.stringify(data));
+                    console.log(data);
+                })
+                .catch(error => ipcRenderer.send('request-failed-to-generate-action'));
+
+            sysInfo.osInfo()
+                .then(data => {
+                    $("#systemData").append(JSON.stringify(data));
+                    console.log(data);
+                })
+                .catch(error => ipcRenderer.send('request-failed-to-generate-action'));
+
+            sysInfo.graphics()
+                .then(data => {
+                    console.log(data);
+                   $("#systemData").append(JSON.stringify(data));
+                })
+                .catch(error => ipcRenderer.send('request-failed-to-generate-action'));
+            
+            try{
+                $("#systemData").append(JSON.stringify(screenInfo));
+            } catch (err) {
+                ipcRenderer.send('request-failed-to-generate-action')
+            }
+        })
+    </script>
+</div>
