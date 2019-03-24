@@ -28,7 +28,7 @@
     </div>
     <script>
         $(document).ready(() => {
-            $(document).on('keypress', "#mapsLocation", event => {
+            $("#mapsLocation").keypress(event => {
                 if(event.keyCode == 13){
                     $('#maps-box-window .box-window-content').html(`                  
                         <iframe 

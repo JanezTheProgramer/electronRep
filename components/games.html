@@ -21,7 +21,7 @@
                 //
             } (loadGames)();
 
-            $(document).on('mousedown', '#gameList li', () => {
+            $('#gameList li').mousedown(() => {
                 $('#mainDiv').children().hide();
                 $('#gameWindow').fadeIn(300);
                 $('#platformDiv #content').children().remove();

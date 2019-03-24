@@ -34,17 +34,6 @@
     </div>
     <script>
         $(document).ready(() => {
-            /*(() => {
-                //require( '@ckeditor/ckeditor5-build-classic' );
-                ClassicEditor
-                    .create( document.querySelector('#textarea'))
-                    .then( editor => {
-                        console.log( editor );
-                    })
-                    .catch( error => {
-                        console.error( error );
-                    }).width = '150%';
-            })();*/
             !fs.existsSync('./notes') ? fs.mkdirSync('./notes') : null;
             let curr_fileName = null;
             function refresh() {
@@ -95,15 +84,14 @@
                 `);
                 $("#textarea").val("");
             };
-
-            $(document).on('click', "#notesList li", event => {
+            $("#notesList li").click(event => {
                 curr_fileName = event.currentTarget.id;
                 $("#noteTextArea").show();
                 $('#notesList li .title').css({ color: 'white' });
                 $(`#textarea`).val($(`#${curr_fileName} .content`).html());
                 $(`#${curr_fileName} .title`).css({ color: 'rgb(199, 64, 40)' });
             });
-            $(document).on('keypress', "#newFileName", event =>
+            $("#newFileName").keypress(event =>
                 event.keyCode == 13 ?
                     generateNewFile() :
                     null
@@ -132,7 +120,7 @@
             };
 
 
-            $(document).on('mousedown', '#deleteFileControl', () => {
+            $('#deleteFileControl').mousedown(() => {
                 let path = $(`#${curr_fileName} .title`).text();
                 if (!curr_fileName) {
                     return;
@@ -144,10 +132,10 @@
                 refresh();
             });
 
-            $(document).on('mousedown', '#saveFileControl', saveFile);
-            $(document).on('mousedown', '#newFileControl', generateNewFile);
-            $(document).on('input', '#textarea', () => $("#textarea").css({ color: '#ff471a' }));
-            $(document).on('input', '#newFileName', () => $("#notes_error span").text(""));
+            $('#saveFileControl').mousedown(saveFile);
+            $('#newFileControl').mousedown(generateNewFile);
+            $('#textarea').input(() => $("#textarea").css({ color: '#ff471a' }));
+            $('#newFileName').input(() => $("#notes_error span").text(""));
 
             $("#textarea").keydown(e => {
                 if (e.which == 83 || e.which == 17) {

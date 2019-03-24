@@ -73,8 +73,8 @@
                 `);
                 $("#msgWindowPWS").fadeIn(200);
             }
-            $(document).on('mousedown', '#yes_powershell', () => finalExcecute());
-            $(document).on('mousedown', '#no_powershell', () => {
+            $('#yes_powershell').mousedown(() => finalExcecute());
+            $('#no_powershell').mousedown(() => {
                 currentCommandIndex = null;
                 $("#msgWindowPWS").hide();
                 $("#systemCommands").fadeIn(200);
@@ -82,10 +82,10 @@
             });
 
 
-            $(document).on('mousedown', '#system_shutdown', () => initialTerminalCall(0));
-            $(document).on('mousedown', '#system_restart', () => initialTerminalCall(1));
-            $(document).on('mousedown', '#system_sleep', () => initialTerminalCall(2));
-            $(document).on('mousedown', '#system_logOut', () => initialTerminalCall(3));
+            $('#system_shutdown').mousedown(() => initialTerminalCall(0));
+            $('#system_restart').mousedown(() => initialTerminalCall(1));
+            $('#system_sleep').mousedown(() => initialTerminalCall(2));
+            $('#system_logOut').mousedown(() => initialTerminalCall(3));
         });
     </script>
 </div>
