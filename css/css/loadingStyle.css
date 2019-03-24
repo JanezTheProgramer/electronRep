@@ -25,16 +25,19 @@ body {
 
 .h2 {
     transform: rotate(60deg);
+    -webkit-transform: rotate(60deg);
 }
 
 .h3 {
     transform: rotate(-60deg);
+    -webkit-transform: rotate(-60deg);
 }
 
 .gel {
     height: 30px;
     width: 30px;
     transition: all .3s;
+    -webkit-transition: all .3s;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -277,12 +280,15 @@ body {
 
 @keyframes pulse {
     0% {
+        -webkit-transform: scale(1);
         transform: scale(1);
     }
     50% {
+        -webkit-transform: scale(0.01);
         transform: scale(0.01);
     }
     100% {
+        -webkit-transform: scale(1);
         transform: scale(1);
     }
 }
@@ -293,6 +299,33 @@ body {
     }
     50% {
         background: #90BBBF;
+    }
+    100% {
+        background: #ABF8FF;
+    }
+}
+
+@-webkit-keyframes pulse {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    50% {
+        -webkit-transform: scale(0.01);
+        transform: scale(0.01);
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@-webkit-keyframes fade {
+    0% {
+        background: #ABF8FF;
+    }
+    50% {
+        background: #389CA6;
     }
     100% {
         background: #ABF8FF;
