@@ -9,7 +9,8 @@ const {
     getUser,
     resetValues,
     setUserConfiguration,
-    getUserConfig
+    getUserConfig,
+    getUser_uiTheme
 } = require('../scripts/sqliteQuery');
 const sysInfo = require('systeminformation');
 const screenInfo = electron.screen.getAllDisplays();
@@ -33,13 +34,25 @@ window.drag = {
 
 window.Theme = {
     id: '#alternate-css',
-    actualCSS: (`
-        .box-window-top {
-            background-color: rgb(0, 90, 42)
+    actualCSS: null,
+    sqlSuccess: false,
+    change: () => {
+        try {
+            window.Theme.sqlSuccess = getUser_uiTheme();
+            setTimeout(() => {
+                if (window.Theme.sqlSuccess == false) {
+                    window.Theme.change();
+                    console.log(window.Theme.sqlSuccess, "zogrn");
+                } else {
+                    console.log(window.Theme.sqlSuccess);
+                }
+            }, 300);
+        } catch (err) { /* ingore */ } finally {
+            //$(window.Theme.id).html(window.Theme.actualCSS);
+            //window.Theme.sqlSuccess = false;
         }
-    `),
-    change: () => $(window.Theme.id).html(window.Theme.actualCSS)
-};
+    }
+}
 
 window.components = {
     games: {
@@ -80,9 +93,10 @@ $(document).ready(() => {
     setTimeout(() => $('body').fadeIn(500), 1000);
     (() => setInterval(() => $('#clock').text(`${moment().format('LT')}`), 60000))();
     (() => {
-        if (!navigator.onLine) 
+        window.Theme.change();
+        if (!navigator.onLine)
             for (let key in ['sysControl', 'maps', 'weather'])
-                components[key].enabled = false;        
+                components[key].enabled = false;
     })();
 
     $('#clock').text(moment().format('LT'));
@@ -104,7 +118,10 @@ $(document).ready(() => {
         }
     });
 
-    $('.dropbtn').click(() => generatePlatform());
+    $('.dropbtn').click(() => {
+        generatePlatform();
+        window.Theme.change();
+    });
 
     $('.data').click(e => {
         $('#mainDiv').children().hide();
@@ -213,6 +230,7 @@ $(document).ready(() => {
                 width: '7vw',
                 opacity: '1'
             });
+            $('.box-window').css("resize", "both");
             $(`#${targetID}`).animate({
                 top: '8vh',
                 left: '15vw',
@@ -229,6 +247,7 @@ $(document).ready(() => {
             maxHeight: '100vh',
             maxWidth: '100vw'
         });
+        $('.box-window').css("resize", "none");
         $('#leftNav').animate({
             width: '0',
             opacity: '0'

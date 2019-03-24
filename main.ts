@@ -16,12 +16,24 @@ let loginWindow,
     reqWindow,
     loadingWindow,
     popUpWindow,
-    screenWidth;
-    //curr_user = null;
+    screenWidth,
+    _Session_ = null;
+
+// get current user logged 
+ipcMain.on('user-request', event => {
+    if(!_Session_){
+        createWindow();
+        mainWindow.close();
+        drawAlert('User not defined!');
+    } else {
+        event.returnValue = _Session_.toString()
+    }
+});
 
 ////global functions throughout the app
 
 function createWindow() {
+    _Session_ = null;
     if (loginWindow) {
         loginWindow.focus();
         return;
@@ -75,7 +87,8 @@ app.on('activate', () => !loginWindow ? createWindow() : null);
 
 /// mainWindow / reqisterWindow generate on ipcMain request
 
-ipcMain.on('request-mainprocess-action', () => {
+ipcMain.on('request-mainprocess-action', (event, data) => {
+    _Session_ = data
     if (mainWindow) {
         mainWindow.focus();
         return;
@@ -140,15 +153,6 @@ ipcMain.on('request-registration-action', () => {
     reqWindow.on('closed', () => reqWindow = null);
 });
 
-// not used maybe later (not tested)
-/*
-//set user logged currently
-ipcMain.on('request-set-curr-user', (id) => curr_user = id);
-
-// get current user logged 
-ipcMain.on('request-get-curr-user', () => curr_user);
-*/
-
 /// minimize 
 ipcMain.on('request-login-minimize', () => loginWindow.minimize());
 ipcMain.on('request-register-minimize', () => reqWindow.minimize());
@@ -160,17 +164,20 @@ ipcMain.on('request-close-action', () => popUpWindow.close());
 /// other popup requests && ipcMain requests
 
 ipcMain.on('request-mainwindow-logOut', () => {
+    _Session_ = null;
     createWindow();
     mainWindow.close();
     drawAlert('Logged out!');
 });
 
 ipcMain.on('request-failed-to-generate-action', () => {
+    _Session_ = null;
     drawAlert('Unknow error, app will close!');
     setTimeout(() => app.quit(), 2500);
 });
 
 ipcMain.on('request-createdAcc-action', () => {
+    _Session_ = null;
     drawAlert('New Account was Created!');
     reqWindow.close();
 });

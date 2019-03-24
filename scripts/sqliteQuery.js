@@ -2,7 +2,8 @@ const sqlite3 = require('sqlite3');
 const { ipcRenderer } = require('electron');
 
 var user,
-    uConfig;
+    uConfig,
+    uiTheme;
 
 exports.createDB = () => {
     try {
@@ -28,6 +29,7 @@ exports.createDB = () => {
                 name TEXT, 
                 pass TEXT, 
                 date_c TEXT, 
+                ui_theme TEXT,
                 settings TEXT DEFAULT '${JSON.stringify(settings)}'
             )`,
             `CREATE TABLE IF NOT EXISTS log_history (
@@ -55,7 +57,7 @@ exports.loginFunc = (name, pass) => {
             [], (err, row) => {
                 if (row && !err) {
                     db.run(`INSERT INTO log_history (id_user, date_l) VALUES ('${row.id}', '${new Date()}')`);
-                    ipcRenderer.send('request-mainprocess-action');
+                    ipcRenderer.send('request-mainprocess-action', row.id);
                 } else
                     ipcRenderer.send('request-account-not-found');
             });
@@ -91,6 +93,7 @@ exports.getUser = () => {
             SELECT DISTINCT users.*, log_history.date_l 
             FROM log_history 
             INNER JOIN users ON log_history.id_user = users.id
+            WHERE users.id = ${Number(ipcRenderer.sendSync('user-request'))}
             ORDER BY log_history.id DESC LIMIT 1`),
             [], (err, row) => user = !err ? row : null);
         db.close();
@@ -109,7 +112,7 @@ exports.setUserConfiguration = (_user_, _jsonCfg_) => {
             db.serialize(() => db.run(`
                 UPDATE users
                 SET name='${_user_.name}'
-                WHERE id='${_user_.id}';
+                WHERE id='${Number(ipcRenderer.sendSync('user-request'))}';
             `));
             db.close();
             success = true;
@@ -124,7 +127,7 @@ exports.setUserConfiguration = (_user_, _jsonCfg_) => {
                 UPDATE users
                 SET name='${_user_.name}',
                     settings='${JSON.stringify(_jsonCfg_)}'
-                WHERE id='${_user_.id}';
+                WHERE id='${Number(ipcRenderer.sendSync('user-request'))}';
             `));
             db.close();
             success = true;
@@ -142,10 +145,12 @@ exports.getUserConfig = () => {
     try {
         let db = new sqlite3.Database('database.db');
         db.get((`
-            SELECT DISTINCT u.settings 
+            SELECT u.settings 
             FROM log_history AS l
             INNER JOIN users AS u ON l.id_user = u.id
-            ORDER BY l.id DESC LIMIT 1`),
+            WHERE users.id = ${Number(ipcRenderer.sendSync('user-request'))}
+            ORDER BY l.id DESC 
+            LIMIT 1`),
             [], (err, row) => uConfig = !err ? row : null);
         db.close();
     } catch (e) {
@@ -154,7 +159,26 @@ exports.getUserConfig = () => {
     return uConfig;   
 }
 
+exports.getUser_uiTheme = () => {
+    try {
+        let db = new sqlite3.Database('database.db');
+        db.get((`
+            SELECT u.* 
+            FROM log_history AS l
+            INNER JOIN users AS u ON l.id_user = u.id
+            WHERE u.id = ${Number(ipcRenderer.sendSync('user-request'))}
+            ORDER BY l.id DESC 
+            LIMIT 1`),
+            [], (err, row) => uiTheme = row);
+        db.close();
+    } catch (e) {
+        ipcRenderer.send('request-failed-to-generate-action');
+    }
+    return uiTheme ? uiTheme : false;  
+}
+
 exports.resetValues = () => {
     user = null;
     uConfig = null;
+    uiTheme = null;
 };
