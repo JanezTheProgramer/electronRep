@@ -22,15 +22,10 @@
         $(document).ready(() => {
             let userData = null, locallyStoredColor = null;
             $('#ui_icons_set').html("");
-            resetValues();
-            function retriveUserPromise() {
-                //console.log("getting data");
-                userData = getUser();
-                setTimeout(() => {
-                    if (!userData)
-                        retriveUserPromise();
-                    else {
-                        let date_created = moment(userData.date_c).format('L')
+            async function retriveUserPromise() {
+                getUser.then(result => {
+                    userData = result;
+                    let date_created = moment(userData.date_c).format('L')
                         $("#username").val(String(userData.name));
                         $("#member_since").text(date_created);
                         $("#last_seen").text(moment(userData.date_l).format('L'));
@@ -50,8 +45,7 @@
                         `));
 
                         setTimeout(() => $('#account-info-div-content').fadeIn(100), 10);
-                    }
-                }, 300);
+                });
             } (retriveUserPromise)();
 
             const updateUser = key => {
@@ -66,11 +60,12 @@
                     return;
                 }
                 let finalSqlArray = [];
-                $('#ui_icons_set input[type=checkbox]').each(function () {
+                $('#ui_icons_set .xBoxes input[type=checkbox]').each(function () {
                     finalSqlArray.push({
                         name: $(this).attr('name'),
                         enabled: $(this).is(":checked") ? true : false
                     });
+                    console.log(finalSqlArray);
                 });
                 setUserConfiguration(userData, { navigationMenu: finalSqlArray });
             }
@@ -91,9 +86,10 @@
             $('#username').keypress(event => event.keyCode == 13 ? updateUser(0) : null);
             $('input#saveUserCfg').click(() => {
                 updateUser(1);
-                window.Theme.actualCSS = determineTheme(locallyStoredColor);
-                window.Theme.change();
+                //window.Theme.actualCSS = determineTheme(locallyStoredColor);
+                window.Theme.sqlSuccess = false;
                 console.log(window.Theme.actualCSS);
+                location.reload();
             });
             AColorPicker.from('div.picker').on('change', picker => locallyStoredColor = picker.color);
         });

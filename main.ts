@@ -21,12 +21,12 @@ let loginWindow,
 
 // get current user logged 
 ipcMain.on('user-request', event => {
-    if(!_Session_){
+    if(mainWindow && !_Session_){
         createWindow();
-        mainWindow.close();
         drawAlert('User not defined!');
+        event.returnValue = -1;
     } else {
-        event.returnValue = _Session_.toString()
+        event.returnValue = _Session_;
     }
 });
 

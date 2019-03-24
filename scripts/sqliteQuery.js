@@ -1,10 +1,6 @@
 const sqlite3 = require('sqlite3');
 const { ipcRenderer } = require('electron');
 
-var user,
-    uConfig,
-    uiTheme;
-
 exports.createDB = () => {
     try {
         let db = new sqlite3.Database('database.db');
@@ -86,23 +82,6 @@ exports.reqFunc = (name, pass) => {
     }
 }
 
-exports.getUser = () => {
-    try {
-        let db = new sqlite3.Database('database.db');
-        db.get((`
-            SELECT DISTINCT users.*, log_history.date_l 
-            FROM log_history 
-            INNER JOIN users ON log_history.id_user = users.id
-            WHERE users.id = ${Number(ipcRenderer.sendSync('user-request'))}
-            ORDER BY log_history.id DESC LIMIT 1`),
-            [], (err, row) => user = !err ? row : null);
-        db.close();
-    } catch (e) {
-        ipcRenderer.send('request-failed-to-generate-action');
-    }
-    return user;
-}
-
 exports.setUserConfiguration = (_user_, _jsonCfg_) => {
     _jsonCfg_ = _jsonCfg_ || null;
     let success = false;
@@ -112,7 +91,7 @@ exports.setUserConfiguration = (_user_, _jsonCfg_) => {
             db.serialize(() => db.run(`
                 UPDATE users
                 SET name='${_user_.name}'
-                WHERE id='${Number(ipcRenderer.sendSync('user-request'))}';
+                WHERE id='${ipcRenderer ? Number(ipcRenderer.sendSync('user-request')) : null}';
             `));
             db.close();
             success = true;
@@ -127,7 +106,7 @@ exports.setUserConfiguration = (_user_, _jsonCfg_) => {
                 UPDATE users
                 SET name='${_user_.name}',
                     settings='${JSON.stringify(_jsonCfg_)}'
-                WHERE id='${Number(ipcRenderer.sendSync('user-request'))}';
+                WHERE id='${ipcRenderer ? Number(ipcRenderer.sendSync('user-request')) : null}';
             `));
             db.close();
             success = true;
@@ -141,44 +120,40 @@ exports.setUserConfiguration = (_user_, _jsonCfg_) => {
     return success;
 }
 
-exports.getUserConfig = () => {
-    try {
+exports.getUser = new Promise((resolve, reject) => {
+    let db = new sqlite3.Database('database.db');
+    db.get((`
+        SELECT DISTINCT users.*, log_history.date_l 
+        FROM log_history 
+        INNER JOIN users ON log_history.id_user = users.id
+        WHERE users.id = ${ipcRenderer ? Number(ipcRenderer.sendSync('user-request')) : null}
+        ORDER BY log_history.id DESC LIMIT 1`),
+        [], (err, row) => !err && row ? resolve(row) : reject);
+    db.close();
+});
+
+exports.getUserConfig = new Promise((resolve, reject) => {
         let db = new sqlite3.Database('database.db');
         db.get((`
             SELECT u.settings 
             FROM log_history AS l
             INNER JOIN users AS u ON l.id_user = u.id
-            WHERE users.id = ${Number(ipcRenderer.sendSync('user-request'))}
+            WHERE u.id = ${ipcRenderer ? Number(ipcRenderer.sendSync('user-request')) : null}
             ORDER BY l.id DESC 
             LIMIT 1`),
-            [], (err, row) => uConfig = !err ? row : null);
+            [], (err, row) => !err && row ? resolve(row) : reject);
         db.close();
-    } catch (e) {
-        ipcRenderer.send('request-failed-to-generate-action');
-    }
-    return uConfig;   
-}
+});
 
-exports.getUser_uiTheme = () => {
-    try {
-        let db = new sqlite3.Database('database.db');
-        db.get((`
-            SELECT u.* 
-            FROM log_history AS l
-            INNER JOIN users AS u ON l.id_user = u.id
-            WHERE u.id = ${Number(ipcRenderer.sendSync('user-request'))}
-            ORDER BY l.id DESC 
-            LIMIT 1`),
-            [], (err, row) => uiTheme = row);
-        db.close();
-    } catch (e) {
-        ipcRenderer.send('request-failed-to-generate-action');
-    }
-    return uiTheme ? uiTheme : false;  
-}
-
-exports.resetValues = () => {
-    user = null;
-    uConfig = null;
-    uiTheme = null;
-};
+exports.getUser_uiTheme = new Promise((resolve, reject) => {
+    let db = new sqlite3.Database('database.db');
+    db.get((`
+        SELECT u.ui_theme
+        FROM log_history AS l
+        INNER JOIN users AS u ON l.id_user = u.id
+        WHERE u.id = ${ipcRenderer ? Number(ipcRenderer.sendSync('user-request')) : null}
+        ORDER BY l.id DESC 
+        LIMIT 1`),
+        [], (err, row) => !err && row ? resolve(row) : reject);
+    db.close();
+});

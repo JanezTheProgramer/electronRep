@@ -37,7 +37,6 @@
                 });
             });
             $('#saveImage').mousedown(() => {
-                if(!$('#img_edit').css('opacity') != '1') return;
                 htmlToImage.toJpeg(
                     document.getElementById('img_edit'),
                     { quality: 0.99 }

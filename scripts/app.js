@@ -7,10 +7,9 @@ const electron = require('electron');
 const { ipcRenderer } = electron;
 const {
     getUser,
-    resetValues,
     setUserConfiguration,
-    getUserConfig,
-    getUser_uiTheme
+    getUser_uiTheme,
+    getUserConfig
 } = require('../scripts/sqliteQuery');
 const sysInfo = require('systeminformation');
 const screenInfo = electron.screen.getAllDisplays();
@@ -31,26 +30,13 @@ window.drag = {
     iY: null
 }; // object for element dragging properties
 
-
 window.Theme = {
     id: '#alternate-css',
-    actualCSS: null,
     sqlSuccess: false,
-    change: () => {
-        try {
-            window.Theme.sqlSuccess = getUser_uiTheme();
-            setTimeout(() => {
-                if (window.Theme.sqlSuccess == false) {
-                    window.Theme.change();
-                    console.log(window.Theme.sqlSuccess, "zogrn");
-                } else {
-                    console.log(window.Theme.sqlSuccess);
-                }
-            }, 300);
-        } catch (err) { /* ingore */ } finally {
-            //$(window.Theme.id).html(window.Theme.actualCSS);
-            //window.Theme.sqlSuccess = false;
-        }
+    load: async () => {
+        getUser_uiTheme.then(result => {
+            $(window.id).html(result.ui_theme);
+        }).catch(err => console.log(err));
     }
 }
 
@@ -93,7 +79,6 @@ $(document).ready(() => {
     setTimeout(() => $('body').fadeIn(500), 1000);
     (() => setInterval(() => $('#clock').text(`${moment().format('LT')}`), 60000))();
     (() => {
-        window.Theme.change();
         if (!navigator.onLine)
             for (let key in ['sysControl', 'maps', 'weather'])
                 components[key].enabled = false;
@@ -103,7 +88,6 @@ $(document).ready(() => {
     $('.roundBtn').click(element => {
         switch (String(element.target.id)) {
             case 'exit':
-                resetValues();
                 window.close();
                 break;
             case 'minimize':
@@ -120,7 +104,7 @@ $(document).ready(() => {
 
     $('.dropbtn').click(() => {
         generatePlatform();
-        window.Theme.change();
+        window.Theme.load();
     });
 
     $('.data').click(e => {
@@ -142,7 +126,6 @@ $(document).ready(() => {
                 ipcRenderer.send('request-mainwindow-logOut');
                 break;
             default:
-                resetValues();
                 ipcRenderer.send('request-failed-to-generate-action');
                 break;
         }
@@ -181,38 +164,28 @@ $(document).ready(() => {
         event.currentTarget.style.zIndex = '1';
     });
 
-    const generatePlatform = () => {
-        try {
-            let config = getUserConfig();
+    const generatePlatform  = async () => {
+        getUserConfig.then(result => {
             $('#leftNav').html("");
-            setTimeout(() => {
-                if (!config)
-                    generatePlatform();
-                else {
-                    JSON.parse(config.settings).navigationMenu.forEach(obj => {
-                        if (obj.enabled) {
-                            $('#leftNav').append(`
-                                <div id="${obj.name}_nav" custom_title="${components[obj.name].tooltip}">
-                                    <img src="../util/icons/${obj.name}.png" alt="/" />
-                                </div>
-                            `);
-                        }
-                    });
+            JSON.parse(result.settings).navigationMenu.forEach(obj => {
+                if (obj.enabled) {
+                    $('#leftNav').append(`
+                            <div id="${obj.name}_nav" custom_title="${components[obj.name].tooltip}">
+                                <img src="../util/icons/${obj.name}.png" alt="/" />
+                            </div>
+                        `);
                 }
-            }, 300);
-        } catch (err) {
-            console.log("error");
-        } finally {
+            });
             $('#mainDiv').children().hide();
             $('#accInfoDiv').children().remove();
             $('#tutorialDiv').children().remove();
             $('#platformDiv #content').children().remove();
             setTimeout(() => $('#platformDiv').fadeIn(200), 300);
             setTimeout(() => {
-                if ($('#leftNav').is(':visible')) return;
+                if ($('#leftNav').is(':visible') || !$('#platformDiv').is(':visible')) return;
                 $('#leftNav').show();
             }, 2000);
-        }
+        }).catch(err => console.log(err));
     }
 
     $(document).on('mousedown', '.box-window-top .box-window-toggle-fullScreen', e => {
