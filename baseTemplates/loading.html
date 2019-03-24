@@ -19,9 +19,8 @@
             for (let c = 0; c < 37; c++) {
                 if (c >= 6) r = 2;
                 else if (c >= 18) r = 3;
-                document.write(`<div class="gel c${c + 1} r${r}">`)
-                for (let h = 0; h < 3; h++)
-                    document.write(`<div class="hex-brick h${h + 1}"></div>`);
+                document.write(`<div class="gel c${c + 1} r${r}">`);
+                for (let h = 0; h < 3; h++) document.write(`<div class="hex-brick h${h + 1}"></div>`);
                 document.write('</div>');
             }
         </script>
