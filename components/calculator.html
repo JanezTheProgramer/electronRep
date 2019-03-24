@@ -36,40 +36,40 @@
         <div style="display: block">
             <input class="equationSubmit" type="submit" value="=" />
         </div>
-        <script>
-            $(document).ready(event => {
-                $("#equation").focus();
-                const calculateExpression = () => {
-                    try {
-                        let equationString = $("#equation").val().toString();
-                        if (['*', '/', '+', '-'].includes(equationString[equationString.length - 1])) {
-                            equationString = equationString.substr(0, equationString.length - 1)
-                        }
-                        $("#equation").val(Math.round(eval(equationString) * 1000) / 1000);
-                    } catch (e) { /* invalid expression */ }
-                }
-                const expressionInput = char => {
-                    if (!['C', '*', '/', '+', '-'].includes(char) && $("#equation").val()[0] != '0') {
-                        $("#equation").val($("#equation").val() + char)
-                    } else if (!['C', '*', '/', '+', '-'].includes(char) && $("#equation").val()[0] == '0') {
-                        $("#equation").val(char);
-                    } else if (['*', '/', '+', '-'].includes(char)) {
-                        let lastChar = $("#equation").val()[$("#equation").val().length - 1];
-                        if (['*', '/', '+', '-'].includes(lastChar)) {
-                            $("#equation").val(
-                                $("#equation").val().substr(0, $("#equation").val().length - 1) + char
-                            );
-                        } else {
-                            $("#equation").val($("#equation").val() + char)
-                        }
-                    } else if (char == 'C')
-                        $("#equation").val("0");
-                }
-                $("#equation").keypress(event => event.keyCode == 13 ? calculateExpression() : null);
-                $('.equationInput').keypress(event => event.preventDefault());
-                $(".equationSubmit").click(event => calculateExpression());
-                $('.equationInput').click(event => expressionInput(event.target.value));
-            });
-        </script>
     </div>
+    <script>
+        $(document).ready(event => {
+            $("#equation").focus();
+            const calculateExpression = () => {
+                try {
+                    let equationString = $("#equation").val().toString();
+                    if (['*', '/', '+', '-'].includes(equationString[equationString.length - 1])) {
+                        equationString = equationString.substr(0, equationString.length - 1)
+                    }
+                    $("#equation").val(Math.round(eval(equationString) * 1000) / 1000);
+                } catch (e) { /* invalid expression */ }
+            }
+            const expressionInput = char => {
+                if (!['C', '*', '/', '+', '-'].includes(char) && $("#equation").val()[0] != '0') {
+                    $("#equation").val($("#equation").val() + char)
+                } else if (!['C', '*', '/', '+', '-'].includes(char) && $("#equation").val()[0] == '0') {
+                    $("#equation").val(char);
+                } else if (['*', '/', '+', '-'].includes(char)) {
+                    let lastChar = $("#equation").val()[$("#equation").val().length - 1];
+                    if (['*', '/', '+', '-'].includes(lastChar)) {
+                        $("#equation").val(
+                            $("#equation").val().substr(0, $("#equation").val().length - 1) + char
+                        );
+                    } else {
+                        $("#equation").val($("#equation").val() + char)
+                    }
+                } else if (char == 'C')
+                    $("#equation").val("0");
+            }
+            $("#equation").keypress(event => event.keyCode == 13 ? calculateExpression() : null);
+            $('.equationInput').keypress(event => event.preventDefault());
+            $(".equationSubmit").click(event => calculateExpression());
+            $('.equationInput').click(event => expressionInput(event.target.value));
+        });
+    </script>
 </div>

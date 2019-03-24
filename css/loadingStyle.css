@@ -21,9 +21,6 @@ body {
     animation-name: fade;
     animation-duration: 2s;
     animation-iteration-count: infinite;
-    -webkit-animation-name: fade;
-    -webkit-animation-duration: 2s;
-    -webkit-animation-iteration-count: infinite;
 }
 
 .h2 {
@@ -52,9 +49,6 @@ body {
     animation-name: pulse;
     animation-duration: 2s;
     animation-iteration-count: infinite;
-    -webkit-animation-name: pulse;
-    -webkit-animation-duration: 2s;
-    -webkit-animation-iteration-count: infinite;
 }
 
 .c1 {
@@ -247,10 +241,6 @@ body {
     animation-duration: 2s;
     animation-iteration-count: infinite;
     animation-delay: .2s;
-    -webkit-animation-name: pulse;
-    -webkit-animation-duration: 2s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-delay: .2s;
 }
 
 .r2 {
@@ -258,10 +248,6 @@ body {
     animation-duration: 2s;
     animation-iteration-count: infinite;
     animation-delay: .4s;
-    -webkit-animation-name: pulse;
-    -webkit-animation-duration: 2s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-delay: .4s;
 }
 
 .r3 {
@@ -269,10 +255,6 @@ body {
     animation-duration: 2s;
     animation-iteration-count: infinite;
     animation-delay: .6s;
-    -webkit-animation-name: pulse;
-    -webkit-animation-duration: 2s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-delay: .6s;
 }
 
 .r1>.hex-brick {
@@ -280,10 +262,6 @@ body {
     animation-duration: 2s;
     animation-iteration-count: infinite;
     animation-delay: .2s;
-    -webkit-animation-name: fade;
-    -webkit-animation-duration: 2s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-delay: .2s;
 }
 
 .r2>.hex-brick {
@@ -291,10 +269,6 @@ body {
     animation-duration: 2s;
     animation-iteration-count: infinite;
     animation-delay: .4s;
-    -webkit-animation-name: fade;
-    -webkit-animation-duration: 2s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-delay: .4s;
 }
 
 .r3>.hex-brick {
@@ -302,10 +276,6 @@ body {
     animation-duration: 2s;
     animation-iteration-count: infinite;
     animation-delay: .6s;
-    -webkit-animation-name: fade;
-    -webkit-animation-duration: 2s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-delay: .6s;
 }
 
 @keyframes pulse {
