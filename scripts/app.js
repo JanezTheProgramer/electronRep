@@ -12,7 +12,8 @@ const {
     setUserName,
     setConfiguration,
     setTheme,
-    user_setEverything
+    user_setEverything,
+    removeCustomTheme
 } = require('../scripts/sqliteQuery');
 const sysInfo = require('systeminformation');
 const screenInfo = electron.screen.getAllDisplays();

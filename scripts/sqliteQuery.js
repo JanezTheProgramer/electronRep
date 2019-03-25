@@ -83,6 +83,7 @@ exports.reqFunc = (name, pass) => {
 }
 
 exports.setUserName = name => {
+    if (!name) return;
     try {
         let db = new sqlite3.Database('database.db');
         db.serialize(() => db.run(`
@@ -93,10 +94,11 @@ exports.setUserName = name => {
         db.close();
     } catch (e) {
         ipcRenderer.send('request-failed-to-generate-action');
-    }  
+    }
 }
 
 exports.setConfiguration = config => {
+    if (!config) return;
     try {
         let db = new sqlite3.Database('database.db');
         db.serialize(() => db.run(`
@@ -107,31 +109,33 @@ exports.setConfiguration = config => {
         db.close();
     } catch (e) {
         ipcRenderer.send('request-failed-to-generate-action');
-    } 
+    }
 }
 
 exports.setTheme = theme => {
+    theme = (theme != null) ? String(`'${theme}'`) : null;
     try {
         let db = new sqlite3.Database('database.db');
         db.serialize(() => db.run(`
             UPDATE users
-            SET ui_theme='${theme}'
+            SET ui_theme=${theme}
             WHERE id='${ipcRenderer ? Number(ipcRenderer.sendSync('user-request')) : null}';
         `));
         db.close();
     } catch (e) {
         ipcRenderer.send('request-failed-to-generate-action');
-    } 
+    }
 }
 
 exports.user_setEverything = (_user_, _config_, _theme_) => {
+    if (!_user_) return;
     try {
         let db = new sqlite3.Database('database.db');
         db.serialize(() => db.run(`
             UPDATE users
             SET name='${_user_}',
                 settings='${JSON.stringify(_config_)}'
-                ${_theme_ != null ? String(`,ui_theme='${_theme_}'`) : null}
+                ${(_theme_ != null) ? String(`,ui_theme='${_theme_}'`) : null}
             WHERE id='${ipcRenderer ? Number(ipcRenderer.sendSync('user-request')) : null}';
         `));
         db.close();
@@ -153,16 +157,16 @@ exports.user_getEverything = new Promise((resolve, reject) => {
 });
 
 exports.getConfiguration = new Promise((resolve, reject) => {
-        let db = new sqlite3.Database('database.db');
-        db.get((`
+    let db = new sqlite3.Database('database.db');
+    db.get((`
             SELECT u.settings 
             FROM log_history AS l
             INNER JOIN users AS u ON l.id_user = u.id
             WHERE u.id = ${ipcRenderer ? Number(ipcRenderer.sendSync('user-request')) : null}
             ORDER BY l.id DESC 
             LIMIT 1`),
-            [], (err, row) => !err && row ? resolve(row) : reject);
-        db.close();
+        [], (err, row) => !err && row ? resolve(row) : reject);
+    db.close();
 });
 
 exports.getTheme = new Promise((resolve, reject) => {
