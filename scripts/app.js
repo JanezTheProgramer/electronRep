@@ -6,10 +6,13 @@ window.$ = window.jQuery = require('jquery');
 const electron = require('electron');
 const { ipcRenderer } = electron;
 const {
-    getUser,
-    setUserConfiguration,
-    getUser_uiTheme,
-    getUserConfig
+    getConfiguration,
+    getTheme,
+    user_getEverything,
+    setUserName,
+    setConfiguration,
+    setTheme,
+    user_setEverything
 } = require('../scripts/sqliteQuery');
 const sysInfo = require('systeminformation');
 const screenInfo = electron.screen.getAllDisplays();
@@ -30,12 +33,38 @@ window.drag = {
     iY: null
 }; // object for element dragging properties
 
-window.Theme = {
-    id: '#alternate-css',
-    sqlSuccess: false,
-    load: async () => {
-        getUser_uiTheme.then(result => {
-            $(window.id).html(result.ui_theme);
+window.Platform = {
+    css_id: '#alternate-css',
+    nav_id: '#leftNav',
+    onLoad: async () => {
+        // get theme of UI
+        getTheme.then(result => {
+            console.log(result.ui_theme);
+            if(result.ui_theme != null)
+                $(Platform.css_id).html(result.ui_theme);
+            else 
+                $(Platform.css_id).html("");
+        }).catch(err => console.log(err));
+    },
+
+    generateWidgets: async () => {
+        // get platform widgets for display
+        getConfiguration.then(result => {
+            $(Platform.nav_id).html("");
+            JSON.parse(result.settings).navigationMenu.forEach(obj => {
+                if (obj.enabled) {
+                    $(Platform.nav_id).append(`
+                            <div id="${obj.name}_nav" custom_title="${components[obj.name].tooltip}">
+                                <img src="../util/icons/${obj.name}.png" alt="/" />
+                            </div>
+                        `);
+                }
+            });
+            $('#mainDiv').children().hide();
+            $('#accInfoDiv').children().remove();
+            $('#tutorialDiv').children().remove();
+            $('#platformDiv #content').children().remove();
+            setTimeout(() => $('#platformDiv').fadeIn(200), 300);
         }).catch(err => console.log(err));
     }
 }
@@ -79,6 +108,7 @@ $(document).ready(() => {
     setTimeout(() => $('body').fadeIn(500), 1000);
     (() => setInterval(() => $('#clock').text(`${moment().format('LT')}`), 60000))();
     (() => {
+        Platform.onLoad();
         if (!navigator.onLine)
             for (let key in ['sysControl', 'maps', 'weather'])
                 components[key].enabled = false;
@@ -102,10 +132,7 @@ $(document).ready(() => {
         }
     });
 
-    $('.dropbtn').click(() => {
-        generatePlatform();
-        window.Theme.load();
-    });
+    $('.dropbtn').click(() => Platform.generateWidgets());
 
     $('.data').click(e => {
         $('#mainDiv').children().hide();
@@ -114,13 +141,14 @@ $(document).ready(() => {
         $('#tutorialDiv').children().remove();
         switch (Number(e.target.id[0])) {
             case 1:
-                $('#accInfoDiv').fadeIn("fast");
-                if (!document.getElementById('account-info-div-content'))
-                    $.get('../components/account.html', data => $('#accInfoDiv').append(data));
+                if (document.getElementById('account-info-div-content')) break;
+                $.get('../components/account.html', data => $('#accInfoDiv').append(data));
+                $('#accInfoDiv').fadeIn(400);
                 break;
             case 2:
-                $('#tutorialDiv').fadeIn(100);
+                if (document.getElementById('tutorialDiv')) break;
                 $.get('../components/tutorial.html', data => $('#tutorialDiv').append(data));
+                $('#tutorialDiv').fadeIn(400);
                 break;
             case 3:
                 ipcRenderer.send('request-mainwindow-logOut');
@@ -163,30 +191,6 @@ $(document).ready(() => {
         $('#content .box-window').css({ zIndex: '0' });
         event.currentTarget.style.zIndex = '1';
     });
-
-    const generatePlatform  = async () => {
-        getUserConfig.then(result => {
-            $('#leftNav').html("");
-            JSON.parse(result.settings).navigationMenu.forEach(obj => {
-                if (obj.enabled) {
-                    $('#leftNav').append(`
-                            <div id="${obj.name}_nav" custom_title="${components[obj.name].tooltip}">
-                                <img src="../util/icons/${obj.name}.png" alt="/" />
-                            </div>
-                        `);
-                }
-            });
-            $('#mainDiv').children().hide();
-            $('#accInfoDiv').children().remove();
-            $('#tutorialDiv').children().remove();
-            $('#platformDiv #content').children().remove();
-            setTimeout(() => $('#platformDiv').fadeIn(200), 300);
-            setTimeout(() => {
-                if ($('#leftNav').is(':visible') || !$('#platformDiv').is(':visible')) return;
-                $('#leftNav').show();
-            }, 2000);
-        }).catch(err => console.log(err));
-    }
 
     $(document).on('mousedown', '.box-window-top .box-window-toggle-fullScreen', e => {
         let targetID = e.currentTarget.parentNode.parentNode.id;

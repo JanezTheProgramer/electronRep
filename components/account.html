@@ -23,7 +23,7 @@
             let userData = null, locallyStoredColor = null;
             $('#ui_icons_set').html("");
             async function retriveUserPromise() {
-                getUser.then(result => {
+                user_getEverything.then(result => {
                     userData = result;
                     let date_created = moment(userData.date_c).format('L')
                     $("#username").val(String(userData.name));
@@ -48,27 +48,52 @@
                 });
             } (retriveUserPromise)();
 
-            const updateUser = key => {
-                if ($("#username").val() != userData.name && $("#username").val().length > 4) {
-                    userData.name = $("#username").val();
-                }
-                if (key < 1) {
-                    if (setUserConfiguration(userData, null)) {
-                        $("#username").css({ background: "transparent" });
-                        null;
-                    }
-                    return;
-                }
-                let finalSqlArray = [];
+            const updateUserName = () => {
+                if (!$("#username").val().length > 4) return;
+                setUserName($("#username").val());
+                $("#username").css({ background: "transparent" });
+                location.reload();
+            }
+
+            const updateConfiguration = () => {
+                let configList = [];
                 $('#ui_icons_set .xBoxes input[type=checkbox]').each(function () {
-                    finalSqlArray.push({
+                    configList.push({
                         name: $(this).attr('name'),
                         enabled: $(this).is(":checked") ? true : false
                     });
-                    console.log(finalSqlArray);
                 });
-                setUserConfiguration(userData, { navigationMenu: finalSqlArray });
+                setConfiguration({ navigationMenu: configList });
+                location.reload();
             }
+
+            const updateTheme = () => {
+                if (!locallyStoredColor) return;
+                let cssObj = determineTheme(locallyStoredColor);
+                setTheme(cssObj);
+                location.reload();
+            }
+
+            $('input#saveUserCfg').click(() => {
+                console.log("in update");
+                // update everything
+                let username, configList = [], cssObj;
+                if (!$("#username").val().length > 4) return;
+
+                username = $("#username").val();
+                $("#username").css({ background: "transparent" });
+                $('#ui_icons_set .xBoxes input[type=checkbox]').each(function () {
+                    configList.push({
+                        name: $(this).attr('name'),
+                        enabled: $(this).is(":checked") ? true : false
+                    });
+                });
+                if (!locallyStoredColor) cssObj = null;
+                else cssObj = determineTheme(locallyStoredColor);
+
+                user_setEverything(String(username), { navigationMenu: configList }, cssObj);
+                location.reload();
+            });
 
             $('#username').on('input', () =>
                 $("#username").val() != userData.name ?
@@ -83,14 +108,7 @@
                 });
             });
 
-            $('#username').keypress(event => event.keyCode == 13 ? updateUser(0) : null);
-            $('input#saveUserCfg').click(() => {
-                updateUser(1);
-                //window.Theme.actualCSS = determineTheme(locallyStoredColor);
-                window.Theme.sqlSuccess = false;
-                console.log(window.Theme.actualCSS);
-                location.reload();
-            });
+            $('#username').keypress(event => event.keyCode == 13 ? updateUserName() : null);
             AColorPicker.from('div.picker').on('change', picker => locallyStoredColor = picker.color);
         });
     </script>

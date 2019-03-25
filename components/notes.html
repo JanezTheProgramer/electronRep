@@ -134,8 +134,8 @@
 
             $('#saveFileControl').mousedown(saveFile);
             $('#newFileControl').mousedown(generateNewFile);
-            $('#textarea').input(() => $("#textarea").css({ color: '#ff471a' }));
-            $('#newFileName').input(() => $("#notes_error span").text(""));
+            $('#textarea').on('input', () => $("#textarea").css({ color: '#ff471a' }));
+            $('#newFileName').on('input', () => $("#notes_error span").text(""));
 
             $("#textarea").keydown(e => {
                 if (e.which == 83 || e.which == 17) {

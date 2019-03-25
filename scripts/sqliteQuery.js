@@ -82,45 +82,65 @@ exports.reqFunc = (name, pass) => {
     }
 }
 
-exports.setUserConfiguration = (_user_, _jsonCfg_) => {
-    _jsonCfg_ = _jsonCfg_ || null;
-    let success = false;
-    if (!_jsonCfg_) {
-        try {
-            let db = new sqlite3.Database('database.db');
-            db.serialize(() => db.run(`
-                UPDATE users
-                SET name='${_user_.name}'
-                WHERE id='${ipcRenderer ? Number(ipcRenderer.sendSync('user-request')) : null}';
-            `));
-            db.close();
-            success = true;
-        } catch (e) {
-            ipcRenderer.send('request-failed-to-generate-action');
-        }
-    } else if (_jsonCfg_) {
-        //console.log(JSON.stringify(_jsonCfg_));
-        try {
-            let db = new sqlite3.Database('database.db');
-            db.serialize(() => db.run(`
-                UPDATE users
-                SET name='${_user_.name}',
-                    settings='${JSON.stringify(_jsonCfg_)}'
-                WHERE id='${ipcRenderer ? Number(ipcRenderer.sendSync('user-request')) : null}';
-            `));
-            db.close();
-            success = true;
-        } catch (e) {
-            ipcRenderer.send('request-failed-to-generate-action');
-        }
-    } else {
-        success = false;
-    }
-
-    return success;
+exports.setUserName = name => {
+    try {
+        let db = new sqlite3.Database('database.db');
+        db.serialize(() => db.run(`
+            UPDATE users
+            SET name='${name}'
+            WHERE id='${ipcRenderer ? Number(ipcRenderer.sendSync('user-request')) : null}';
+        `));
+        db.close();
+    } catch (e) {
+        ipcRenderer.send('request-failed-to-generate-action');
+    }  
 }
 
-exports.getUser = new Promise((resolve, reject) => {
+exports.setConfiguration = config => {
+    try {
+        let db = new sqlite3.Database('database.db');
+        db.serialize(() => db.run(`
+            UPDATE users
+            SET settings='${JSON.stringify(config)}'
+            WHERE id='${ipcRenderer ? Number(ipcRenderer.sendSync('user-request')) : null}';
+        `));
+        db.close();
+    } catch (e) {
+        ipcRenderer.send('request-failed-to-generate-action');
+    } 
+}
+
+exports.setTheme = theme => {
+    try {
+        let db = new sqlite3.Database('database.db');
+        db.serialize(() => db.run(`
+            UPDATE users
+            SET ui_theme='${theme}'
+            WHERE id='${ipcRenderer ? Number(ipcRenderer.sendSync('user-request')) : null}';
+        `));
+        db.close();
+    } catch (e) {
+        ipcRenderer.send('request-failed-to-generate-action');
+    } 
+}
+
+exports.user_setEverything = (_user_, _config_, _theme_) => {
+    try {
+        let db = new sqlite3.Database('database.db');
+        db.serialize(() => db.run(`
+            UPDATE users
+            SET name='${_user_}',
+                settings='${JSON.stringify(_config_)}'
+                ${_theme_ != null ? String(`,ui_theme='${_theme_}'`) : null}
+            WHERE id='${ipcRenderer ? Number(ipcRenderer.sendSync('user-request')) : null}';
+        `));
+        db.close();
+    } catch (e) {
+        ipcRenderer.send('request-failed-to-generate-action');
+    }
+}
+
+exports.user_getEverything = new Promise((resolve, reject) => {
     let db = new sqlite3.Database('database.db');
     db.get((`
         SELECT DISTINCT users.*, log_history.date_l 
@@ -132,7 +152,7 @@ exports.getUser = new Promise((resolve, reject) => {
     db.close();
 });
 
-exports.getUserConfig = new Promise((resolve, reject) => {
+exports.getConfiguration = new Promise((resolve, reject) => {
         let db = new sqlite3.Database('database.db');
         db.get((`
             SELECT u.settings 
@@ -145,7 +165,7 @@ exports.getUserConfig = new Promise((resolve, reject) => {
         db.close();
 });
 
-exports.getUser_uiTheme = new Promise((resolve, reject) => {
+exports.getTheme = new Promise((resolve, reject) => {
     let db = new sqlite3.Database('database.db');
     db.get((`
         SELECT u.ui_theme
