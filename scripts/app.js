@@ -6,27 +6,27 @@ window.$ = window.jQuery = require('jquery');
 const electron = require('electron');
 const { ipcRenderer } = electron;
 const {
-    getConfiguration,
-    getTheme,
-    user_getEverything,
-    setUserName,
-    setConfiguration,
-    setTheme,
-    user_setEverything,
-    removeCustomTheme
-} = require('../scripts/sqliteQuery');
-const sysInfo = require('systeminformation');
-const screenInfo = electron.screen.getAllDisplays();
-const weather = require('weather-js');
-const path = require('path');
-const moment = require('moment');
-const fs = require('fs');
-const Shell = require('node-powershell');
-const Chart = require('chart.js');
-const htmlToImage = require('html-to-image');
-const { determineTheme } = require('../scripts/theme');
-const AColorPicker = require('a-color-picker');
-const Color = require('color');
+        getConfiguration,
+        getTheme,
+        user_getEverything,
+        setUserName,
+        setConfiguration,
+        setTheme,
+        user_setEverything,
+        removeCustomTheme
+    } = require('../scripts/sqliteQuery'),
+    sysInfo = require('systeminformation'),
+    screenInfo = electron.screen.getAllDisplays(),
+    weather = require('weather-js'),
+    path = require('path'),
+    moment = require('moment'),
+    fs = require('fs'),
+    Shell = require('node-powershell'),
+    Chart = require('chart.js'),
+    htmlToImage = require('html-to-image'),
+    { determineTheme } = require('../scripts/theme'),
+    AColorPicker = require('a-color-picker'),
+    Color = require('color');
 
 window.drag = {
     isDown: false,
@@ -39,13 +39,10 @@ window.Platform = {
     nav_id: '#leftNav',
     onLoad: async () => {
         // get theme of UI
-        getTheme.then(result => {
-            console.log(result.ui_theme);
-            if(result.ui_theme != null)
-                $(Platform.css_id).html(result.ui_theme);
-            else 
-                $(Platform.css_id).html("");
-        }).catch(err => console.log(err));
+        getTheme.then(result => result.ui_theme != null ?
+            $(Platform.css_id).html(result.ui_theme)
+            : $(Platform.css_id).html("")
+        ).catch(err => console.log(err));
     },
 
     generateWidgets: async () => {
@@ -55,10 +52,10 @@ window.Platform = {
             JSON.parse(result.settings).navigationMenu.forEach(obj => {
                 if (obj.enabled) {
                     $(Platform.nav_id).append(`
-                            <div id="${obj.name}_nav" custom_title="${components[obj.name].tooltip}">
-                                <img src="../util/icons/${obj.name}.png" alt="/" />
-                            </div>
-                        `);
+                        <div id="${obj.name}_nav" custom_title="${components[obj.name].tooltip}">
+                            <img src="../util/icons/${obj.name}.png" alt="/" />
+                        </div>
+                    `);
                 }
             });
             $('#mainDiv').children().hide();
@@ -147,7 +144,7 @@ $(document).ready(() => {
                 $('#accInfoDiv').fadeIn(400);
                 break;
             case 2:
-                if (document.getElementById('tutorialDiv')) break;
+                if (document.getElementById('tutorial-info-div-content')) break;
                 $.get('../components/tutorial.html', data => $('#tutorialDiv').append(data));
                 $('#tutorialDiv').fadeIn(400);
                 break;
@@ -295,5 +292,4 @@ $(document).ready(() => {
         winId = winId.substr(0, winId.indexOf('_'));
         navRequest(String(winId), e.button)
     });
-
 });

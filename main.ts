@@ -115,7 +115,8 @@ ipcMain.on('request-mainprocess-action', (event, data) => {
         resizable: false,
         frame: false,
         icon: icon,
-        show: false
+        show: false,
+        webPreferences: { plugins: true }
     });
     mainWindow.loadFile('./src/baseTemplates/mainWindow.html');
     loginWindow.close();
