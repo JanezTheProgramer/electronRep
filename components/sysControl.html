@@ -1,6 +1,7 @@
 <div id="sysControl-box-window" class="box-window">
     <div class="box-window-top">
-        <div onmousemove="moveTrigger(this.target)" onmousedown='downTrigger(this.target)' class="box-window-top-draggable">
+        <div onmousemove="moveTrigger(this.target)" onmouseleave='leaveTrigger(this.target)'
+            onmousedown='downTrigger(this.target)' class="box-window-top-draggable">
             <h3>eXo-sysControl</h3>
         </div>
         <span class="exit">&times;</span>
@@ -59,7 +60,7 @@
                     setTimeout(() => {
                         msgWindow.hide();
                         setTimeout(() => {
-                            sysCommands.fadeIn(100);   
+                            sysCommands.fadeIn(100);
                         }, 500);
                     }, 1000);
 

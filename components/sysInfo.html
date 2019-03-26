@@ -1,6 +1,7 @@
 <div id="sysInfo-box-window" class="box-window">
     <div class="box-window-top">
-        <div onmousemove="moveTrigger(this.target)" onmousedown='downTrigger(this.target)' class="box-window-top-draggable">
+        <div onmousemove="moveTrigger(this.target)" onmouseleave='leaveTrigger(this.target)'
+            onmousedown='downTrigger(this.target)' class="box-window-top-draggable">
             <h3>eXo-sysInfo</h3>
         </div>
         <span class="exit">&times;</span>
@@ -29,11 +30,11 @@
             sysInfo.graphics()
                 .then(data => {
                     console.log(data);
-                   $("#systemData").append(JSON.stringify(data));
+                    $("#systemData").append(JSON.stringify(data));
                 })
                 .catch(error => ipcRenderer.send('request-failed-to-generate-action'));
-            
-            try{
+
+            try {
                 $("#systemData").append(JSON.stringify(screenInfo));
             } catch (err) {
                 ipcRenderer.send('request-failed-to-generate-action')

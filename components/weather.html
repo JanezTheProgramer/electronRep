@@ -1,6 +1,7 @@
 <div id="weather-box-window" class="box-window">
     <div class="box-window-top">
-        <div onmousemove="moveTrigger(this.target)" onmousedown='downTrigger(this.target)' class="box-window-top-draggable">
+        <div onmousemove="moveTrigger(this.target)" onmouseleave='leaveTrigger(this.target)'
+            onmousedown='downTrigger(this.target)' class="box-window-top-draggable">
             <h3>eXo-weather</h3>
         </div>
         <span class="exit">&times;</span>
@@ -102,7 +103,7 @@
                         high: [...(foreacastObj ? foreacastObj.high : []), ...[day.high]],
                         low: [...(foreacastObj ? foreacastObj.low : []), ...[day.low]],
                         avg: [
-                            ...(foreacastObj ? foreacastObj.avg : []), 
+                            ...(foreacastObj ? foreacastObj.avg : []),
                             ...[parseInt(Math.ceil((Number(day.low) + Number(day.high)) / 2), 10)]
                         ]
                     };
@@ -119,12 +120,12 @@
                                 label: "High",
                                 borderColor: "#a55d40",
                                 fill: true
-                            },{
+                            }, {
                                 data: foreacastObj.avg,
                                 label: "Avg",
                                 borderColor: "#55bd7d",
                                 fill: true
-                            },{
+                            }, {
                                 data: foreacastObj.low,
                                 label: "Low",
                                 borderColor: "#40a5a0",
@@ -137,7 +138,7 @@
                                 text: 'forecast temperature chart (°C)'.toUpperCase()
                             }
                         }
-                });
+                    });
             });
 
             $("#locationInput").on('keypress', event => (event.keyCode == 13) ?

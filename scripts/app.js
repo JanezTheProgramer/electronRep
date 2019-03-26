@@ -84,7 +84,7 @@ window.components = {
     }
 };
 
-/// 2 global drag functions in vanilla JS (old school)
+/// 3 global drag functions in vanilla JS (old school)
 
 const downTrigger = () => {
     drag.isDown = true;
@@ -98,6 +98,8 @@ const moveTrigger = () => {
     event.currentTarget.parentNode.parentNode.style.left = `${event.clientX - drag.iX}px`;
     event.currentTarget.parentNode.parentNode.style.zIndex = '1';
 };
+
+const leaveTrigger = () => drag.isDown = false;
 
 $(document).ready(() => {
     //automated functions 
