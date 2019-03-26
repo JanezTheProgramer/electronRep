@@ -131,10 +131,10 @@ $(document).ready(() => {
     $('.dropbtn').click(() => Platform.generateWidgets());
 
     $('.data').click(e => {
-        $('#mainDiv').children().hide();
+        $(document.getElementById('mainDiv')).children().hide();
         $('#platformDiv #content').children().remove();
-        $('#accInfoDiv').children().remove();
-        $('#tutorialDiv').children().remove();
+        $(document.getElementById('accInfoDiv')).children().remove();
+        $(document.getElementById('tutorialDiv')).children().remove();
         switch (Number(e.target.id[0])) {
             case 1:
                 if (document.getElementById('account-info-div-content')) break;
