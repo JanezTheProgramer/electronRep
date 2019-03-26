@@ -1,6 +1,6 @@
 <div id="sysInfo-box-window" class="box-window">
     <div class="box-window-top">
-        <div class="box-window-top-draggable">
+        <div onmousemove="moveTrigger(this.target)" onmousedown='downTrigger(this.target)' class="box-window-top-draggable">
             <h3>eXo-sysInfo</h3>
         </div>
         <span class="exit">&times;</span>
@@ -10,6 +10,8 @@
     </div>
     <script>
         $(document).ready(() => {
+            let sysInfo = require('systeminformation'),
+                screenInfo = electron.screen.getAllDisplays();
             sysInfo.cpu()
                 .then(data => {
                     $("#systemData").append(JSON.stringify(data));

@@ -10,11 +10,8 @@ $(document).ready(() => {
     $("#usernameId").focus();
 
     const isLengthOk = element => {
-        if($(`#${element}`).val().length > 4){
-            $(`#${element}`).css({color: 'white'});
-        }else{
-            $(`#${element}`).css({color: '#ff471a'});
-        }
+        element = $(document.getElementById(element)) || null;
+        element.css(element.val().length > 4 ? {color: 'white' } : {color: '#ff471a'});
     }
 
     $(document).on("input", "#usernameId", () => isLengthOk("usernameId"));

@@ -1,6 +1,6 @@
 <div id="weather-box-window" class="box-window">
     <div class="box-window-top">
-        <div class="box-window-top-draggable">
+        <div onmousemove="moveTrigger(this.target)" onmousedown='downTrigger(this.target)' class="box-window-top-draggable">
             <h3>eXo-weather</h3>
         </div>
         <span class="exit">&times;</span>
@@ -35,7 +35,10 @@
     </div>
     <script>
         $(document).ready(() => {
-            var weatherObj = null;
+            let weather = require('weather-js'),
+                Chart = require('chart.js'),
+                weatherObj = null,
+                locations = $(document.getElementById('locationList'));
             const getWeatherData = location => {
                 try {
                     $('#weatherData').hide();
@@ -46,18 +49,18 @@
                         }
                         weatherObj = result || [];
                         console.log(weatherObj);
-                        $("#locationList").html("");
+                        locations.html("");
                         for (var key in weatherObj)
                             if (result.hasOwnProperty(key))
-                                $("#locationList").append(`
+                                locations.append(`
                                     <li id="${key}_place">
                                         <span class="locSpan">
                                             ${result[key].location.name}
                                         </span>
                                     </li>
                                 `);
-                        $("#locationList").delay(100).fadeIn(200);
-                        $("#locationList").focus();
+                        locations.delay(100).fadeIn(200);
+                        locations.focus();
                     });
                 } catch (err) {
                     ipcRenderer.send('request-failed-to-generate-action');
@@ -65,11 +68,11 @@
                 inProgress = false;
             }
 
-            $('#locationList').on("click", event => {
+            locations.on("click", event => {
                 $('#todayWeather').html("");
                 let for_dislay = String(event.target.id);
                 for_dislay = for_dislay.substr(0, for_dislay.indexOf('_'));
-                $("#locationList").fadeOut(200);
+                locations.fadeOut(200);
                 $('#weatherData').delay(100).fadeIn(100);
                 $("#tbody_forecast").html("");
                 let clickedObject = weatherObj[Number(for_dislay)];

@@ -7,26 +7,10 @@ const electron = require('electron');
 const { ipcRenderer } = electron;
 const {
         getConfiguration,
-        getTheme,
-        user_getEverything,
-        setUserName,
-        setConfiguration,
-        setTheme,
-        user_setEverything,
-        removeCustomTheme
+        getTheme
     } = require('../scripts/sqliteQuery'),
-    sysInfo = require('systeminformation'),
-    screenInfo = electron.screen.getAllDisplays(),
-    weather = require('weather-js'),
     path = require('path'),
-    moment = require('moment'),
-    fs = require('fs'),
-    Shell = require('node-powershell'),
-    Chart = require('chart.js'),
-    htmlToImage = require('html-to-image'),
-    { determineTheme } = require('../scripts/theme'),
-    AColorPicker = require('a-color-picker'),
-    Color = require('color');
+    moment = require('moment');
 
 window.drag = {
     isDown: false,
@@ -35,34 +19,33 @@ window.drag = {
 }; // object for element dragging properties
 
 window.Platform = {
-    css_id: '#alternate-css',
-    nav_id: '#leftNav',
+    css_id: 'alternate-css',
+    nav_id: 'leftNav',
     onLoad: async () => {
         // get theme of UI
-        getTheme.then(result => result.ui_theme != null ?
-            $(Platform.css_id).html(result.ui_theme)
-            : $(Platform.css_id).html("")
-        ).catch(err => console.log(err));
+        getTheme.then(result => {
+            $(document.getElementById(Platform.css_id)).html(result.ui_theme != null ? result.ui_theme : "")
+        }).catch(err => console.log(err));
     },
 
     generateWidgets: async () => {
         // get platform widgets for display
         getConfiguration.then(result => {
-            $(Platform.nav_id).html("");
+            $(document.getElementById(Platform.nav_id)).html("");
             JSON.parse(result.settings).navigationMenu.forEach(obj => {
                 if (obj.enabled) {
-                    $(Platform.nav_id).append(`
+                    $(document.getElementById(Platform.nav_id)).append(`
                         <div id="${obj.name}_nav" custom_title="${components[obj.name].tooltip}">
                             <img src="../util/icons/${obj.name}.png" alt="/" />
                         </div>
                     `);
                 }
             });
-            $('#mainDiv').children().hide();
-            $('#accInfoDiv').children().remove();
-            $('#tutorialDiv').children().remove();
+            $(document.getElementById('mainDiv')).children().hide();
+            $(document.getElementById('accInfoDiv')).children().remove();
+            $(document.getElementById('tutorialDiv')).children().remove();
             $('#platformDiv #content').children().remove();
-            setTimeout(() => $('#platformDiv').fadeIn(200), 300);
+            setTimeout(() => $(document.getElementById('platformDiv')).fadeIn(200), 300);
         }).catch(err => console.log(err));
     }
 }
@@ -101,10 +84,25 @@ window.components = {
     }
 };
 
+/// 2 global drag functions in vanilla JS (old school)
+
+const downTrigger = () => {
+    drag.isDown = true;
+    drag.iX = event.clientX - event.offsetX;
+    drag.iY = event.clientY - event.offsetY;
+};
+
+const moveTrigger = () => {
+    if (!drag.isDown) return;
+    event.currentTarget.parentNode.parentNode.style.top = `${event.clientY - drag.iY}px`;
+    event.currentTarget.parentNode.parentNode.style.left = `${event.clientX - drag.iX}px`;
+    event.currentTarget.parentNode.parentNode.style.zIndex = '1';
+};
+
 $(document).ready(() => {
     //automated functions 
     setTimeout(() => $('body').fadeIn(500), 1000);
-    (() => setInterval(() => $('#clock').text(`${moment().format('LT')}`), 60000))();
+    (() => setInterval(() => $(document.getElementById('clock')).text(`${moment().format('LT')}`), 60000))();
     (() => {
         Platform.onLoad();
         if (!navigator.onLine)
@@ -112,7 +110,7 @@ $(document).ready(() => {
                 components[key].enabled = false;
     })();
 
-    $('#clock').text(moment().format('LT'));
+    $(document.getElementById('clock')).text(moment().format('LT'));
     $('.roundBtn').click(element => {
         switch (String(element.target.id)) {
             case 'exit':
@@ -164,24 +162,7 @@ $(document).ready(() => {
         else if (e.which == 82) self.location.assign(location); //restart app on 'r' pressed
     });
 
-    // the draggg functions
-    $(document).on('mousedown', '.box-window-top-draggable', down => {
-        !drag.isDown ? drag.isDown = true : null;
-        drag.iX = down.clientX - down.offsetX;
-        drag.iY = down.clientY - down.offsetY;
-    });
-
-    $(document).on('mousemove', '.box-window-top-draggable', move => {
-        if (!drag.isDown) return;
-        move.currentTarget.parentNode.parentNode.style.top = `${move.clientY - drag.iY}px`;
-        move.currentTarget.parentNode.parentNode.style.left = `${move.clientX - drag.iX}px`;
-        move.currentTarget.parentNode.parentNode.style.zIndex = '1';
-    });
-
-    $(document).on('mouseleave', '.box-window-top-draggable', () => drag.isDown = false);
     $(document).mouseup(() => drag.isDown = false);
-
-    //end of draggggg functions
 
     $(document).on('click', '.exit', e => closeTargetWindow(e.currentTarget.parentNode.parentNode.id));
 
@@ -206,7 +187,7 @@ $(document).ready(() => {
                 opacity: '1'
             });
             $('.box-window').css("resize", "both");
-            $(`#${targetID}`).animate({
+            $(document.getElementById(targetID)).animate({
                 top: '8vh',
                 left: '15vw',
                 width: '50vw',
@@ -218,17 +199,17 @@ $(document).ready(() => {
     });
 
     const goFullScreen = targetID => {
-        $(`#${targetID}`).css({
+        $(document.getElementById(targetID)).css({
             maxHeight: '100vh',
             maxWidth: '100vw'
         });
         $('.box-window').css("resize", "none");
-        $('#leftNav').animate({
+        $(document.getElementById('leftNav')).animate({
             width: '0',
             opacity: '0'
         });
         document.getElementById('leftNav').setAttribute('toggle', '0');
-        $(`#${targetID}`).animate({
+        $(document.getElementById(targetID)).animate({
             top: '0',
             left: '0',
             width: '100%',
@@ -239,24 +220,24 @@ $(document).ready(() => {
 
     const closeTargetWindow = (targetID, speed) => {
         speed = speed || 700;
-        if (document.getElementById(targetID)) {
-            $('#leftNav').attr('toggle') == '0' ? $('#leftNav').animate({
+        let obj = $(document.getElementById(targetID));
+        if (obj) {
+            $(document.getElementById('leftNav')).attr('toggle') == '0' ? $(document.getElementById('leftNav')).animate({
                 width: '7vw',
                 opacity: '1'
             }) : null;
 
-            $(`#${targetID}`).css({ minHeight: 0 });
-            $(`#${targetID}`).animate({
+            obj.css({ minHeight: 0 });
+            obj.animate({
                 top: '-1vh',
                 height: '0',
                 opacity: '0'
             }, speed);
-            setTimeout(() => $(`#${targetID}`).remove(), 800);
+            setTimeout(() => obj.remove(), 800);
         }
     };
 
     const navRequest = (windowId, keyCode) => {
-        //console.log(windowId);
         if (!components[windowId].enabled) {
             $('#content .box-window').css({ zIndex: '0' });
             if (document.getElementById('notEnabled-box-window'))
@@ -271,7 +252,7 @@ $(document).ready(() => {
             if (!document.getElementById(components[windowId].id)) {
                 $.get(`../components/${components[windowId].file}`, data => $('#platformDiv #content').append(data));
             } else {
-                $(`#${components[windowId].id}`).css({ zIndex: '1' });
+                $(document.getElementById(components[windowId].id)).css({ zIndex: '1' });
             }
         } else if (keyCode === 1) {
             let opened = false;

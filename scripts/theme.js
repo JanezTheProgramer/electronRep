@@ -1,3 +1,5 @@
+let Color = require('color');
+
 exports.determineTheme = color => {
     color = Color(color.toString());
     return (`

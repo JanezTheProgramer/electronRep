@@ -1,6 +1,6 @@
 <div id="photoEditor-box-window" class="box-window">
     <div class="box-window-top">
-        <div class="box-window-top-draggable">
+        <div onmousemove="moveTrigger(this.target)" onmousedown='downTrigger(this.target)' class="box-window-top-draggable">
             <h3>eXo-photoEdtior</h3>
         </div>
         <span class="exit">&times;</span>
@@ -27,6 +27,7 @@
     </div>
     <script>
         $(document).ready(() => {
+            let htmlToImage = require('html-to-image');
             $("input[type=file]#uploadBtnImg").change(img => {
                 $('#img_edit').attr({
                     src: URL.createObjectURL(img.target.files[0])
@@ -41,7 +42,7 @@
                     document.getElementById('img_edit'),
                     { quality: 0.99 }
                 ).then(img => {
-                    var link = document.createElement('a');
+                    let link = document.createElement('a');
                     link.download = 'exo-edited.jpeg';
                     link.href = img;
                     link.click();

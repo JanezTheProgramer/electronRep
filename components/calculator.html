@@ -1,6 +1,6 @@
 <div id="calculator-box-window" class="box-window">
     <div class="box-window-top">
-        <div class="box-window-top-draggable">
+        <div onmousemove="moveTrigger(this.target)" onmousedown='downTrigger(this.target)' class="box-window-top-draggable">
             <h3>eXo-calculator</h3>
         </div>
         <span class="exit">&times;</span>
@@ -39,34 +39,35 @@
     </div>
     <script>
         $(document).ready(event => {
-            $("#equation").focus();
+            let equation = $(document.getElementById('equation'));
+            equation.focus();
             const calculateExpression = () => {
                 try {
-                    let equationString = $("#equation").val().toString();
+                    let equationString = equation.val().toString();
                     if (['*', '/', '+', '-'].includes(equationString[equationString.length - 1])) {
                         equationString = equationString.substr(0, equationString.length - 1)
                     }
-                    $("#equation").val(Math.round(eval(equationString) * 1000) / 1000);
+                    equation.val(Math.round(eval(equationString) * 1000) / 1000);
                 } catch (e) { /* invalid expression */ }
             }
             const expressionInput = char => {
-                if (!['C', '*', '/', '+', '-'].includes(char) && $("#equation").val()[0] != '0') {
-                    $("#equation").val($("#equation").val() + char)
-                } else if (!['C', '*', '/', '+', '-'].includes(char) && $("#equation").val()[0] == '0') {
-                    $("#equation").val(char);
+                if (!['C', '*', '/', '+', '-'].includes(char) && equation.val()[0] != '0') {
+                    equation.val(equation.val() + char)
+                } else if (!['C', '*', '/', '+', '-'].includes(char) && equation.val()[0] == '0') {
+                    equation.val(char);
                 } else if (['*', '/', '+', '-'].includes(char)) {
-                    let lastChar = $("#equation").val()[$("#equation").val().length - 1];
+                    let lastChar = equation.val()[equation.val().length - 1];
                     if (['*', '/', '+', '-'].includes(lastChar)) {
-                        $("#equation").val(
-                            $("#equation").val().substr(0, $("#equation").val().length - 1) + char
+                        equation.val(
+                            equation.val().substr(0, equation.val().length - 1) + char
                         );
                     } else {
-                        $("#equation").val($("#equation").val() + char)
+                        equation.val(equation.val() + char)
                     }
                 } else if (char == 'C')
-                    $("#equation").val("0");
+                    equation.val("0");
             }
-            $("#equation").keypress(event => event.keyCode == 13 ? calculateExpression() : null);
+            equation.keypress(event => event.keyCode == 13 ? calculateExpression() : null);
             $('.equationInput').keypress(event => event.preventDefault());
             $(".equationSubmit").click(event => calculateExpression());
             $('.equationInput').click(event => expressionInput(event.target.value));

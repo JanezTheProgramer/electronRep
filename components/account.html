@@ -20,13 +20,22 @@
     </div>
     <script>
         $(document).ready(() => {
-            let userData = null, locallyStoredColor = null;
+            let { user_getEverything,
+                setUserName,
+                setConfiguration,
+                setTheme,
+                user_setEverything 
+            } = require('../scripts/sqliteQuery');
+            let { determineTheme } = require('../scripts/theme'),
+                AColorPicker = require('a-color-picker'),
+                userName = $(document.getElementById('username')),
+                userData = null, locallyStoredColor = null;
             $('#ui_icons_set').html("");
             async function retriveUserPromise() {
                 user_getEverything.then(result => {
                     userData = result;
                     let date_created = moment(userData.date_c).format('L')
-                    $("#username").val(String(userData.name));
+                    userName.val(String(userData.name));
                     $("#member_since").text(date_created);
                     $("#last_seen").text(moment(userData.date_l).format('L'));
                     $("#age").text(
@@ -49,9 +58,9 @@
             } (retriveUserPromise)();
 
             const updateUserName = () => {
-                if (!$("#username").val().length > 4) return;
-                setUserName($("#username").val());
-                $("#username").css({ background: "transparent" });
+                if (!userName.val().length > 4) return;
+                setUserName(userName.val());
+                userName.css({ background: "transparent" });
                 location.reload();
             }
 
@@ -78,10 +87,10 @@
                 console.log("in update");
                 // update everything
                 let username, configList = [], cssObj;
-                if (!$("#username").val().length > 4) return;
+                if (!userName.val().length > 4) return;
 
-                username = $("#username").val();
-                $("#username").css({ background: "transparent" });
+                username = userName.val();
+                userName.css({ background: "transparent" });
                 $('#ui_icons_set .xBoxes input[type=checkbox]').each(function () {
                     configList.push({
                         name: $(this).attr('name'),
@@ -95,10 +104,10 @@
                 location.reload();
             });
 
-            $('#username').on('input', () =>
-                $("#username").val() != userData.name ?
-                    $("#username").css({ background: "linear-gradient(to bottom, rgba(0,0,0,0), rgba(200,0,0, 0.4))" }) :
-                    $("#username").css({ background: "transparent" })
+            userName.on('input', () =>
+                userName.val() != userData.name ?
+                    userName.css({ background: "linear-gradient(to bottom, rgba(0,0,0,0), rgba(200,0,0, 0.4))" }) :
+                    userName.css({ background: "transparent" })
             );
 
             $('#toggleAccCfg').mousedown(() => {
@@ -108,7 +117,7 @@
                 });
             });
 
-            $('#username').keypress(event => event.keyCode == 13 ? updateUserName() : null);
+            userName.keypress(event => event.keyCode == 13 ? updateUserName() : null);
             AColorPicker.from('div.picker').on('change', picker => locallyStoredColor = picker.color);
         });
     </script>
