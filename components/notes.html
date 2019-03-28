@@ -39,6 +39,7 @@
                 curr_fileName = null,
                 textField = $(document.getElementById('textarea'));
             !fs.existsSync('./notes') ? fs.mkdirSync('./notes') : null;
+            CKEDITOR.replace( 'textarea' );
             function refresh() {
                 !curr_fileName ? $(document.getElementById('noteTextArea')).hide() : $(document.getElementById('noteTextArea')).show();
                 $(document.getElementById('notesList')).html("");
