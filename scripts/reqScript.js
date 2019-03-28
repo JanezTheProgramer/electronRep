@@ -4,7 +4,7 @@ window.onerror = function() {
 
 window.$ = window.jQuery = require("jquery");
 const { ipcRenderer } = require('electron');
-const { reqFunc } = require('../scripts/query');
+const { reqFunc } = require('../scripts/sqliteQuery');
 $(document).ready(() => {
 
     $("#usernameId").focus();

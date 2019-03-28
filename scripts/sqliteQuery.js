@@ -135,7 +135,7 @@ exports.user_setEverything = (_user_, _config_, _theme_) => {
             UPDATE users
             SET name='${_user_}',
                 settings='${JSON.stringify(_config_)}'
-                ${(_theme_ != null) ? String(`,ui_theme='${_theme_}'`) : null}
+                ${(_theme_ != null) ? String(`,ui_theme='${_theme_}'`) : ''}
             WHERE id='${ipcRenderer ? Number(ipcRenderer.sendSync('user-request')) : null}';
         `));
         db.close();
