@@ -1120,7 +1120,7 @@ input:focus {
     overflow: visible;
 }
 
-#notes-box-window #noteControls #newFileControl {
+#notes-box-window #noteControls #newFileButton {
     margin-left: 30%;
 }
 
@@ -1156,7 +1156,7 @@ input:focus {
     border-radius: .3vw;
 }
 
-#notes-box-window #noteControls #newFileName {
+#notes-box-window #noteControls #newFileInput {
     background: transparent;
     border: none;
     height: 90%;

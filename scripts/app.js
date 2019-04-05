@@ -7,10 +7,22 @@ const electron = require('electron');
 const { ipcRenderer } = electron;
 const {
         getConfiguration,
-        getTheme
+        getTheme,
+        user_getEverything,
+        setUserName,
+        setConfiguration,
+        setTheme,
+        user_setEverything
     } = require('../scripts/sqliteQuery'),
     path = require('path'),
-    moment = require('moment');
+    moment = require('moment'),
+    weather = require('weather-js'),
+    Chart = require('chart.js'),
+    fs = require('fs-extra'),
+    sysInfo = require('systeminformation'),
+    { canvasLoader } = require('../gameFiles/canvasLoading'),
+    { determineTheme } = require('../scripts/theme'),
+    AColorPicker = require('a-color-picker');
 
 window.drag = {
     isDown: false,

@@ -20,15 +20,7 @@
     </div>
     <script>
         $(document).ready(() => {
-            let { user_getEverything,
-                setUserName,
-                setConfiguration,
-                setTheme,
-                user_setEverything
-            } = require('../scripts/sqliteQuery');
-            let { determineTheme } = require('../scripts/theme'),
-                AColorPicker = require('a-color-picker'),
-                userName = $(document.getElementById('username')),
+            let userName = $(document.getElementById('username')),
                 userData = null, locallyStoredColor = null;
             $('#ui_icons_set').html("");
             async function retriveUserPromise() {

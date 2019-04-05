@@ -36,9 +36,7 @@
     </div>
     <script>
         $(document).ready(() => {
-            let weather = require('weather-js'),
-                Chart = require('chart.js'),
-                weatherObj = null,
+            let weatherObj = null,
                 locations = $(document.getElementById('locationList'));
             const getWeatherData = location => {
                 try {

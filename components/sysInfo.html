@@ -11,8 +11,7 @@
     </div>
     <script>
         $(document).ready(() => {
-            let sysInfo = require('systeminformation'),
-                screenInfo = electron.screen.getAllDisplays();
+            let screenInfo = electron.screen.getAllDisplays();
             sysInfo.cpu()
                 .then(data => {
                     $("#systemData").append(JSON.stringify(data));
