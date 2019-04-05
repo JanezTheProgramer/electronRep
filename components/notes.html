@@ -36,6 +36,7 @@
         $(document).ready(() => {
             let curr_fileName = null,
                 editor = CKEDITOR.replace('textarea');
+            (() => editor.config.skin = 'prestige')();
             const readNotes = async () => {
                 editor.setData("");
                 $("#notes_error").html(``);
@@ -96,12 +97,11 @@
                     `./notes/${fileToEdit}.json`, {
                         'date': moment().format('L'),
                         'content': `<p>${editor.getData()}</p>`
-                    }, err => null
-                );
+                    });
                 readNotes();
             };
 
-            $("#notesList").on("click", event => {
+            $(document.getElementById('notesList')).on("click", event => {
                 $("#notes_error").html(``);
                 if (event.target.nodeName.toLowerCase() == "li")
                     curr_fileName = event.target.id;
@@ -124,7 +124,6 @@
                     generateNewFile() :
                     null
             );
-
         });
     </script>
 </div>
