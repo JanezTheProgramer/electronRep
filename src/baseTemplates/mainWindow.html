@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>eXo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, 
+    initial-scale=1.0, 
+    user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="../css/mainpStyle.css">
+    <script src="../scripts/app.js"></script>
+    <script src="../../node_modules/ckeditor/ckeditor.js"></script>
+    <style id="alternate-css"></style>
+</head>
+
+<body>
+    <div id='top_takbar'>
+        <div class="dropdown">
+            <button class="dropbtn">eXo</button>
+            <div class="dropdown-content">
+                <a id="1acc" class="data">Account</a>
+                <a id="2acc" class="data">Tutorial</a>
+                <a id="3acc" class="data">Logout</a>
+            </div>
+        </div>
+        <div id="clock"></div>
+        <a class="roundBtn" id="reset"></a>
+        <a class="roundBtn" id="minimize"></a>
+        <a class="roundBtn" id="exit"></a>
+    </div>
+    <div id="mainDiv" class="bodyDiv">
+        <figure id="welcText">
+            <h1>Welcome<br>to eXo!</h1>
+            <h1>Welcome<br>to eXo!</h1>
+            <h1>Welcome<br>to eXo!</h1>
+            <h1>Welcome<br>to eXo!</h1>
+            <h1>Welcome<br>to eXo!</h1>
+            <h1>Welcome<br>to eXo!</h1>
+            <h1>Welcome<br>to eXo!</h1>
+        </figure>
+        <div id="gameWindow">
+            <canvas id="gameCanvas">Error occured!</canvas>
+        </div>
+        <div id="platformDiv" style="display:none">
+            <nav id="leftNav" toggle='1'>
+            </nav>
+            <div id="content"></div>
+        </div>
+        <div id="accInfoDiv" style="display:none">
+        </div>
+        <div id="tutorialDiv" style="display:none">
+        </div>
+    </div>
+</body>
+
+</html>

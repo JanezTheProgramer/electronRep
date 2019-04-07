@@ -1,0 +1,94 @@
+<div id="sysControl-box-window" class="box-window">
+    <div class="box-window-top">
+        <div drag="1" class="box-window-top-draggable">
+            <h3 drag="1">eXo-sysControl</h3>
+        </div>
+        <span class="exit">&times;</span>
+    </div>
+    <div class="box-window-content">
+        <ul id="systemCommands">
+            <li id="system_shutdown">
+                <span>shutdown</span>
+            </li>
+            <li id="system_restart">
+                <span>restart</span>
+            </li>
+            <li id="system_sleep">
+                <span>hibernate</span>
+            </li>
+            <li id="system_logOut">
+                <span>logOut</span>
+            </li>
+        </ul>
+        <div id="msgWindowPWS" style="display: none">
+        </div>
+    </div>
+    <script>
+        $(document).ready(() => {
+
+            let Shell = require('node-powershell'),
+                currentCommandIndex = null,
+                msgWindow = $(document.getElementById('msgWindowPWS')),
+                sysCommands = $(document.getElementById('systemCommands'));
+
+            const powerShellCommands = [
+                { code: 'shutdown /s /t 10', warning_msg: 'Are you sure you want to turn off your pc?' },
+                { code: 'Restart-Computer', warning_msg: 'Are you sure you want to restart your pc?' },
+                { code: 'shutdown.exe /h', warning_msg: 'Are you sure you want your pc in hibernate mode?' },
+                { code: 'shutdown -L -F', warning_msg: 'Are you sure you want to log out of your pc?' }
+            ];
+
+            const finalExcecute = () => {
+                if (!currentCommandIndex) return;
+                const ps = new Shell({
+                    executionPolicy: 'Bypass',
+                    noProfile: true
+                });
+
+                ps.addCommand(String(powerShellCommands[currentCommandIndex].code));
+                ps.invoke().then(() => {
+                    console.log("success");
+                }).catch(err => {
+                    currentCommandIndex = null;
+                    msgWindow.hide().fadeIn(200);
+                    sysCommands.hide();
+                    msgWindow.html(`
+                        <h3>${"ERROR OCCURED! Going back!"}</h3>
+                    `);
+
+                    setTimeout(() => {
+                        msgWindow.hide();
+                        setTimeout(() => {
+                            sysCommands.fadeIn(100);
+                        }, 500);
+                    }, 1000);
+
+                });
+            }
+
+            const initialTerminalCall = index => {
+                currentCommandIndex = index;
+                sysCommands.hide();
+                msgWindow.html(`
+                    <h3>${powerShellCommands[index].warning_msg}</h3>
+                    <input type="button" id="yes_powershell" value="YES" />
+                    <input type="button" id="no_powershell" value="CANCEL" />
+                `);
+                msgWindow.fadeIn(200);
+            }
+            $('#yes_powershell').mousedown(() => finalExcecute());
+            $('#no_powershell').mousedown(() => {
+                currentCommandIndex = null;
+                msgWindow.hide();
+                sysCommands.fadeIn(200);
+                msgWindow.html("");
+            });
+
+
+            $('#system_shutdown').mousedown(() => initialTerminalCall(0));
+            $('#system_restart').mousedown(() => initialTerminalCall(1));
+            $('#system_sleep').mousedown(() => initialTerminalCall(2));
+            $('#system_logOut').mousedown(() => initialTerminalCall(3));
+        });
+    </script>
+</div>

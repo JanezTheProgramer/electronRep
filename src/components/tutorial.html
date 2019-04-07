@@ -1,0 +1,19 @@
+<div id="tutorial-info-div-content">
+    <textarea id="tutorial_editor"></textarea>
+    <script>
+        $(document).ready(() => {
+            let t_editor = CKEDITOR.replace('tutorial_editor', {
+                on: {
+                    instanceReady: function (evt) {
+                        document.getElementById('cke_top_' + evt.editor.name).style.display = 'none';
+                    }
+                }
+            });
+            t_editor.config.readOnly = true;
+            console.log(t_editor, t_editor.config);
+            t_editor.config.removePlugins = 'toolbar';
+            fs.readJson(`./tutorial.json`, (err, data) =>
+                t_editor.setData(data.content));
+        });
+    </script>
+</div>
