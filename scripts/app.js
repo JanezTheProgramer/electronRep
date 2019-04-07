@@ -24,55 +24,10 @@ const {
     { determineTheme } = require('../scripts/theme'),
     AColorPicker = require('a-color-picker');
 
-window.dragActivity = {
-    active: false,
-    target: null
-};
+window.dragActivity_target = null;
 
 $.fn.hasAttr = function (name) {
     return this.attr(name) !== undefined && this.attr(name) != true;
-};
-
-const dragStart = e => {
-    $('.box-window').css('z-index', '0');
-    dragActivity.active = true;
-    let element = $(e.target).closest('.box-window').get(0).id;
-    if (typeof $(e.target).attr('drag') === typeof undefined) return;
-    dragActivity.target = components[element.substr(0, element.length - 11)];
-    if ($(document.getElementById(dragActivity.target.id)).hasAttr("fscreen")) {
-        console.log("tlke", document.getElementById('notes-box-window'));
-        dragActivity.target = null;
-        dragActivity.active = false;
-        return;
-    }
-
-    document.getElementById(dragActivity.target.id).style.zIndex = '1';
-    $(`#${dragActivity.target.id}`).css("border", `.2vw solid ${
-        $('.box-window-top').css('background-color')
-    }`);
-    dragActivity.target.initialX = e.clientX - dragActivity.target.xOffset;
-    dragActivity.target.initialY = e.clientY - dragActivity.target.yOffset;
-};
-
-const drag = e => {
-    if (!dragActivity.active || !dragActivity.target) return;
-    e.preventDefault();
-    dragActivity.target.currentX = e.clientX - dragActivity.target.initialX;
-    dragActivity.target.currentY = e.clientY - dragActivity.target.initialY;
-    dragActivity.target.xOffset = dragActivity.target.currentX;
-    dragActivity.target.yOffset = dragActivity.target.currentY;
-    document.getElementById(dragActivity.target.id).style.transform = (`
-        translate(${dragActivity.target.currentX}px, ${dragActivity.target.currentY}px)
-    `);
-};
-
-const dragEnd = () => {
-    if (!dragActivity.active || !dragActivity.target) return;
-    dragActivity.target.initialX = dragActivity.target.currentX;
-    dragActivity.target.initialY = dragActivity.target.currentY;
-    dragActivity.active = false;
-    dragActivity.target = null;
-    $(`.box-window`).css("border", "none");
 };
 
 window.Platform = {
@@ -81,7 +36,7 @@ window.Platform = {
     onLoad: async () => {
         // get theme of UI
         getTheme.then(result => {
-            $(document.getElementById(Platform.css_id)).html(result.ui_theme != null ? result.ui_theme : "")
+            $(document.getElementById(Platform.css_id)).html(result.ui_theme ? result.ui_theme : "")
         }).catch(err => console.log(err));
     },
 
@@ -162,12 +117,46 @@ window.components = {
 };
 
 $(document).ready(() => {
-    let container = document.getElementById('content');
 
-    container.onmousedown = dragStart;
-    container.onmousemove = drag;
-    //$('.box-window').mouseleave(dragEnd);
-    document.onmouseup = dragEnd;
+    // drag functions
+    document.onmousedown = event => {
+        if ($(event.target).attr('drag') === undefined) return;
+        $('.box-window').css('z-index', '0');
+        let element = $(event.target).closest('.box-window').get(0).id;
+        dragActivity_target = components[element.substr(0, element.length - 11)];
+        if ($(document.getElementById(dragActivity_target.id)).hasAttr("fscreen")) {
+            dragActivity_target = null;
+            return;
+        }
+
+        document.getElementById(dragActivity_target.id).style.zIndex = '1';
+        document.getElementById(dragActivity_target.id).style.border = `.2vw solid ${
+            $('.box-window-top').css('background-color')
+            }`;
+        dragActivity_target.initialX = event.clientX - dragActivity_target.xOffset;
+        dragActivity_target.initialY = event.clientY - dragActivity_target.yOffset;
+    };
+
+    document.onmousemove = event => {
+        if (!dragActivity_target) return;
+        event.preventDefault();
+        dragActivity_target.currentX = event.clientX - dragActivity_target.initialX;
+        dragActivity_target.currentY = event.clientY - dragActivity_target.initialY;
+        document.getElementById(dragActivity_target.id).style.transform = (`
+            translate(${dragActivity_target.currentX}px, ${dragActivity_target.currentY}px)
+        `);
+        dragActivity_target.xOffset = dragActivity_target.currentX;
+        dragActivity_target.yOffset = dragActivity_target.currentY;
+    };
+
+    document.onmouseup = () => {
+        if (!dragActivity_target) return;
+        dragActivity_target.initialX = dragActivity_target.currentX;
+        dragActivity_target.initialY = dragActivity_target.currentY;
+        $(`.box-window`).css("border", "none");
+        dragActivity_target = null;
+    };
+
     //automated functions 
     setTimeout(() => $('body').fadeIn(500), 1000);
     (() => setInterval(() => $(document.getElementById('clock')).text(`${moment().format('LT')}`), 60000))();
@@ -260,9 +249,7 @@ $(document).ready(() => {
 
     $(document).on('mousedown', '.box-window-top .box-window-toggle-fullScreen', e => {
         let targetID = e.currentTarget.parentNode.parentNode.id;
-        console.log(components[find(components, targetID)]);
         if (!document.getElementById(targetID)) return;
-        //console.log(e.currentTarget.parentNode.parentNode);
         if (['▢', '&#9634;'].includes(e.target.innerHTML)) {
             goFullScreen(targetID);
         } else if (['−', '&minus;'].includes(e.target.innerHTML)) {
@@ -286,7 +273,6 @@ $(document).ready(() => {
     const goFullScreen = async targetID => {
         let target_element = document.getElementById(targetID),
             curr_component = components[find(components, targetID)];
-        console.log(target_element.style);
         $(target_element).css({
             maxHeight: '100vh',
             maxWidth: '100vw'
@@ -310,8 +296,8 @@ $(document).ready(() => {
 
     const closeTargetWindow = (targetID, speed) => {
         speed = speed || 700;
-        resetToDefault(components[find(components, targetID)]);
-        console.log(targetID);
+        let component_ = components[find(components, targetID)];
+        resetToDefault(component_);
         let obj = $(document.getElementById(targetID));
         if (obj) {
             $(document.getElementById('leftNav')).attr('toggle') == '0' ? $(document.getElementById('leftNav')).animate({
@@ -321,9 +307,9 @@ $(document).ready(() => {
 
             obj.css({ minHeight: 0 });
             obj.animate({
-                top: '-1vh',
                 height: '0',
-                opacity: '0'
+                opacity: '0',
+                top: '-1vw'
             }, speed);
             setTimeout(() => obj.remove(), 800);
         }
@@ -339,24 +325,31 @@ $(document).ready(() => {
             return;
         }
 
-        if (keyCode === 0) {
-            $('#content .box-window').css({ zIndex: '0' });
-            if (!document.getElementById(components[windowId].id)) {
-                $.get(`../components/${components[windowId].file}`, data => $('#platformDiv #content').append(data));
-            } else {
-                $(document.getElementById(components[windowId].id)).css({ zIndex: '1' });
-            }
-        } else if (keyCode === 1) {
-            let opened = false;
-            $('.box-window').each((key, window) => window.id !== components[windowId].id ?
-                closeTargetWindow(window.id, 400) : opened = true
-            );
-            if (opened) return;
-            setTimeout(() => {
-                $.get(`../components/${components[windowId].file}`, data => $('#platformDiv #content').append(data));
-            }, 200);
-        } else if (keyCode === 2) {
-            closeTargetWindow(components[windowId].id);
+        switch (keyCode) {
+            case 0:
+                $('#content .box-window').css({ zIndex: '0' });
+                if (!document.getElementById(components[windowId].id)) {
+                    $.get(`../components/${components[windowId].file}`, data => $('#platformDiv #content').append(data));
+                } else {
+                    $(document.getElementById(components[windowId].id)).css({ zIndex: '1' });
+                }
+                break;
+            case 1:
+                let opened = false;
+                $('.box-window').each((key, window) => window.id !== components[windowId].id ?
+                    closeTargetWindow(window.id, 400) : opened = true
+                );
+                if (opened) return;
+                setTimeout(() => {
+                    $.get(`../components/${components[windowId].file}`, data => $('#platformDiv #content').append(data));
+                }, 200);
+                break;
+            case 2:
+                closeTargetWindow(components[windowId].id);
+                break;
+            default:
+                return;
+
         }
     };
 
