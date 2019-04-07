@@ -6,14 +6,14 @@ window.$ = window.jQuery = require('jquery');
 const electron = require('electron');
 const { ipcRenderer } = electron;
 const {
-    getConfiguration,
-    getTheme,
-    user_getEverything,
-    setUserName,
-    setConfiguration,
-    setTheme,
-    user_setEverything
-} = require('../scripts/sqliteQuery'),
+        getConfiguration,
+        getTheme,
+        user_getEverything,
+        setUserName,
+        setConfiguration,
+        setTheme,
+        user_setEverything
+    } = require('../scripts/sqliteQuery'),
     path = require('path'),
     moment = require('moment'),
     weather = require('weather-js'),
@@ -132,7 +132,7 @@ $(document).ready(() => {
         document.getElementById(dragActivity_target.id).style.zIndex = '1';
         document.getElementById(dragActivity_target.id).style.border = `.2vw solid ${
             $('.box-window-top').css('background-color')
-            }`;
+        }`;
         dragActivity_target.initialX = event.clientX - dragActivity_target.xOffset;
         dragActivity_target.initialY = event.clientY - dragActivity_target.yOffset;
     };
@@ -295,6 +295,7 @@ $(document).ready(() => {
     }
 
     const closeTargetWindow = (targetID, speed) => {
+        targetID == 'music-box-window' ? player.pause() : null;
         speed = speed || 700;
         let component_ = components[find(components, targetID)];
         resetToDefault(component_);
