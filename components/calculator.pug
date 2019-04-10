@@ -1,0 +1,57 @@
+#calculator-box-window.box-window
+  .box-window-top
+    .box-window-top-draggable(drag='1')
+      h3(drag='1') eXo-calculator
+    span.exit ×
+  .box-window-content
+    div(style='display: block')
+      input#equation(type='text', value='0')
+    div(style='display: block')
+        each val in ["7", "8", "9", "C"]
+            input.equationInput(type='button', value=val)
+        div(style='display: block')
+        each val in ["4", "5", "6", "+"]
+            input.equationInput(type='button', value=val)
+        div(style='display: block')
+        each val in ["1", "2", "3", "-"]
+            input.equationInput(type='button', value=val)
+        div(style='display: block')
+        each val in [".", "0", "*", "/"]
+            input.equationInput(type='button', value=val)
+        div(style='display: block')
+        input.equationSubmit(type='submit', value='=')
+  script.
+    $(document).ready(event => {
+        let equation = $(document.getElementById('equation'));
+        equation.focus();
+        const calculateExpression = () => {
+            try {
+                let equationString = equation.val().toString();
+                if (['*', '/', '+', '-'].includes(equationString[equationString.length - 1])) {
+                    equationString = equationString.substr(0, equationString.length - 1)
+                }
+                equation.val(Math.round(eval(equationString) * 1000) / 1000);
+            } catch (e) { /* invalid expression */ }
+        }
+        const expressionInput = char => {
+            if (!['C', '*', '/', '+', '-'].includes(char) && equation.val()[0] != '0') {
+                equation.val(equation.val() + char)
+            } else if (!['C', '*', '/', '+', '-'].includes(char) && equation.val()[0] == '0') {
+                equation.val(char);
+            } else if (['*', '/', '+', '-'].includes(char)) {
+                let lastChar = equation.val()[equation.val().length - 1];
+                if (['*', '/', '+', '-'].includes(lastChar)) {
+                    equation.val(
+                        equation.val().substr(0, equation.val().length - 1) + char
+                    );
+                } else {
+                    equation.val(equation.val() + char)
+                }
+            } else if (char == 'C')
+                equation.val("0");
+        }
+        equation.keypress(event => event.keyCode == 13 ? calculateExpression() : null);
+        $('.equationInput').keypress(event => event.preventDefault());
+        $(".equationSubmit").click(event => calculateExpression());
+        $('.equationInput').click(event => expressionInput(event.target.value));
+    });

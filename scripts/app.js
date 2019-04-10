@@ -66,17 +66,17 @@ window.Platform = {
 
 window.components = {
     games: {
-        id: 'games-box-window', file: 'games.html', enabled: true,
+        id: 'games-box-window', file: 'games.pug', enabled: true,
         tooltip: 'eXo-games', defHeight: '50vh', currentX: null,
         currentY: null, initialX: null, initialY: null, yOffset: 0,
         xOffset: 0
     }, calculator: {
-        id: 'calculator-box-window', file: 'calculator.html', enabled: true,
+        id: 'calculator-box-window', file: 'calculator.pug', enabled: true,
         tooltip: 'eXo-calculator', defHeight: '50vh', currentX: null,
         currentY: null, initialX: null, initialY: null, yOffset: 0,
         xOffset: 0
     }, notes: {
-        id: 'notes-box-window', file: 'notes.html', enabled: true,
+        id: 'notes-box-window', file: 'notes.pug', enabled: true,
         tooltip: 'eXo-notes', defHeight: '50vh', currentX: null,
         currentY: null, initialX: null, initialY: null, yOffset: 0,
         xOffset: 0
@@ -86,33 +86,23 @@ window.components = {
         currentY: null, initialX: null, initialY: null, yOffset: 0,
         xOffset: 0
     }, video: {
-        id: 'video-box-window', file: 'videoPlayer.html', enabled: true,
+        id: 'video-box-window', file: 'videoPlayer.pug', enabled: true,
         tooltip: 'eXo-video', defHeight: '50vh', currentX: null,
         currentY: null, initialX: null, initialY: null, yOffset: 0,
         xOffset: 0
     }, weather: {
-        id: 'weather-box-window', file: 'weather.html', enabled: true,
+        id: 'weather-box-window', file: 'weather.pug', enabled: true,
         tooltip: 'eXo-weather', defHeight: '50vh', currentX: null,
         currentY: null, initialX: null, initialY: null, yOffset: 0,
         xOffset: 0
     }, maps: {
-        id: 'maps-box-window', file: 'maps.html', enabled: true,
+        id: 'maps-box-window', file: 'maps.pug', enabled: true,
         tooltip: 'eXo-maps', defHeight: '50vh', currentX: null,
         currentY: null, initialX: null, initialY: null, yOffset: 0,
         xOffset: 0
     }, photoEditor: {
         id: 'photoEditor-box-window', file: 'photoEditor.html', enabled: true,
         tooltip: 'eXo-photoEditor', defHeight: '50vh', currentX: null,
-        currentY: null, initialX: null, initialY: null, yOffset: 0,
-        xOffset: 0
-    }, sysInfo: {
-        id: 'sysInfo-box-window', file: 'sysInfo.html', enabled: true,
-        tooltip: 'eXo-sysInfo', defHeight: '50vh', currentX: null,
-        currentY: null, initialX: null, initialY: null, yOffset: 0,
-        xOffset: 0
-    }, sysControl: {
-        id: 'sysControl-box-window', file: 'sysControl.html', enabled: true,
-        tooltip: 'eXo-sysControl', defHeight: '35vh', currentX: null,
         currentY: null, initialX: null, initialY: null, yOffset: 0,
         xOffset: 0
     }
@@ -197,12 +187,12 @@ $(document).ready(() => {
         switch (Number(e.target.id[0])) {
             case 1:
                 if (document.getElementById('account-info-div-content')) break;
-                $.get('../components/account.html', data => $('#accInfoDiv').append(data));
+                $.get('../components/account.pug', data => $('#accInfoDiv').append(data));
                 $('#accInfoDiv').fadeIn(400);
                 break;
             case 2:
                 if (document.getElementById('tutorial-info-div-content')) break;
-                $.get('../components/tutorial.html', data => $('#tutorialDiv').append(data));
+                $.get('../components/tutorial.pug', data => $('#tutorialDiv').append(data));
                 $('#tutorialDiv').fadeIn(400);
                 break;
             case 3:
@@ -318,15 +308,6 @@ $(document).ready(() => {
     };
 
     const navRequest = (windowId, keyCode) => {
-        if (!components[windowId].enabled) {
-            $('#content .box-window').css({ zIndex: '0' });
-            if (document.getElementById('notEnabled-box-window'))
-                $('#notEnabled-box-window').remove();
-            $('.box-window').css({ minHeight: 0 });
-            $.get(`../components/notEnabled.html`, data => $('#platformDiv #content').append(data));
-            return;
-        }
-
         switch (keyCode) {
             case 0:
                 $('#content .box-window').css({ zIndex: '0' });

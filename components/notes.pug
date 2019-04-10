@@ -1,0 +1,111 @@
+#notes-box-window.box-window
+  .box-window-top
+    .box-window-top-draggable(drag='1')
+      h3(drag='1') eXo-notes
+    span.exit ×
+    span.box-window-toggle-fullScreen ▢
+  .box-window-content
+    ul#notesList
+  #noteControls
+    #deleteFileControl.hasTollTip(custom_title='Delete file')
+      img(src='../util/icons/notes/delete.ico', alt='/')
+    #saveFileControl.hasTollTip(custom_title='Save content')
+      img(src='../util/icons/notes/save.png', alt='/')
+    div
+      input#newFileInput(type='text', value='', placeholder='new file')
+    #newFileButton.hasTollTip(custom_title='Create file')
+      img(src='../util/icons/notes/new.png', alt='/')
+    #notes_error
+    br(style='clear:both;')
+  #noteTextArea
+    textarea#textarea         
+  script.
+    $(document).ready(() => {
+        let curr_fileName = null,
+            editor = CKEDITOR.replace('textarea');
+        (() => editor.config.skin = 'prestige')();
+        const readNotes = async () => {
+            editor.setData("");
+            $("#notes_error").html(``);
+            curr_fileName = null;
+            $(document.getElementById('noteTextArea')).fadeOut(300);
+            $(`#${curr_fileName} .title`).css({ color: 'white' });
+            let files_ = fs.readdirSync('./notes');
+            $(document.getElementById('notesList')).html("");
+            for (let i = 0; i < files_.length; i++) {
+                if (path.extname(files_[i]) === ".json") {
+                    fs.readJson(`./notes/${files_[i]}`, function (err, data) {
+                        $(document.getElementById('notesList')).append(`
+                            <li id="${i}_note">
+                                <span class="title">${files_[i].substring(0, files_[i].length - 5)}</span>
+                                <span class="date">${data.date}</span>
+                                <div class="content">${data.content}</div>
+                            </li>
+                        `);
+                    });
+                }
+            }
+        }; readNotes(); // initial call
+
+        const generateNewFile = async () => {
+            let file_name = $('#newFileInput').val();
+            if (!file_name) {
+                $("#notes_error").html(`<span>Enter file name</span>`);
+                return;
+            }
+            if (fs.existsSync(`./notes/${file_name}.json`)) {
+                $("#notes_error").html(`<span>File exists</span>`);
+                return;
+            }
+            await fs.writeJSONSync(`./notes/${file_name}.json`, {
+                'date': moment().format('L'),
+                'content': ''
+            });
+            readNotes();
+        }
+
+        const deleteFile = async () => {
+            if (!curr_fileName) return;
+            let fileToEdit = $(`#${curr_fileName} .title`).text();
+            await fs.removeSync(`./notes/${fileToEdit}.json`);
+            readNotes();
+        };
+
+        const saveFile = async () => {
+            if (!curr_fileName) return;
+            let fileToEdit = $(`#${curr_fileName} .title`).text();
+            await fs.outputJsonSync(`./notes/${fileToEdit}.json`, {
+                'date': moment().format('L'),
+                'content': `${editor.getData()}`
+            });
+            readNotes();
+        };
+
+        $(document.getElementById('notesList')).on("click", event => {
+            $("#notes_error").html(``);
+            switch (event.target.nodeName.toLowerCase()) {
+                case "li":
+                    curr_fileName = event.target.id;
+                    break;
+                case "span":
+                    curr_fileName = event.target.parentNode.id;
+                    break;
+                default:
+                    return;
+            }
+
+            $(document.getElementById('noteTextArea')).fadeIn(300);
+            $('#notesList li .title').css({ color: 'white' });
+            editor.setData($(`#${curr_fileName} .content`).html());
+            $(`#${curr_fileName} .title`).css({ color: 'rgb(199, 64, 40)' });
+        });
+
+        $(document.getElementById('saveFileControl')).click(saveFile);
+        $(document.getElementById('deleteFileControl')).mousedown(deleteFile);
+        $(document.getElementById('newFileButton')).click(generateNewFile);
+        $(document.getElementById('newFileInput')).keypress(event =>
+            event.keyCode == 13 ?
+                generateNewFile() :
+                null
+        );
+    });

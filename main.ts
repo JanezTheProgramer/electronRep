@@ -1,8 +1,11 @@
+'use strict';
+
 const electron = require('electron');
 const { app, BrowserWindow, ipcMain, nativeImage } = electron;
 const path = require('path');
 const msgBox = require('./scripts/renderAlert');
 const icon = nativeImage.createFromPath(path.join(__dirname, './util/icon.png'));
+const setupPug = require('electron-pug');
 
 require('./scripts/sqliteQuery').createDB();
 
@@ -49,7 +52,7 @@ function createWindow() {
         transparent: true,
         icon: icon
     });
-    loginWindow.loadFile('./src/baseTemplates/loginForm.html');
+    loginWindow.loadFile('./src/baseTemplates/loginForm.pug');
     loginWindow.setMenu(null);
     loginWindow.focus();
     loginWindow.on('closed', () => loginWindow = null);
@@ -77,7 +80,9 @@ function drawAlert(_msg_) {
 }
 
 /// default app operations
-app.on('ready', () => {
+app.on('ready', async () => {
+    let pug = await setupPug({pretty: true}, {})
+    pug.on('error', err => console.error('electron-pug error', err))
     screenWidth = electron.screen.getPrimaryDisplay().workAreaSize.width;
     createWindow();
 });
@@ -105,7 +110,7 @@ ipcMain.on('request-mainprocess-action', (event, data) => {
         transparent: true,
         icon: icon
     });
-    loadingWindow.loadFile('./src/baseTemplates/loading.html');
+    loadingWindow.loadFile('./src/baseTemplates/loading.pug');
     loadingWindow.setMenu(null);
     loadingWindow.focus();
 
@@ -118,7 +123,7 @@ ipcMain.on('request-mainprocess-action', (event, data) => {
         show: false,
         webPreferences: { plugins: true }
     });
-    mainWindow.loadFile('./src/baseTemplates/mainWindow.html');
+    mainWindow.loadFile('./src/baseTemplates/mainWindow.pug');
     loginWindow.close();
     try {
         reqWindow.close();
@@ -149,7 +154,7 @@ ipcMain.on('request-registration-action', () => {
         transparent: true,
         icon: icon
     });
-    reqWindow.loadFile('./src/baseTemplates/registerForm.html')
+    reqWindow.loadFile('./src/baseTemplates/registerForm.pug')
     reqWindow.setMenu(null);
     reqWindow.on('closed', () => reqWindow = null);
 });
