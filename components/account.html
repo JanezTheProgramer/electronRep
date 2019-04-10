@@ -33,17 +33,20 @@
                     $("#age").text(
                         `${Math.floor(Math.abs(moment.duration(moment(new Date()).diff(date_created)).asDays()))} days`
                     );
-                    JSON.parse(userData.settings).navigationMenu.forEach(row => $('#ui_icons_set').append(`
-                        <div class="xBoxes">
-                            <input 
-                                type="checkbox" 
-                                id="${row.name}"
-                                class="ui_filter_checboxes"
-                                name="${row.name}"
-                                ${row.enabled ? "checked" : null}
-                            ><label for="${row.name}">${row.name}</label>
-                        </div>
-                    `));
+                    JSON.parse(userData.settings).navigationMenu.forEach(row => {
+                        if (!components[row.name].enabled) return;
+                        $('#ui_icons_set').append(`
+                            <div class="xBoxes">
+                                <input 
+                                    type="checkbox" 
+                                    id="${row.name}"
+                                    class="ui_filter_checboxes"
+                                    name="${row.name}"
+                                    ${row.enabled ? "checked" : null}
+                                ><label for="${row.name}">${row.name}</label>
+                            </div>
+                        `)
+                    });
 
                     setTimeout(() => $('#account-info-div-content').fadeIn(100), 10);
                 });

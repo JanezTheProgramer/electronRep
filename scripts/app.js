@@ -22,7 +22,9 @@ const {
     sysInfo = require('systeminformation'),
     { canvasLoader } = require('../gameFiles/canvasLoading'),
     { determineTheme } = require('../scripts/theme'),
-    AColorPicker = require('a-color-picker');
+    AColorPicker = require('a-color-picker'),
+    { SineWaves } = require('sine-waves'),
+    { cnvT } = require('../scripts/convertion');
 
 window.dragActivity_target = null;
 
@@ -45,7 +47,7 @@ window.Platform = {
         getConfiguration.then(result => {
             $(document.getElementById(Platform.nav_id)).html("");
             JSON.parse(result.settings).navigationMenu.forEach(obj => {
-                if (obj.enabled) {
+                if (obj.enabled && components[obj.name].enabled) {
                     $(document.getElementById(Platform.nav_id)).append(`
                         <div id="${obj.name}_nav" custom_title="${components[obj.name].tooltip}">
                             <img src="../util/icons/${obj.name}.png" alt="/" />
@@ -110,7 +112,7 @@ window.components = {
         xOffset: 0
     }, sysControl: {
         id: 'sysControl-box-window', file: 'sysControl.html', enabled: true,
-        tooltip: 'exo-sysControl', defHeight: '35vh', currentX: null,
+        tooltip: 'eXo-sysControl', defHeight: '35vh', currentX: null,
         currentY: null, initialX: null, initialY: null, yOffset: 0,
         xOffset: 0
     }
@@ -293,9 +295,8 @@ $(document).ready(() => {
         $(target_element).attr('fscreen', true);
         $(`#${targetID} .box-window-top .box-window-toggle-fullScreen`).html('&minus;');
     }
-
+    
     const closeTargetWindow = (targetID, speed) => {
-        targetID == 'music-box-window' ? player.pause() : null;
         speed = speed || 700;
         let component_ = components[find(components, targetID)];
         resetToDefault(component_);

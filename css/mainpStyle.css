@@ -634,8 +634,11 @@ h1:nth-child(6) {
     overflow-y: scroll;
 }
 
+#music-box-window {
+    min-width: 40vw;
+}
 #music-box-window .box-window-content {
-    background-color: transparent;
+    overflow-y: hidden;
     background-image: linear-gradient(to right, rgb(13, 93, 139), rgb(9, 46, 94))
 }
 
@@ -693,16 +696,17 @@ h1:nth-child(6) {
     font-family: custom;
 }
 
-#notes-box-window .box-window-content ul, #weather-box-window .box-window-content ul, #games-box-window .box-window-content ul, #sysControl-box-window .box-window-content ul {
+#notes-box-window .box-window-content ul, #music-box-window .box-window-content ul, #weather-box-window .box-window-content ul, #games-box-window .box-window-content ul, #sysControl-box-window .box-window-content ul {
     padding: 0;
     margin: 0;
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
+    z-index: 10;
 }
 
-#notes-box-window .box-window-content ul li, #weather-box-window .box-window-content ul li, #games-box-window .box-window-content ul li, #sysControl-box-window .box-window-content ul li {
+#notes-box-window .box-window-content ul li, #music-box-window .box-window-content ul li, #weather-box-window .box-window-content ul li, #games-box-window .box-window-content ul li, #sysControl-box-window .box-window-content ul li {
     --c1: #49697A;
     --c2: #5D6366;
     display: block;
@@ -720,18 +724,18 @@ h1:nth-child(6) {
     color: white;
 }
 
-#weather-box-window .box-window-content ul li:hover, #notes-box-window .box-window-content ul li:hover, #games-box-window .box-window-content ul li:hover, #sysControl-box-window .box-window-content ul li:hover {
+#weather-box-window .box-window-content ul li:hover, #music-box-window .box-window-content ul li:hover, #notes-box-window .box-window-content ul li:hover, #games-box-window .box-window-content ul li:hover, #sysControl-box-window .box-window-content ul li:hover {
     --x: 100%
 }
 
-#games-box-window .box-window-content ul li span, #sysControl-box-window .box-window-content ul li span {
+#games-box-window .box-window-content ul li span, #music-box-window .box-window-content ul li span, #sysControl-box-window .box-window-content ul li span {
     font-family: custom;
     position: absolute;
     left: 10%;
     font-size: 3vw;
 }
 
-#games-box-window .box-window-content ul li:hover span, #sysControl-box-window .box-window-content ul li:hover span {
+#games-box-window .box-window-content ul li:hover span,  #music-box-window .box-window-content ul li:hover span, #sysControl-box-window .box-window-content ul li:hover span {
     text-shadow: 0px .1vw .5vw rgba(255, 255, 255, 0.6);
 }
 
@@ -747,9 +751,9 @@ input:focus {
     outline: none;
 }
 
-#calculator-box-window {
+#calculator-box-window, #music-box-window {
     --height: 50vh;
-    width: 40vw;
+    width: 50vw;
     height: var(--height);
     animation: 1s displayWindow;
     resize: none;
