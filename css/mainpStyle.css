@@ -642,59 +642,6 @@ h1:nth-child(6) {
     background-image: linear-gradient(to right, rgb(13, 93, 139), rgb(9, 46, 94))
 }
 
-#sysControl-box-window .box-window-content {
-    height: calc(100% - 5.5vh);
-}
-
-#sysControl-box-window .box-window-content #msgWindowPWS {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    margin: 0 auto;
-    align-content: center;
-    text-align: center;
-}
-
-#sysControl-box-window .box-window-content #msgWindowPWS h3 {
-    color: rgb(32, 148, 184);
-    font-size: 200%;
-}
-
-#sysControl-box-window .box-window-content #msgWindowPWS input[type=button] {
-    width: 20%;
-    border: none;
-    background: rgba(49, 49, 49, .8);
-    transition: .32s all;
-    font-size: 120%;
-    color: #aaa;
-    font-family: custom;
-    margin-left: 1vw;
-    padding: .3vw;
-    border: none;
-}
-
-#sysControl-box-window .box-window-content #msgWindowPWS #no_powershell:hover, #sysControl-box-window .box-window-content #msgWindowPWS #yes_powershell:hover {
-    background: rgb(37, 37, 37, .9);
-}
-
-#notEnabled-box-window .box-window-content {
-    height: 60%;
-    text-align: center;
-    margin: 0 auto;
-    align-content: center;
-}
-
-#notEnabled-box-window .box-window-content h3 {
-    font-size: 170%;
-    color: rgb(22, 134, 168);
-    text-align: center;
-    margin: 0 auto;
-    margin-top: 2%;
-    align-content: center;
-    font-family: custom;
-}
 
 #notes-box-window .box-window-content ul, #music-box-window .box-window-content ul, #weather-box-window .box-window-content ul, #games-box-window .box-window-content ul, #sysControl-box-window .box-window-content ul {
     padding: 0;
@@ -933,14 +880,6 @@ input:focus {
     animation: 1s displayWindow;
 }
 
-#sysControl-box-window {
-    --minHeight: 35vh;
-    --height: 35vh;
-    height: var(--height);
-    animation: 1s displayWindow;
-    min-height: var(--minHeight);
-}
-
 #maps-box-window {
     --minHeight: 50vh;
     --height: 50vh;
@@ -990,13 +929,6 @@ input:focus {
 }
 
 #photoEditor-box-window {
-    --minHeight: 50vh;
-    --height: 50vh;
-    height: var(--height);
-    animation: 1s displayWindow;
-}
-
-#sysInfo-box-window {
     --minHeight: 50vh;
     --height: 50vh;
     height: var(--height);

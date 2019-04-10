@@ -19,7 +19,6 @@ const {
     weather = require('weather-js'),
     Chart = require('chart.js'),
     fs = require('fs-extra'),
-    sysInfo = require('systeminformation'),
     { canvasLoader } = require('../gameFiles/canvasLoading'),
     { determineTheme } = require('../scripts/theme'),
     AColorPicker = require('a-color-picker'),
