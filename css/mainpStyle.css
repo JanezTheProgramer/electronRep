@@ -520,9 +520,7 @@ h1:nth-child(6) {
 }
 
 #leftNav div:hover {
-    left: 18%;
-    width: 64%;
-    height: 11%;
+    transform: scale(1.33, 1.33);
 }
 
 #leftNav div:hover:after {
@@ -531,8 +529,8 @@ h1:nth-child(6) {
     opacity: 1;
     font-size: 1.3vw;
     position: relative;
-    top: -5vw;
-    left: 4.5vw;
+    top: -4vw;
+    left: 4vw;
     content: attr(custom_title);
     background-image: radial-gradient(rgba(30, 50, 60, .6), rgba(10, 10, 10, .8));
     color: #fff;

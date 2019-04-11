@@ -20,6 +20,7 @@ const {
     Chart = require('chart.js'),
     fs = require('fs-extra'),
     { canvasLoader } = require('../gameFiles/canvasLoading'),
+    { crossGame } = require('../gameFiles/crossing'),
     { determineTheme } = require('../scripts/theme'),
     AColorPicker = require('a-color-picker'),
     { SineWaves } = require('sine-waves'),
@@ -42,7 +43,6 @@ window.Platform = {
     },
 
     generateWidgets: async () => {
-        // get platform widgets for display
         getConfiguration.then(result => {
             $(document.getElementById(Platform.nav_id)).html("");
             JSON.parse(result.settings).navigationMenu.forEach(obj => {

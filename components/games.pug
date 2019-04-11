@@ -23,11 +23,8 @@
             var canvasSizing = document.getElementById("gameCanvas");
             canvasSizing.width = $("#mainDiv").width();
             canvasSizing.height = $("#mainDiv").height();
-            canvasSizing.style.width = `${canvasSizing.width * 1.3}px`;
-            canvasSizing.style.height = `${canvasSizing.height * 1.3}px`;
 
-            var loadingWin = new canvasLoader(document.getElementById("gameCanvas"));
 
-            loadingWin.init();
+            crossGame(document.getElementById("gameCanvas"));
         });
     });

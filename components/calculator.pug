@@ -21,7 +21,7 @@
         div(style='display: block')
         input.equationSubmit(type='submit', value='=')
   script.
-    $(document).ready(event => {
+    $(document).ready(() => {
         let equation = $(document.getElementById('equation'));
         equation.focus();
         const calculateExpression = () => {

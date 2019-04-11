@@ -81,8 +81,8 @@ function drawAlert(_msg_) {
 
 /// default app operations
 app.on('ready', async () => {
-    let pug = await setupPug({pretty: true}, {})
-    pug.on('error', err => console.error('electron-pug error', err))
+    let pug = await setupPug({pretty: true}, {});
+    pug.on('error', err => console.error('electron-pug error', err));
     screenWidth = electron.screen.getPrimaryDisplay().workAreaSize.width;
     createWindow();
 });
@@ -154,7 +154,7 @@ ipcMain.on('request-registration-action', () => {
         transparent: true,
         icon: icon
     });
-    reqWindow.loadFile('./src/baseTemplates/registerForm.pug')
+    reqWindow.loadFile('./src/baseTemplates/registerForm.pug');
     reqWindow.setMenu(null);
     reqWindow.on('closed', () => reqWindow = null);
 });

@@ -13,9 +13,7 @@ exports.createDB = () => {
                 { name: "video", enabled: true },
                 { name: "weather", enabled: true },
                 { name: "maps", enabled: true },
-                { name: "photoEditor", enabled: true },
-                { name: "sysInfo", enabled: true },
-                { name: "sysControl", enabled: true }
+                { name: "photoEditor", enabled: true }
             ]
         }; //also written in a migration file
 
