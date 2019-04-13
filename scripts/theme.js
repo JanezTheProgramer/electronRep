@@ -22,9 +22,7 @@ exports.determineTheme = color => {
             color: ${color.lighten(0.2).isDark() ? "#f7efef" : "#222"};
         }
         .box-window-content {
-            background-color: ${color.lighten(0.2).isDark() ?
-            Color("#4a4a4aef").darken(0.4).hex().toString() :
-            Color("#4a4a4aef").lighten(0.4).hex().toString()};
+            background-color: transparent;
         }
         #music-box-window .box-window-content ul li, 
         #notes-box-window .box-window-content ul li, 

@@ -6,14 +6,14 @@ window.$ = window.jQuery = require('jquery');
 const electron = require('electron');
 const { ipcRenderer } = electron;
 const {
-        getConfiguration,
-        getTheme,
-        user_getEverything,
-        setUserName,
-        setConfiguration,
-        setTheme,
-        user_setEverything
-    } = require('../scripts/sqliteQuery'),
+    getConfiguration,
+    getTheme,
+    user_getEverything,
+    setUserName,
+    setConfiguration,
+    setTheme,
+    user_setEverything
+} = require('../scripts/sqliteQuery'),
     path = require('path'),
     moment = require('moment'),
     weather = require('weather-js'),
@@ -24,7 +24,9 @@ const {
     { determineTheme } = require('../scripts/theme'),
     AColorPicker = require('a-color-picker'),
     { SineWaves } = require('sine-waves'),
-    { cnvT } = require('../scripts/convertion');
+    { cnvT } = require('../scripts/convertion'),
+    { Draggable } = require("gsap"),
+    { initSortable } = require('../scripts/sort-list');
 
 window.dragActivity_target = null;
 
@@ -108,22 +110,32 @@ window.components = {
 };
 
 $(document).ready(() => {
-
     // drag functions
+    const closeDrag = () => {
+        if (!dragActivity_target) return;
+        dragActivity_target.initialX = dragActivity_target.currentX;
+        dragActivity_target.initialY = dragActivity_target.currentY;
+        $(`.box-window`).css("border", "none");
+        dragActivity_target = null;
+    }
+
     document.onmousedown = event => {
-        if ($(event.target).attr('drag') === undefined) return;
+        if ($(event.target).attr('drag') === undefined || event.which != 1) {
+            closeDrag();
+            return;
+        }
         $('.box-window').css('z-index', '0');
         let element = $(event.target).closest('.box-window').get(0).id;
         dragActivity_target = components[element.substr(0, element.length - 11)];
         if ($(document.getElementById(dragActivity_target.id)).hasAttr("fscreen")) {
-            dragActivity_target = null;
+            closeDrag();
             return;
         }
 
         document.getElementById(dragActivity_target.id).style.zIndex = '1';
         document.getElementById(dragActivity_target.id).style.border = `.2vw solid ${
             $('.box-window-top').css('background-color')
-        }`;
+            }`;
         dragActivity_target.initialX = event.clientX - dragActivity_target.xOffset;
         dragActivity_target.initialY = event.clientY - dragActivity_target.yOffset;
     };
@@ -140,13 +152,7 @@ $(document).ready(() => {
         dragActivity_target.yOffset = dragActivity_target.currentY;
     };
 
-    document.onmouseup = () => {
-        if (!dragActivity_target) return;
-        dragActivity_target.initialX = dragActivity_target.currentX;
-        dragActivity_target.initialY = dragActivity_target.currentY;
-        $(`.box-window`).css("border", "none");
-        dragActivity_target = null;
-    };
+    document.onmouseup = closeDrag;
 
     //automated functions 
     setTimeout(() => $('body').fadeIn(500), 1000);
@@ -244,7 +250,7 @@ $(document).ready(() => {
         if (['▢', '&#9634;'].includes(e.target.innerHTML)) {
             goFullScreen(targetID);
         } else if (['−', '&minus;'].includes(e.target.innerHTML)) {
-            $('#leftNav').animate({
+            $(document.getElementById('leftNav')).animate({
                 width: '7vw',
                 opacity: '1'
             });
@@ -284,7 +290,7 @@ $(document).ready(() => {
         $(target_element).attr('fscreen', true);
         $(`#${targetID} .box-window-top .box-window-toggle-fullScreen`).html('&minus;');
     }
-    
+
     const closeTargetWindow = (targetID, speed) => {
         speed = speed || 700;
         let component_ = components[find(components, targetID)];
@@ -306,16 +312,23 @@ $(document).ready(() => {
         }
     };
 
-    const navRequest = (windowId, keyCode) => {
+    const navRequest = (windowId, keyCode, _event=window.event) => {
         switch (keyCode) {
             case 0:
-                $('#content .box-window').css({ zIndex: '0' });
-                if (!document.getElementById(components[windowId].id)) {
-                    $.get(`../components/${components[windowId].file}`, data => $('#platformDiv #content').append(data));
+                let sortable = null;
+                if (_event.ctrlKey) {
+                    sortable = initSortable(document.getElementById('leftNav'));
                 } else {
-                    $(document.getElementById(components[windowId].id)).css({ zIndex: '1' });
+                    sortable = null;
+                    $('#content .box-window').css({ zIndex: '0' });
+                    if (!document.getElementById(components[windowId].id)) {
+                        $.get(`../components/${components[windowId].file}`, data => $('#platformDiv #content').append(data));
+                    } else {
+                        $(document.getElementById(components[windowId].id)).css({ zIndex: '1' });
+                    }
                 }
-                break;
+                return;
+
             case 1:
                 let opened = false;
                 $('.box-window').each((key, window) => window.id !== components[windowId].id ?
@@ -325,10 +338,10 @@ $(document).ready(() => {
                 setTimeout(() => {
                     $.get(`../components/${components[windowId].file}`, data => $('#platformDiv #content').append(data));
                 }, 200);
-                break;
+                return;
             case 2:
                 closeTargetWindow(components[windowId].id);
-                break;
+                return;
             default:
                 return;
 
@@ -338,6 +351,6 @@ $(document).ready(() => {
     $(document).on('mousedown', '#leftNav div', e => {
         let winId = e.currentTarget.id;
         winId = winId.substr(0, winId.indexOf('_'));
-        navRequest(String(winId), e.button)
+        navRequest(String(winId), e.button, e)
     });
 });
