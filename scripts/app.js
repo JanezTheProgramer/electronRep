@@ -13,7 +13,6 @@ const electron = require('electron'),
     fs = require('fs-extra'),
     AColorPicker = require('a-color-picker'),
     { SineWaves } = require('sine-waves'),
-    sqlite3 = require('sqlite3'),
     { Draggable } = require("gsap");
 
 // => my libraries / js files
@@ -82,7 +81,7 @@ window.components = {
         xOffset: 0
     }, notes: {
         id: 'notes-box-window', file: 'notes.pug', enabled: true,
-        tooltip: 'eXo-notes', defHeight: '50vh', currentX: null,
+        tooltip: 'eXo-notes', defHeight: '65vh', currentX: null,
         currentY: null, initialX: null, initialY: null, yOffset: 0,
         xOffset: 0
     }, music: {
