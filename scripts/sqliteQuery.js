@@ -1,6 +1,3 @@
-const sqlite3 = require('sqlite3');
-const { ipcRenderer } = require('electron');
-
 exports.createDB = () => {
     try {
         let db = new sqlite3.Database('database.db');

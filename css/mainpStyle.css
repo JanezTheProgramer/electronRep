@@ -636,8 +636,7 @@ h1:nth-child(6) {
     overflow-y: hidden;
 }
 
-
-#notes-box-window .box-window-content ul, #music-box-window .box-window-content ul, #weather-box-window .box-window-content ul, #games-box-window .box-window-content ul, #sysControl-box-window .box-window-content ul {
+.box-window-content ul {
     padding: 0;
     margin: 0;
     position: absolute;
@@ -647,39 +646,38 @@ h1:nth-child(6) {
     z-index: 10;
 }
 
-#notes-box-window .box-window-content ul li, #music-box-window .box-window-content ul li, #weather-box-window .box-window-content ul li, #games-box-window .box-window-content ul li, #sysControl-box-window .box-window-content ul li {
-    --c1: #49697A;
-    --c2: #5D6366;
+.box-window-content ul li:nth-child(odd) {
+    background: linear-gradient(to right, rgba(4, 51, 59, 0.781), transparent);
+}
+
+.box-window-content ul li {
     display: block;
     padding: 0;
     margin: 0;
     position: relative;
     margin-left: 0;
-    margin-bottom: .5vw;
-    height: 10vh;
+    height: 9vh;
     width: 100%;
-    background: linear-gradient(90deg, var(--c2), var(--c1) 51%, var(--c1)) var(--x, 0)/ 200%;
-    border-radius: .2vw;
-    transition: 0.5s;
+    background: none;
+    transition: 0.3s;
     color: white;
+    border: none;
+    border-bottom: .05vw solid #eeeeee53;
 }
 
-#weather-box-window .box-window-content ul li:hover, #music-box-window .box-window-content ul li:hover, #notes-box-window .box-window-content ul li:hover, #games-box-window .box-window-content ul li:hover, #sysControl-box-window .box-window-content ul li:hover {
-    --x: 100%
-}
-
-#games-box-window .box-window-content ul li span, #music-box-window .box-window-content ul li span, #sysControl-box-window .box-window-content ul li span {
+.box-window-content ul li span {
     font-family: custom;
     position: absolute;
     left: 10%;
     font-size: 3vw;
+    transition: all ease-in-out .2s;
 }
 
-#games-box-window .box-window-content ul li:hover span,  #music-box-window .box-window-content ul li:hover span, #sysControl-box-window .box-window-content ul li:hover span {
-    text-shadow: 0px .1vw .5vw rgba(255, 255, 255, 0.6);
+.box-window-content ul li:hover {
+    border-left: .5vw solid #eeeeee53;
 }
-
-#notes-box-window .box-window-content ul li:hover span, #games-box-window .box-window-content ul li:hover span, #sysControl-box-window .box-window-content ul li:hover span {
+.box-window-content ul li:hover span {
+    margin-left: 1%;
     text-shadow: 0px .1vw .5vw rgba(255, 255, 255, 0.6);
 }
 
@@ -793,8 +791,8 @@ input:focus {
 
 #notes-box-window #noteTextArea {
     position: absolute;
-    top: calc(10vh + 40%);
-    height: calc(100% - (12vh + 40%));
+    top: calc(7vh + 40%);
+    height: calc(100% - (8vh + 40%));
     left: 0;
     width: 100%;
     background-color: rgba(87, 87, 87, 0.7);
@@ -804,7 +802,7 @@ input:focus {
 
 #notes-box-window .box-window-content {
     position: absolute;
-    top: 6vh;
+    top: 4vh;
     left: 0;
     width: 100%;
     height: 34%;
@@ -1041,7 +1039,7 @@ input:focus {
 
 #notes-box-window #noteControls {
     position: absolute;
-    top: calc(10vh + 32%);
+    top: calc(7vh + 32%);
     height: 6%;
     left: 5%;
     width: 90%;

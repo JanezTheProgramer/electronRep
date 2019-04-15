@@ -2,30 +2,34 @@
     ipcRenderer.send('request-failed-to-generate-action');
 } // global error handling (if error exsists app closes!)*/
 
+// => external libraries
 window.$ = window.jQuery = require('jquery');
-const electron = require('electron');
-const { ipcRenderer } = electron;
-const {
-    getConfiguration,
-    getTheme,
-    user_getEverything,
-    setUserName,
-    setConfiguration,
-    setTheme,
-    user_setEverything
-} = require('../scripts/sqliteQuery'),
+const electron = require('electron'),
+    { ipcRenderer } = electron;
     path = require('path'),
     moment = require('moment'),
     weather = require('weather-js'),
     Chart = require('chart.js'),
     fs = require('fs-extra'),
+    AColorPicker = require('a-color-picker'),
+    { SineWaves } = require('sine-waves'),
+    sqlite3 = require('sqlite3'),
+    { Draggable } = require("gsap");
+
+// => my libraries / js files
+const {
+        getConfiguration,
+        getTheme,
+        user_getEverything,
+        setUserName,
+        setConfiguration,
+        setTheme,
+        user_setEverything
+    } = require('../scripts/sqliteQuery'),
     { canvasLoader } = require('../gameFiles/canvasLoading'),
     { crossGame } = require('../gameFiles/crossing'),
     { determineTheme } = require('../scripts/theme'),
-    AColorPicker = require('a-color-picker'),
-    { SineWaves } = require('sine-waves'),
     { cnvT } = require('../scripts/convertion'),
-    { Draggable } = require("gsap"),
     { initSortable } = require('../scripts/sort-list');
 
 window.dragActivity_target = null;
