@@ -16,12 +16,12 @@ head
         each val, i in ["Account", "Tutorial", "Logout"]
             a( id=`${i+1}acc` class="data" )= val
   #clock
-each val in ["reset", "minimize", "exit"]
-  div( id=val class="roundBtn" )
+  each val in ["reset", "minimize", "exit"]
+    div( id=val class="roundBtn" )
 #mainDiv.bodyDiv
   figure#welcText
     - for (let i=0; i < 5 ; i++ )
-      h1 
+      h1
         | Welcome
         br
         | to eXo!

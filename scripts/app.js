@@ -109,6 +109,11 @@ window.components = {
         tooltip: 'eXo-photoEditor', defHeight: '50vh', currentX: null,
         currentY: null, initialX: null, initialY: null, yOffset: 0,
         xOffset: 0
+    }, toText: {
+        id: 'toText-box-window', file: 'toText.html', enabled: true,
+        tooltip: 'eXo-toText', defHeight: '50vh', currentX: null,
+        currentY: null, initialX: null, initialY: null, yOffset: 0,
+        xOffset: 0       
     }
 };
 
@@ -118,7 +123,7 @@ $(document).ready(() => {
         if (!dragActivity_target) return;
         dragActivity_target.initialX = dragActivity_target.currentX;
         dragActivity_target.initialY = dragActivity_target.currentY;
-        $(`.box-window`).css("border", "none");
+        $(`.box-window`).css("outline", "none");
         dragActivity_target = null;
     }
 
@@ -136,9 +141,9 @@ $(document).ready(() => {
         }
 
         document.getElementById(dragActivity_target.id).style.zIndex = '1';
-        document.getElementById(dragActivity_target.id).style.border = `.2vw solid ${
+        document.getElementById(dragActivity_target.id).style.outline = `.2vw solid ${
             $('.box-window-top').css('background-color')
-            }`;
+        }`;
         dragActivity_target.initialX = event.clientX - dragActivity_target.xOffset;
         dragActivity_target.initialY = event.clientY - dragActivity_target.yOffset;
     };
