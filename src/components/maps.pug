@@ -1,0 +1,30 @@
+#maps-box-window.box-window
+  .box-window-top
+    .box-window-top-draggable(drag='1')
+      h3(drag='1') eXo-maps
+    span.exit ×
+    span.box-window-toggle-fullScreen ▢
+  div
+    input#mapsLocation(type='text', placeholder='enter location', value='')
+  .box-window-content
+    iframe#googleFrame(width='100%', height='100%', src='https://maps.google.com/maps?q=europe&ie=UTF8&iwloc=&output=embed', frameborder='0', scrolling='yes', marginheight='0', marginwidth='0')
+  script.
+    $(document).ready(() => {
+        $("#mapsLocation").keypress(event => {
+            if (event.keyCode == 13) {
+                $('#maps-box-window .box-window-content').html(`                  
+                    <iframe 
+                        id="googleFrame"
+                        width="100%" 
+                        height="100%"  
+                        src="https://maps.google.com/maps?q=${$('#mapsLocation').val()}&ie=UTF8&iwloc=&output=embed"
+                        frameborder="0" 
+                        scrolling="yes" 
+                        marginheight="0" 
+                        marginwidth="0"
+                    ></iframe>
+                `);
+            }
+        });
+        //
+    });

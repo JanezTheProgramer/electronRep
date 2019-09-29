@@ -1,0 +1,18 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  title Loading
+  link(rel='stylesheet' type='text/css' href='../css/loadingStyle.css')
+.socket
+  .gel.center-gel
+    .hex-brick.h1
+    .hex-brick.h2
+    .hex-brick.h3
+  - let r = 1
+  - for(let c = 1; c < 38; c++) {
+        - if (c > 6) r = 2
+        - else if (c > 18) r = 3
+        div( class=`gel c${c} r${r}`)
+            - for (let h = 1; h < 4; h++)
+                div(class=`hex-brick h${h}`)
+  - }

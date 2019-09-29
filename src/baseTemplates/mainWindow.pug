@@ -1,0 +1,35 @@
+doctype html
+head
+  title eXo
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, \
+  initial-scale=1.0, \
+  user-scalable=no')
+  link(rel='stylesheet' type='text/css' href='../css/mainpStyle.css')
+  script(src='../scripts/app.js')
+  script(src='../../node_modules/ckeditor/ckeditor.js')
+  script(src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js")
+  style#alternate-css.
+#top_takbar
+  .dropdown
+    button.dropbtn eXo
+    .dropdown-content
+        each val, i in ["Account", "Tutorial", "Logout"]
+            a( id=`${i+1}acc` class="data" )= val
+  #clock
+  each val in ["reset", "minimize", "exit"]
+    div( id=val class="roundBtn" )
+#mainDiv.bodyDiv
+  figure#welcText
+    - for (let i = 0; i < 5; i++)
+      h1
+        | Welcome
+        br
+        | to eXo!
+  #gameWindow
+    canvas#gameCanvas Error occured!
+  #platformDiv(style='display:none')
+    nav#leftNav(toggle='1')
+    #content
+  #accInfoDiv(style='display:none')
+  #tutorialDiv(style='display:none')
