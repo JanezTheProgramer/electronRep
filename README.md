@@ -4,9 +4,9 @@ Simple all in one app idea (os like) Calculator, WeatherApp, ImageEditor..... Wi
 
 ## Getting Started
 
-> Download the project
-> npm install
-> that's it... now just run "npm run start"
+> Download the project<br/>
+> npm install<br/>
+> that's it... now just run "npm run start"<br/>
 
 ### Prerequisites
 
