@@ -2,6 +2,8 @@
 
 Simple all in one app idea (os like) Calculator, WeatherApp, ImageEditor..... Without a proper file system
 
+![alt text](https://github.com/JanezSedeljsak/exo-os/blob/master/site.png)
+
 ## Getting Started
 
 > Download the project<br/>
