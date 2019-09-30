@@ -1,3 +1,5 @@
+<img src="https://github.com/matiassingers/awesome-readme/blob/master/icon.png" align="right" />
+
 # eXo - OS
 
 Simple all in one app idea (os like) Calculator, WeatherApp, ImageEditor..... Without a proper file system
@@ -16,10 +18,14 @@ Simple all in one app idea (os like) Calculator, WeatherApp, ImageEditor..... Wi
 
 ## Built With
 
-* electronJS
-* jQuery
-* Pug
+* [electronJS](https://electronjs.org)
+* [jQuery](https://jquery.com)
+* [Pug](https://pugjs.org/api/getting-started.html)
 * some random js libraries
+
+## License
+
+[![CC0](https://licensebuttons.net/p/zero/1.0/88x31.png)](https://creativecommons.org/publicdomain/zero/1.0/)
 
 ## Authors
 
