@@ -30,6 +30,5 @@ Simple all in one app idea (os like) Calculator, WeatherApp, ImageEditor..... Wi
 ## Authors
 
 ```JS
-const AUTHOR = 'Janez Sedeljsak';
+const AUTHOR = 'Janez Sedeljsak' //https://github.com/JanezSedeljsak;
 ```
-[GitHub Profile](https://github.com/JanezSedeljsak)
