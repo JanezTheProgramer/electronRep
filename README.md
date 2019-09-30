@@ -29,4 +29,7 @@ Simple all in one app idea (os like) Calculator, WeatherApp, ImageEditor..... Wi
 
 ## Authors
 
-* **Janez Sedeljsak** - [GitHub Profile](https://github.com/JanezSedeljsak)
+```JS
+const AUTHOR = 'Janez Sedeljsak';
+```
+[GitHub Profile](https://github.com/JanezSedeljsak)
