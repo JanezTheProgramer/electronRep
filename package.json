@@ -28,7 +28,7 @@
     "node-powershell": "^4.0.0",
     "sine-waves": "^0.3.0",
     "sqlite3": "^4.0.6",
-    "systeminformation": "^3.54.0",
+    "systeminformation": "^4.30.5",
     "typescript": "^3.2.2",
     "weather-js": "^2.0.0"
   }
